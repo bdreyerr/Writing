@@ -23,7 +23,11 @@
 		1AA1A5002C0BD15D009D9233 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA1A4FF2C0BD15D009D9233 /* ContentView.swift */; };
 		1AA1A5022C0BD15E009D9233 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA1A5012C0BD15E009D9233 /* Assets.xcassets */; };
 		1AA1A5052C0BD15E009D9233 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA1A5042C0BD15E009D9233 /* Preview Assets.xcassets */; };
-		1AA1A50D2C0BD5E6009D9233 /* HistoryMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA1A50C2C0BD5E6009D9233 /* HistoryMainView.swift */; };
+		1ABF08EB2C16562C00F2E6AF /* SinglePersonalResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08EA2C16562C00F2E6AF /* SinglePersonalResponse.swift */; };
+		1ABF08ED2C165D9E00F2E6AF /* SideBarStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08EC2C165D9E00F2E6AF /* SideBarStack.swift */; };
+		1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */; };
+		1ABF08F32C16B51E00F2E6AF /* ProfileSuggestPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */; };
+		1ABF08F52C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F42C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +48,11 @@
 		1AA1A4FF2C0BD15D009D9233 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1AA1A5012C0BD15E009D9233 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AA1A5042C0BD15E009D9233 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		1AA1A50C2C0BD5E6009D9233 /* HistoryMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryMainView.swift; sourceTree = "<group>"; };
+		1ABF08EA2C16562C00F2E6AF /* SinglePersonalResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePersonalResponse.swift; sourceTree = "<group>"; };
+		1ABF08EC2C165D9E00F2E6AF /* SideBarStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarStack.swift; sourceTree = "<group>"; };
+		1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditProfileView.swift; sourceTree = "<group>"; };
+		1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSuggestPromptView.swift; sourceTree = "<group>"; };
+		1ABF08F42C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHowWeAnalyzeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +70,6 @@
 			isa = PBXGroup;
 			children = (
 				1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */,
-				1AA1A50C2C0BD5E6009D9233 /* HistoryMainView.swift */,
 				1A7944EE2C0E7E4300757A7E /* HistorySingleResponseView.swift */,
 			);
 			path = History;
@@ -99,6 +106,10 @@
 			isa = PBXGroup;
 			children = (
 				1A7944E72C0E75E500757A7E /* ProfileMainView.swift */,
+				1ABF08EA2C16562C00F2E6AF /* SinglePersonalResponse.swift */,
+				1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */,
+				1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */,
+				1ABF08F42C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -109,6 +120,7 @@
 				1A7944EA2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift */,
 				1A7944EC2C0E78FC00757A7E /* TodaysPrompt.swift */,
 				1A97B08D2C0FD58F00F597AB /* CommunityResponseComment.swift */,
+				1ABF08EC2C165D9E00F2E6AF /* SideBarStack.swift */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -250,10 +262,14 @@
 				1A7944D72C0C257000757A7E /* HomeMainView.swift in Sources */,
 				1A97B08E2C0FD58F00F597AB /* CommunityResponseComment.swift in Sources */,
 				1A7944E32C0E75AC00757A7E /* ListCommunityResponseView.swift in Sources */,
-				1AA1A50D2C0BD5E6009D9233 /* HistoryMainView.swift in Sources */,
 				1A7944DA2C0D516900757A7E /* KeyboardResponder.swift in Sources */,
+				1ABF08F32C16B51E00F2E6AF /* ProfileSuggestPromptView.swift in Sources */,
+				1ABF08EB2C16562C00F2E6AF /* SinglePersonalResponse.swift in Sources */,
+				1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */,
 				1A7944E82C0E75E500757A7E /* ProfileMainView.swift in Sources */,
+				1ABF08ED2C165D9E00F2E6AF /* SideBarStack.swift in Sources */,
 				1A97B0912C0FD9BA00F597AB /* NavBarView.swift in Sources */,
+				1ABF08F52C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift in Sources */,
 				1A7944ED2C0E78FC00757A7E /* TodaysPrompt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

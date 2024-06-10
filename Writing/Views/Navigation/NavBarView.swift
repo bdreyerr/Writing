@@ -10,15 +10,19 @@ import SwiftUI
 struct NavBarView: View {
     var body: some View {
         TabView {
-            HomeMainView()
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
+            Group {
+                HomeMainView()
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+                
+                ProfileMainView()
+                    .tabItem {
+                        Label("Profile", systemImage: "person")
+                    }
+            }
+            .toolbarBackground(.visible, for: .tabBar)
             
-            HistorySingleResponseView()
-                .tabItem {
-                    Label("History", systemImage: "clock")
-                }
         }
     }
 }

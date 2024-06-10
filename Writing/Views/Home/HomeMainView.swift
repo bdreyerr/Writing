@@ -11,20 +11,19 @@ struct HomeMainView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @State private var responseText: String = ""
-    @State private var isWriteResponsePopupShowing = false
     
     var body: some View {
         NavigationView {
             ZStack {
                 VStack {
                     ScrollView(showsIndicators: false) {
-                        
                         // Today's Date
                         Text("June 4th 2024")
                             .font(.system(size: 14, design: .serif))
                             .bold()
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.bottom, 40)
+                            .padding(.top, 5)
                         
                         // Today's Prompt
                         Text("Today's Prompt")
@@ -34,17 +33,15 @@ struct HomeMainView: View {
                         
                         TodaysPrompt(image: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike"], likeCount: 173, responseCount: 47, includeResponseCount: true)
                         
-                        // Begin Your Response
-                        Button(action: {
-                            
-                        }) {
+                        // Begin Your Response Nav Link
+                        NavigationLink(destination: CreateResponseView()) {
                             RoundedRectangle(cornerRadius: 25.0)
                                 .stroke(lineWidth: 1)
                                 .frame(width: 200, height: 40)
                                 .overlay {
                                     HStack {
                                         // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
-                                        Text("Begin Your Response")
+                                        Text("Once upon a time...")
                                             .font(.system(size: 14, design: .serif))
                                             .bold()
                                         
@@ -56,39 +53,30 @@ struct HomeMainView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         
+                        
                         // Community Responses
                         CommunityResponses()
-                        
-                        // TODO(bendreyer): have a couple different openers here (once upon a time, in a land far far away, etc..) and pick one at random
-                        
-                        //                    TextField("Once upon a time...", text: $responseText, axis: .vertical)
-                        //                        .frame(minWidth: 60, maxWidth: .infinity, alignment: .leading)
-                        //                        .font(.system(size: 14, design: .serif))
-                        //                        .modifier(KeyboardAdaptive())
-                        //
-                        //
-                        //
-                        //                    Text("10 / 50 characters")
-                        //                        .font(.system(size: 12, design: .serif))
-                        //                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        
+                            .padding(.bottom, 20)
                         
                         Spacer()
                         
-                        
                         // Logo
                         if (colorScheme == .light) {
-                            Image("WhiteBackground")
+                            Image("LogoTransparentWhiteBackground")
                                 .resizable()
                                 .frame(width: 80, height: 80)
                         } else if (colorScheme == .dark) {
-                            Image("BlackBackground")
+                            Image("LogoBlackBackground")
                                 .resizable()
                                 .frame(width: 80, height: 80)
                         }
                         
-                        Text("The Daily Scribe")
-                            .font(.system(size: 16, design: .serif))
+                        Text("Promptly")
+                            .font(.system(size: 15, design: .serif))
+                            .frame(maxWidth: .infinity, alignment: .bottom)
+                            .opacity(0.8)
+                        Text("version 1.1 june 2024")
+                            .font(.system(size: 11, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .bottom)
                             .opacity(0.8)
                     }

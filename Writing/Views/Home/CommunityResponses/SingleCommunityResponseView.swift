@@ -111,6 +111,13 @@ struct SingleCommunityResponseView: View {
                         Text("\(numComments)")
                             .font(.system(size: 13, design: .serif))
                     }
+                    
+                    HStack {
+                        // Comment image
+                        Image(systemName: "exclamationmark.circle")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
