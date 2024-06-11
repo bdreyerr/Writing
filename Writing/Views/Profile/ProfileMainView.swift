@@ -9,54 +9,14 @@ import SwiftUI
 
 struct ProfileMainView: View {
     @Environment(\.colorScheme) var colorScheme
-    @State var showSidebar: Bool = false
     @AppStorage("isDarkMode") private var isDarkMode = false
+    
+    @State var showSidebar: Bool = false
+    @State var showSettingsView: Bool = false
     
     var body: some View {
         NavigationView {
-            
-            
             SideBarStack(sidebarWidth: 240, showSidebar: $showSidebar) {
-                
-                
-//                HStack {
-//                    // Button Icons
-//                    VStack {
-//                        Image(systemName: "person.badge.plus")
-//                            .font(.title3)
-//                        
-//                        Image(systemName: "envelope")
-//                            .font(.title3)
-//                        
-//                        Image(systemName: "bolt")
-//                            .font(.title3)
-//                        
-//                        Image(systemName: "gearshape")
-//                            .font(.title3)
-//                    }
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-//                    .padding(5)
-//                    // Button Text
-//                    VStack {
-//                        Text("Edit Profile")
-//                            .font(.system(size: 16, design: .serif))
-//                        
-//                        Text("Suggest a Prompt")
-//                            .font(.system(size: 16, design: .serif))
-//                        
-//                        Text("How we Analyze")
-//                            .font(.system(size: 16, design: .serif))
-//                        
-//                        Text("Settings")
-//                            .font(.system(size: 16, design: .serif))
-//                    }
-//                }
-//                .padding(.top, 60)
-//                .padding(.leading, 20)
-//                .padding(.trailing, 20)
-//                .padding(.bottom, 60)
-                
-                
                 VStack {
                     // Edit Profile
                     NavigationLink(destination: ProfileEditProfileView()) {
@@ -100,15 +60,21 @@ struct ProfileMainView: View {
                     .buttonStyle(PlainButtonStyle())
                     
                     // Settings
-                    HStack {
-                        Image(systemName: "gearshape")
-                            .font(.title3)
-                        
-                        Text("Settings")
-                            .font(.system(size: 16, design: .serif))
+                    Button(action: {
+                        showSettingsView = true
+                    }) {
+                        HStack {
+                            Image(systemName: "gearshape")
+                                .font(.title3)
+                            
+                            Text("Settings")
+                                .font(.system(size: 16, design: .serif))
+                        }
+                        .padding(.bottom, 10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.bottom, 10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .buttonStyle(PlainButtonStyle())
+                    
                     
                     Spacer()
                     
@@ -148,8 +114,14 @@ struct ProfileMainView: View {
                                             .font(.title3)
                                         
                                         // Settings buttons
-                                        Image(systemName: "gearshape")
-                                            .font(.title3)
+                                        Button(action: {
+                                            self.showSettingsView = true
+                                        }) {
+                                            Image(systemName: "gearshape")
+                                                .font(.title3)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                        
                                     }.frame(maxWidth: .infinity, alignment: .trailing)
                                 }
                                 
@@ -301,6 +273,9 @@ struct ProfileMainView: View {
                                     .opacity(0.8)
                             }
                         }
+                    }
+                    .sheet(isPresented: $showSettingsView) {
+                        ProfileSettingsView()
                     }
                     
                 }

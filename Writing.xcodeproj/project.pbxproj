@@ -28,6 +28,7 @@
 		1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */; };
 		1ABF08F32C16B51E00F2E6AF /* ProfileSuggestPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */; };
 		1ABF08F52C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F42C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift */; };
+		1ABF08F72C1809FD00F2E6AF /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F62C1809FD00F2E6AF /* ProfileSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditProfileView.swift; sourceTree = "<group>"; };
 		1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSuggestPromptView.swift; sourceTree = "<group>"; };
 		1ABF08F42C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHowWeAnalyzeView.swift; sourceTree = "<group>"; };
+		1ABF08F62C1809FD00F2E6AF /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */,
 				1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */,
 				1ABF08F42C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift */,
+				1ABF08F62C1809FD00F2E6AF /* ProfileSettingsView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				1A7944DA2C0D516900757A7E /* KeyboardResponder.swift in Sources */,
 				1ABF08F32C16B51E00F2E6AF /* ProfileSuggestPromptView.swift in Sources */,
 				1ABF08EB2C16562C00F2E6AF /* SinglePersonalResponse.swift in Sources */,
+				1ABF08F72C1809FD00F2E6AF /* ProfileSettingsView.swift in Sources */,
 				1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */,
 				1A7944E82C0E75E500757A7E /* ProfileMainView.swift in Sources */,
 				1ABF08ED2C165D9E00F2E6AF /* SideBarStack.swift in Sources */,

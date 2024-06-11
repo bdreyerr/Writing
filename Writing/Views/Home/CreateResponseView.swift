@@ -17,7 +17,7 @@ struct CreateResponseView: View {
                 
                 // TODO(bendreyer): have a couple different openers here (once upon a time, in a land far far away, etc..) and pick one at random
                 TextField("Once upon a time...",text: $response, axis: .vertical)
-                    .modifier(KeyboardAdaptive())
+//                    .modifier(KeyboardAdaptive())
                     .font(.system(size: 16, design: .serif))
                 // Styling
                     .padding(.vertical, 8)
