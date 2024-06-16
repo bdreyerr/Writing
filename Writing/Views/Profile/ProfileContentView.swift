@@ -13,12 +13,18 @@ struct ProfileContentView: View {
     
     var body: some View {
         ZStack {
-            if self.isSignedIn == false {
-                ProfileMainViewNotSignedIn()
-            } else {
-                ProfileMainView()
-            }
+            ProfileMainViewNotSignedIn()
+                .opacity(isSignedIn ? 0.0 : 1.0)
+            ProfileMainView()
+                .opacity(isSignedIn ? 1.0 : 0.0)
+            
+//            if self.isSignedIn == false {
+//                ProfileMainViewNotSignedIn()
+//            } else {
+//                ProfileMainView()
+//            }
         }
+//        .padding(.bottom, 25)
     }
 }
 

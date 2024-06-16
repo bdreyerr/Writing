@@ -94,7 +94,7 @@ enum TabbedItems : Int, CaseIterable {
         case .home:
             return "house"
         case .freeWrite:
-            return "keyboard"
+            return "books.vertical"
         case .profile:
             return "person"
         }
@@ -120,7 +120,7 @@ extension NavBarView{
             }
             Spacer()
         }
-        .frame(width: isActive ? .infinity : 60, height: 60)
+        .frame(maxWidth: isActive ? .infinity : 60, maxHeight: 60)
 //        .background(isActive ? .white.opacity(0.4) : .clear)
         .background(colorScheme == .light ? isActive ? .black.opacity(0.9) : .clear : isActive ? .white.opacity(0.9) : .clear)
         .cornerRadius(30)

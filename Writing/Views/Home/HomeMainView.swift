@@ -141,6 +141,7 @@ struct HomeMainView: View {
                     SignUpOrIn()
                 }
             }
+            .padding(.bottom, 25)
         }
     }
 }

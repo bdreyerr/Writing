@@ -7,6 +7,8 @@
 
 import SwiftUI
 import AuthenticationServices
+import GoogleSignIn
+import GoogleSignInSwift
 
 struct SignUpOrIn: View {
     // Light / Dark Theme
@@ -58,7 +60,7 @@ struct SignUpOrIn: View {
                 
                 // Sign in with Google Button
                 Button(action: {
-                    
+                    authController.signInWithGoogle()
                 }) {
                     HStack {
                         Image("google_logo")
@@ -86,6 +88,7 @@ struct SignUpOrIn: View {
                         .font(.system(size: 12, design: .serif))
                         .foregroundStyle(Color.blue)
                 }
+                .padding(.top, 10)
             }
             .padding(20)
             .padding(.bottom, 40)
@@ -103,3 +106,4 @@ struct SignUpOrIn: View {
     SignUpOrIn()
         .environmentObject(AuthController())
 }
+

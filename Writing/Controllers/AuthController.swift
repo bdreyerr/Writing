@@ -8,12 +8,13 @@
 import AuthenticationServices
 import CryptoKit
 import FirebaseAuth
+import FirebaseCore
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
+import GoogleSignIn
+import GoogleSignInSwift
 import SwiftUI
-
-
 
 class AuthController : UIViewController, ObservableObject {
     // Controls which views the user can access based on login status.
@@ -33,6 +34,104 @@ class AuthController : UIViewController, ObservableObject {
     @Published var isErrorStringShowing: Bool = false
     
     let db = Firestore.firestore()
+    
+    func signInWithGoogle() {
+        // get app client id
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        // Create Google Sign In config object.
+        let config = GIDConfiguration(clientID: clientID)
+        
+        GIDSignIn.sharedInstance.configuration = config
+        
+        // sign in mrthod goes here
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: ApplicationUtility.rootViewController) { user, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard
+                let user = user?.user,
+                let idToken = user.idToken else { return }
+            
+            let accessToken = user.accessToken
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
+            
+            Auth.auth().signIn(with: credential) { result, error in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                
+                guard let user = result?.user else { return }
+                print("user was signed in: ", user)
+                print(user.displayName)
+                print(user.email)
+                
+                // Split the display name into a first and last name, there's a space inbetween
+                let names = user.displayName?.components(separatedBy: " ")
+
+                if let names = names {
+                    if names.count >= 2 {
+                        let firstName = names[0]
+                        let lastName = names[1]
+                        self.firstName = firstName
+                        self.lastName = lastName
+                    } else {
+                        print("The string does not contain a space")
+                        self.firstName = user.displayName ?? ""
+                        self.lastName = ""
+                    }
+                } else {
+                    self.firstName = user.displayName ?? ""
+                    self.lastName = ""
+                }
+                
+                self.email = user.email ?? ""
+                
+                // Figure out if the user already has an account and is signing in
+                // or if this is their first time signing up. (check on email)
+                let docRef = self.db.collection("users").whereField("email", isEqualTo: self.email)
+                docRef.getDocuments { (querySnapshot, err) in
+                    if let err = err {
+                        print(err.localizedDescription)
+                    } else {
+                        if querySnapshot!.documents.isEmpty {
+                            // User doesn't exist in the database yet, create a new user object
+                            
+                            // The only field not populated is profilePicture. User needs to add that themselves.
+                            let userObject = User(firstName: self.firstName, lastName: self.lastName, email: self.email, shortsCount: 0, numLikes: 0, avgWritingScore: 0, isAdmin: false, blockedUsers: [:])
+                            
+                            // Add the user to firestore user collection
+                            let collectionRef = self.db.collection("users")
+                            do {
+                                try collectionRef.document(user.uid).setData(from: userObject)
+                                self.isSignedIn = true
+                                // Set User Default
+                                //                                    UserDefaults.standard.set(self.isSignedIn, forKey: loginStatusKey)
+                                // Close the auth popup
+                                self.isAuthPopupShowing = false
+                            } catch {
+                                print("Error saving the new user to firestore")
+                            }
+                        } else {
+                            // An existing user is signing back in
+                            if let user = Auth.auth().currentUser {
+                                print("current user signed in ", user.uid)
+                            }
+                            self.isSignedIn = true
+                            // Set user defaults
+                            //                                UserDefaults.standard.set(self.isSignedIn, forKey: loginStatusKey)
+                            self.isAuthPopupShowing = false
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     // The function called in the onComplete closure of the SignInWithAppleButton in the RegisterView
     func appleSignInButtonOnCompletion(result: Result<ASAuthorization, Error>) {
@@ -119,7 +218,7 @@ class AuthController : UIViewController, ObservableObject {
                                     try collectionRef.document(user.uid).setData(from: userObject)
                                     self.isSignedIn = true
                                     // Set User Default
-//                                    UserDefaults.standard.set(self.isSignedIn, forKey: loginStatusKey)
+                                    //                                    UserDefaults.standard.set(self.isSignedIn, forKey: loginStatusKey)
                                     // Close the auth popup
                                     self.isAuthPopupShowing = false
                                 } catch {
@@ -132,7 +231,7 @@ class AuthController : UIViewController, ObservableObject {
                                 }
                                 self.isSignedIn = true
                                 // Set user defaults
-//                                UserDefaults.standard.set(self.isSignedIn, forKey: loginStatusKey)
+                                //                                UserDefaults.standard.set(self.isSignedIn, forKey: loginStatusKey)
                                 self.isAuthPopupShowing = false
                             }
                         }
@@ -155,7 +254,7 @@ class AuthController : UIViewController, ObservableObject {
             return
         }
         self.isSignedIn = false
-//        UserDefaults.standard.set(isSignedIn, forKey: loginStatusKey)
+        //        UserDefaults.standard.set(isSignedIn, forKey: loginStatusKey)
         print("The user logged out")
     }
     
