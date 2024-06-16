@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ProfileSettingsView: View {
+    
+    @EnvironmentObject var authController: AuthController
+    
     var body: some View {
         VStack {
             List {
@@ -20,7 +23,7 @@ struct ProfileSettingsView: View {
                 Section(header: Text("Account")) {
                     Button(action: {
                         // Sign out of account
-//                        authManager.logOut()
+                        authController.logOut()
                     }) {
                         Text("Sign Out")
                     }

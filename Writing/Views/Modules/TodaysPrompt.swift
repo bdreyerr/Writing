@@ -66,7 +66,12 @@ struct TodaysPrompt: View {
                         }
                     }
                     .buttonStyle(PlainButtonStyle())
+                    
                 }
+                
+                // Report Prompt
+                Image(systemName: "exclamationmark.circle")
+                    .font(.caption)
                 
             }
             .frame(maxWidth: .infinity, alignment: .trailing)

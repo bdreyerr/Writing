@@ -9,49 +9,95 @@ import SwiftUI
 
 struct HomeMainView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var authController: AuthController
     
+    @State private var selectedPromptDate = Date()
     @State private var responseText: String = ""
+    
+    
+    // Date Range for the prompt picker
+    let dateRange: ClosedRange<Date> = {
+        let calendar = Calendar.current
+        let startComponents = DateComponents(year: 2024, month: 6, day: 1)
+        let endComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        return calendar.date(from:startComponents)!
+            ...
+            calendar.date(from:endComponents)!
+    }()
     
     var body: some View {
         NavigationView {
             ZStack {
                 VStack {
-                    ScrollView(showsIndicators: false) {
-                        // Today's Date
-                        Text("June 4th 2024")
-                            .font(.system(size: 14, design: .serif))
-                            .bold()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.bottom, 40)
-                            .padding(.top, 5)
+                    // Today's Prompt and Change Date Button
+                    HStack {
                         
-                        // Today's Prompt
-                        Text("Today's Prompt")
+                        // Small Logo
+                        if (colorScheme == .light) {
+                            Image("LogoTransparentWhiteBackground")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                        } else if (colorScheme == .dark) {
+                            Image("LogoBlackBackground")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                        }
+                        
+                        Text("| The Daily Short")
                             .font(.system(size: 16, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .bold()
                         
+                        
+                        
+                        DatePicker(
+                                "",
+                                selection: $selectedPromptDate,
+                                in: dateRange,
+                                displayedComponents: [.date]
+                            )
+                        .labelsHidden()
+//                            .blendMode(.destinationOver)
+//                            .datePickerStyle(.automatic)
+                            
+                    }
+                    .padding(.top, 15)
+                    .padding(.leading, 20)
+                    .padding(.trailing, 20)
+                    
+                    ScrollView(showsIndicators: false) {
+                        // Today's Date
+//                        Text("\(selectedPromptDate.formatted(date: .complete, time: .omitted))")
+//                            .font(.system(size: 14, design: .serif))
+//                            .bold()
+//                            .frame(maxWidth: .infinity, alignment: .center)
+//                            .padding(.bottom, 40)
+//                            .padding(.top, 5)
+                        
                         TodaysPrompt(image: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike"], likeCount: 173, responseCount: 47, includeResponseCount: true)
                         
-                        // Begin Your Response Nav Link
-                        NavigationLink(destination: CreateResponseView()) {
-                            RoundedRectangle(cornerRadius: 25.0)
-                                .stroke(lineWidth: 1)
-                                .frame(width: 200, height: 40)
-                                .overlay {
-                                    HStack {
-                                        // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
-                                        Text("Once upon a time...")
-                                            .font(.system(size: 14, design: .serif))
-                                            .bold()
-                                        
-                                        Image(systemName: "plus.circle")
-                                        
+                        // Begin Your Response Nav Link (only for today's prompt)
+                        
+                        if (selectedPromptDate.formatted(date: .complete, time: .omitted) == Date().formatted(date: .complete, time: .omitted)) {
+                            NavigationLink(destination: CreateResponseView()) {
+                                RoundedRectangle(cornerRadius: 25.0)
+                                    .stroke(lineWidth: 1)
+                                    .frame(width: 200, height: 40)
+                                    .overlay {
+                                        HStack {
+                                            // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
+                                            Text("Once upon a time...")
+                                                .font(.system(size: 14, design: .serif))
+                                                .bold()
+                                            
+                                            Image(systemName: "plus.circle")
+                                            
+                                        }
                                     }
-                                }
-                                .padding(.bottom, 10)
+                                    .padding(.bottom, 10)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .buttonStyle(PlainButtonStyle())
                         
                         
                         // Community Responses
@@ -60,21 +106,21 @@ struct HomeMainView: View {
                         
                         Spacer()
                         
-                        // Logo
-                        if (colorScheme == .light) {
-                            Image("LogoTransparentWhiteBackground")
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                        } else if (colorScheme == .dark) {
-                            Image("LogoBlackBackground")
-                                .resizable()
-                                .frame(width: 80, height: 80)
+                        Button(action: {
+                            authController.isAuthPopupShowing.toggle()
+                        }) {
+                            // Logo
+                            if (colorScheme == .light) {
+                                Image("LogoTransparentWhiteBackground")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+                            } else if (colorScheme == .dark) {
+                                Image("LogoBlackBackground")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+                            }
                         }
                         
-                        Text("Promptly")
-                            .font(.system(size: 15, design: .serif))
-                            .frame(maxWidth: .infinity, alignment: .bottom)
-                            .opacity(0.8)
                         Text("version 1.1 june 2024")
                             .font(.system(size: 11, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .bottom)
@@ -82,11 +128,18 @@ struct HomeMainView: View {
                     }
                     .padding(.leading, 20)
                     .padding(.trailing, 20)
+                    .onTapGesture {
+                        if (authController.isAuthPopupShowing) {
+                            authController.isAuthPopupShowing = false
+                        }
+                    }
                 }
-                .onTapGesture {
-                    self.endEditing()
-                }
+                .blur(radius: authController.isAuthPopupShowing ? 10.0 : 0.0)
                 
+                
+                if (authController.isAuthPopupShowing) {
+                    SignUpOrIn()
+                }
             }
         }
     }
@@ -94,6 +147,7 @@ struct HomeMainView: View {
 
 #Preview {
     HomeMainView()
+        .environmentObject(AuthController())
 }
 
 
@@ -108,7 +162,7 @@ struct CommunityResponses : View {
                 areTopCommentsShowing.toggle()
             }) {
                 HStack {
-                    Text("View Top Comments")
+                    Text("View Top Shorts")
                         .font(.system(size: 11, design: .serif))
                     
                     if (areTopCommentsShowing) {
@@ -175,23 +229,5 @@ struct CommunityResponses : View {
         .sheet(isPresented: $isSingleCommunityResponsePopupShowing) {
             SingleCommunityResponseView(imageName: "wolf", authorHandle: "bob", timePosted: "1:41pm", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", response: "The seasoned knight, Sir Alistair, and his loyal squire, Thomas, stumbled upon a chaotic scene. The carriage lay in shambles, its contents scattered across the forest floor. An injured dwarf leaned against a tree, grimacing in pain. “Bandits ambushed me,“ he groaned, clutching his leg.\n\nThomas knelt beside the dwarf, examining his wounds. “He can't walk, Sir. We need to help him.“\n\nSir Alistair surveyed the area, his hand resting on his sword hilt. “We can't leave him here, but the bandits might still be close. We must be cautious.“\n\nThe dwarf nodded weakly. “I overheard them planning to attack a nearby village.“\n\nSir Alistair's eyes hardened with resolve. “Then we’ll take him to safety and warn the villagers. Justice will come later.“", numLikes: 14, numComments: 2)
         }
-    }
-}
-
-extension View {
-    func endEditing() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
-
-struct KeyboardAdaptive: ViewModifier {
-    @ObservedObject private var keyboard = KeyboardResponder()
-    
-    func body(content: Content) -> some View {
-        content
-            .padding(.bottom, keyboard.currentHeight)
-        //            .animation(.easeOut(duration: 0.16))
-            .animation(.easeOut, value: 0.16)
-        
     }
 }

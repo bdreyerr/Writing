@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var authController = AuthController()
     var body: some View {
         
         ZStack {
             NavBarView()
         }
+        .environmentObject(authController)
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(AuthController())
 }
