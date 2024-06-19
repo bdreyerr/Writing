@@ -50,7 +50,6 @@ struct SinglePersonalResponse: View {
                                 .opacity(0.6)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        
                     }
                     
                     // Response

@@ -29,6 +29,8 @@ struct WritingApp: App {
     @AppStorage("isDarkMode") private var isDarkMode = false
     // App Storage: isSignedIn tracks auth status throughout app
     @AppStorage("isSignedIn") private var isSignedIn = false
+    // App Storage: isTabBarShowing tracks if the tab bar should be visible or not
+    @AppStorage("isTabBarShowing") private var isTabBarShowing = true
     
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate

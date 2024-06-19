@@ -6,24 +6,40 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
-struct Short {
-    // Dates
-    
+struct Short : Codable {
+    // Date -- also the firestore Id of the prompt this short was written for.
     var date: String?
-    // Figure out how supabase can do timestamp, this was a firebase thing in the past. We need this for sorting by recent
-//    var rawTimestamp: Timestamp?
+    // Exact time the short was submitted, used for sorting.
+    var rawTimestamp: Timestamp?
     
     // Author
     var authorId: String?
-    var authorName: String?
+    var authorFirstName: String?
+    var authorLastName: String?
     var authorProfilePictureUrl: String?
+    var authorNumShorts: Int?
+    var authorNumLikes: Int?
     
     // Content
     var shortRawText: String?
-    var shortTitle: String? // Should I do titles?
     
     // Stats
     var likeCount: Int?
     var commentCount: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case date
+        case rawTimestamp
+        case authorId
+        case authorFirstName
+        case authorLastName
+        case authorProfilePictureUrl
+        case authorNumShorts
+        case authorNumLikes
+        case shortRawText
+        case likeCount
+        case commentCount
+    }
 }

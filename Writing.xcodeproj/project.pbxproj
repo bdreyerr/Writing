@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */; };
+		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
+		1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB72C221CE500C8F5FD /* UserController.swift */; };
+		1A6FDDBA2C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB92C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift */; };
 		1A7944D32C0C050000757A7E /* HistoryAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */; };
 		1A7944D72C0C257000757A7E /* HomeMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944D62C0C257000757A7E /* HomeMainView.swift */; };
 		1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944E02C0E759F00757A7E /* SingleCommunityResponseView.swift */; };
@@ -22,6 +26,10 @@
 		1A8172C52C1F7DF4004217AA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1A8172C42C1F7DF4004217AA /* GoogleSignInSwift */; };
 		1A8172C72C1F7EB4004217AA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A8172C62C1F7EB4004217AA /* GoogleService-Info.plist */; };
 		1A8172CA2C1F98F1004217AA /* ApplicationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8172C92C1F98F1004217AA /* ApplicationUtility.swift */; };
+		1A8172CD2C1FA3C5004217AA /* FreeWriteMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8172CC2C1FA3C5004217AA /* FreeWriteMainView.swift */; };
+		1A8172D12C1FE091004217AA /* FreeWriteCreateEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8172D02C1FE091004217AA /* FreeWriteCreateEntryView.swift */; };
+		1A8172D32C1FE2F9004217AA /* FreeWriteSingleEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8172D22C1FE2F9004217AA /* FreeWriteSingleEntryView.swift */; };
+		1A8172D52C20D4DA004217AA /* FreeWriteContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8172D42C20D4DA004217AA /* FreeWriteContentView.swift */; };
 		1A97B08E2C0FD58F00F597AB /* CommunityResponseComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A97B08D2C0FD58F00F597AB /* CommunityResponseComment.swift */; };
 		1A97B0912C0FD9BA00F597AB /* NavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A97B0902C0FD9BA00F597AB /* NavBarView.swift */; };
 		1AA1A4FE2C0BD15D009D9233 /* WritingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA1A4FD2C0BD15D009D9233 /* WritingApp.swift */; };
@@ -49,6 +57,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSignedOutView.swift; sourceTree = "<group>"; };
+		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
+		1A6FDDB72C221CE500C8F5FD /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
+		1A6FDDB92C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortOrYourExistingShort.swift; sourceTree = "<group>"; };
 		1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAnalysisView.swift; sourceTree = "<group>"; };
 		1A7944D62C0C257000757A7E /* HomeMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainView.swift; sourceTree = "<group>"; };
 		1A7944E02C0E759F00757A7E /* SingleCommunityResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCommunityResponseView.swift; sourceTree = "<group>"; };
@@ -63,6 +75,10 @@
 		1A8172C62C1F7EB4004217AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../DailyShort/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1A8172C82C1F7F85004217AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1A8172C92C1F98F1004217AA /* ApplicationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationUtility.swift; sourceTree = "<group>"; };
+		1A8172CC2C1FA3C5004217AA /* FreeWriteMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteMainView.swift; sourceTree = "<group>"; };
+		1A8172D02C1FE091004217AA /* FreeWriteCreateEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteCreateEntryView.swift; sourceTree = "<group>"; };
+		1A8172D22C1FE2F9004217AA /* FreeWriteSingleEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSingleEntryView.swift; sourceTree = "<group>"; };
+		1A8172D42C20D4DA004217AA /* FreeWriteContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteContentView.swift; sourceTree = "<group>"; };
 		1A97B08D2C0FD58F00F597AB /* CommunityResponseComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityResponseComment.swift; sourceTree = "<group>"; };
 		1A97B0902C0FD9BA00F597AB /* NavBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarView.swift; sourceTree = "<group>"; };
 		1AA1A4FA2C0BD15D009D9233 /* Writing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Writing.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +142,7 @@
 		1A7944DB2C0E753F00757A7E /* CommunityResponses */ = {
 			isa = PBXGroup;
 			children = (
+				1A7944EA2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift */,
 				1A7944E02C0E759F00757A7E /* SingleCommunityResponseView.swift */,
 				1A7944E22C0E75AC00757A7E /* ListCommunityResponseView.swift */,
 			);
@@ -150,12 +167,24 @@
 		1A7944E92C0E779500757A7E /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				1A7944EA2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift */,
 				1A7944EC2C0E78FC00757A7E /* TodaysPrompt.swift */,
 				1A97B08D2C0FD58F00F597AB /* CommunityResponseComment.swift */,
 				1ABF08EC2C165D9E00F2E6AF /* SideBarStack.swift */,
+				1A6FDDB92C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift */,
 			);
 			path = Modules;
+			sourceTree = "<group>";
+		};
+		1A8172CB2C1FA3B7004217AA /* FreeWrite */ = {
+			isa = PBXGroup;
+			children = (
+				1A8172CC2C1FA3C5004217AA /* FreeWriteMainView.swift */,
+				1A8172D02C1FE091004217AA /* FreeWriteCreateEntryView.swift */,
+				1A8172D22C1FE2F9004217AA /* FreeWriteSingleEntryView.swift */,
+				1A8172D42C20D4DA004217AA /* FreeWriteContentView.swift */,
+				1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */,
+			);
+			path = FreeWrite;
 			sourceTree = "<group>";
 		};
 		1A97B08F2C0FD9AB00F597AB /* Navigation */ = {
@@ -210,6 +239,7 @@
 		1AA1A50B2C0BD5B0009D9233 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1A8172CB2C1FA3B7004217AA /* FreeWrite */,
 				1ABF09012C1CD58C00F2E6AF /* Auth */,
 				1A97B08F2C0FD9AB00F597AB /* Navigation */,
 				1A7944E92C0E779500757A7E /* Modules */,
@@ -246,6 +276,8 @@
 				1A8172BD2C1E20D6004217AA /* HomeController.swift */,
 				1A8172BF2C1E20E2004217AA /* ProfileController.swift */,
 				1A8172C92C1F98F1004217AA /* ApplicationUtility.swift */,
+				1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */,
+				1A6FDDB72C221CE500C8F5FD /* UserController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -337,20 +369,28 @@
 				1AA1A5002C0BD15D009D9233 /* ContentView.swift in Sources */,
 				1ABF08FC2C1A58BF00F2E6AF /* Prompt.swift in Sources */,
 				1A7944EB2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift in Sources */,
+				1A8172CD2C1FA3C5004217AA /* FreeWriteMainView.swift in Sources */,
 				1A7944E52C0E75C000757A7E /* CreateResponseView.swift in Sources */,
+				1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */,
 				1ABF08FE2C1A59E700F2E6AF /* Short.swift in Sources */,
+				1A8172D12C1FE091004217AA /* FreeWriteCreateEntryView.swift in Sources */,
 				1ABF09182C1E147700F2E6AF /* ProfileContentView.swift in Sources */,
 				1ABF09052C1CDCA400F2E6AF /* ProfileMainViewNotSignedIn.swift in Sources */,
+				1A8172D52C20D4DA004217AA /* FreeWriteContentView.swift in Sources */,
+				1A8172D32C1FE2F9004217AA /* FreeWriteSingleEntryView.swift in Sources */,
 				1A7944D32C0C050000757A7E /* HistoryAnalysisView.swift in Sources */,
+				1A6FDDBA2C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift in Sources */,
 				1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */,
 				1A7944EF2C0E7E4300757A7E /* HistorySingleResponseView.swift in Sources */,
 				1AA1A4FE2C0BD15D009D9233 /* WritingApp.swift in Sources */,
+				1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */,
 				1A7944D72C0C257000757A7E /* HomeMainView.swift in Sources */,
 				1ABF08FA2C1A4D0800F2E6AF /* User.swift in Sources */,
 				1A97B08E2C0FD58F00F597AB /* CommunityResponseComment.swift in Sources */,
 				1A7944E32C0E75AC00757A7E /* ListCommunityResponseView.swift in Sources */,
 				1A8172BE2C1E20D6004217AA /* HomeController.swift in Sources */,
 				1A8172CA2C1F98F1004217AA /* ApplicationUtility.swift in Sources */,
+				1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */,
 				1ABF08F32C16B51E00F2E6AF /* ProfileSuggestPromptView.swift in Sources */,
 				1ABF08EB2C16562C00F2E6AF /* SinglePersonalResponse.swift in Sources */,
 				1ABF09132C1D562800F2E6AF /* AuthController.swift in Sources */,

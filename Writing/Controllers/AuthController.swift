@@ -68,10 +68,10 @@ class AuthController : UIViewController, ObservableObject {
                 
                 guard let user = result?.user else { return }
                 print("user was signed in: ", user)
-                print(user.displayName)
-                print(user.email)
+                print(user.displayName ?? "display name")
+                print(user.email ?? "email")
                 
-                // Split the display name into a first and last name, there's a space inbetween
+                // Split the display name into a first and last name, there's a space inbetween, usually
                 let names = user.displayName?.components(separatedBy: " ")
 
                 if let names = names {

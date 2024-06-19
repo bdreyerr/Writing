@@ -10,6 +10,7 @@ import SwiftUI
 struct NavBarView: View {
     //    @AppStorage("isSignedIn") private var isSignedIn = false
     @Environment(\.colorScheme) var colorScheme
+    @AppStorage("isTabBarShowing") private var isTabBarShowing = true
     
     @State var selectedTab = 0
     
@@ -20,7 +21,8 @@ struct NavBarView: View {
             TabView(selection: $selectedTab) {
                 HomeMainView()
                     .tag(0)
-                ProfileMainViewNotSignedIn()
+                
+                FreeWriteContentView()
                     .tag(1)
                 
                 ProfileContentView()
@@ -39,7 +41,6 @@ struct NavBarView: View {
                 .padding(6)
             }
             // Border
-            
             .frame(height: 70)
             .background(colorScheme == .light ? .white.opacity(0.6) : .black.opacity(0.6))
             .cornerRadius(35)
@@ -48,6 +49,8 @@ struct NavBarView: View {
                     .stroke(colorScheme == .light ? Color.black : Color.white, lineWidth: 1) // 1 px border
             )
             .padding(.horizontal, 26)
+            // tab bar visibility
+            .opacity(self.isTabBarShowing ? 1.0 : 0.0)
             
             
         }

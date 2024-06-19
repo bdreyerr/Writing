@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// A full list of the community responses to a prompt (infinite scroll)
 struct ListCommunityResponseView: View {
     
     @State private var isSingleCommunityResponsePopupShowing: Bool = false
@@ -15,7 +16,7 @@ struct ListCommunityResponseView: View {
         ZStack {
             VStack {
                 ScrollView(showsIndicators: false) {
-                    TodaysPrompt(image: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike"], likeCount: 173, responseCount: 47, includeResponseCount: false)
+                    TodaysPrompt(imageText: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike"], likeCount: 173, responseCount: 47, includeResponseCount: false)
                     
                     // Sort By
                     HStack {

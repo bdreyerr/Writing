@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ProfileMainViewNotSignedIn: View {
     @Environment(\.colorScheme) var colorScheme
-    @AppStorage("isDarkMode") private var isDarkMode = false
     
     @State private var isSignUpViewShowing: Bool = false
     
@@ -146,7 +145,6 @@ struct ProfileMainViewNotSignedIn: View {
                                 }
                                 .padding(.bottom, 10)
                         }
-                        
                     }
                     
                     
@@ -162,7 +160,7 @@ struct ProfileMainViewNotSignedIn: View {
                                 .frame(width: 80, height: 80)
                         }
                         
-                        Text("Promptly")
+                        Text("The Daily Short")
                             .font(.system(size: 15, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .bottom)
                             .opacity(0.8)

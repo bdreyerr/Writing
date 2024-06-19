@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// The full view of a single community response to a prompt.
 struct SingleCommunityResponseView: View {
     
     var imageName: String

@@ -1,4 +1,4 @@
- //
+//
 //  TodaysPrompt.swift
 //  Writing
 //
@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct TodaysPrompt: View {
-    var image: String
+    @EnvironmentObject var homeController: HomeController
+    
+    var image: UIImage?
+    var imageText: String?
     var prompt: String
     var tags: [String]
     var likeCount: Int
@@ -20,9 +23,16 @@ struct TodaysPrompt: View {
     
     var body: some View {
         // Image
-        Image(image)
-            .resizable()
-            .frame(maxWidth: 400, maxHeight: 300)
+        if let img = image {
+            Image(uiImage: img)
+                .resizable()
+                .frame(maxWidth: 400, maxHeight: 300)
+        } else {
+            Image(imageText ?? "prompt-knight")
+                .resizable()
+                .frame(maxWidth: 400, maxHeight: 300)
+        }
+        
         
         // Text
         Text(prompt)
@@ -45,15 +55,42 @@ struct TodaysPrompt: View {
             // Likes and Responses Buttons
             HStack {
                 // Likes
-                HStack {
-                    Image(systemName: "hand.thumbsup")
-                        .font(.caption)
-//                                    .resizable()
-//                                    .frame(width: 15, height: 15)
-                    // Like Count
-                    Text("\(likeCount)")
-                        .font(.system(size: 13, design: .serif))
+                Button(action: {
+                    homeController.likePrompt()
+                }) {
+                    ZStack {
+                        HStack {
+                            Image(systemName: "hand.thumbsup")
+                                .font(.caption)
+                            //                                    .resizable()
+                            //                                    .frame(width: 15, height: 15)
+                            // Like Count
+                            Text("\(likeCount)")
+                                .font(.system(size: 13, design: .serif))
+                        }
+                        
+                        // if a prompt is focused
+                        if let prompt = homeController.focusedPrompt {
+                            // if that prompt is liked, change the color to green
+                            if let isLiked = homeController.likedPrompts[prompt.date!] {
+                                if isLiked == true {
+                                    HStack {
+                                        Image(systemName: "hand.thumbsup")
+                                            .font(.caption)
+                                        //                                    .resizable()
+                                        //                                    .frame(width: 15, height: 15)
+                                        // Like Count
+                                        Text("\(likeCount)")
+                                            .font(.system(size: 13, design: .serif))
+                                    }
+                                    .foregroundStyle(Color.orange)
+                                }
+                            }
+                        }
+                    }
                 }
+                .buttonStyle(PlainButtonStyle())
+                
                 // Responses
                 if (includeResponseCount) {
                     NavigationLink(destination: ListCommunityResponseView()) {
@@ -81,5 +118,6 @@ struct TodaysPrompt: View {
 }
 
 #Preview {
-    TodaysPrompt(image: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike", "Buboy"], likeCount: 173, responseCount: 47, includeResponseCount: true)
+    TodaysPrompt(imageText: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike", "Buboy"], likeCount: 173, responseCount: 47, includeResponseCount: true)
+        .environmentObject(HomeController())
 }

@@ -5,11 +5,12 @@
 //  Created by Ben Dreyer on 6/12/24.
 //
 
+import FirebaseFirestore
 import Foundation
 
 
-struct User : Encodable {
-    // ID? IDK how supabase does it
+struct User : Codable {
+    @DocumentID var id: String?
     var firstName: String?
     var lastName: String?
     
@@ -24,4 +25,17 @@ struct User : Encodable {
     var isAdmin: Bool?
     // Map of userIds : isBlocked
     var blockedUsers: [String: Bool]?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case firstName
+        case lastName
+        case email
+        case profilePictureUrl
+        case shortsCount
+        case numLikes
+        case avgWritingScore
+        case isAdmin
+        case blockedUsers
+    }
 }
