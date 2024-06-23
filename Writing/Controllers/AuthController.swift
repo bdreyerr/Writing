@@ -160,6 +160,14 @@ class AuthController : UIViewController, ObservableObject {
                     }
                 }
                 
+                if self.firstName == "" {
+                    self.firstName = "Guest"
+                }
+                
+                if self.lastName == "" {
+                    self.lastName = "Writer"
+                }
+                
                 guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
                     print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                     return

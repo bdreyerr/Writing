@@ -11,282 +11,251 @@ struct ProfileMainView: View {
     @Environment(\.colorScheme) var colorScheme
     @AppStorage("isDarkMode") private var isDarkMode = false
     
-    @State var showSidebar: Bool = false
-    @State var showSettingsView: Bool = false
+    @EnvironmentObject var profileController: ProfileController
+    @EnvironmentObject var userController: UserController
     
     var body: some View {
         NavigationView {
             ZStack {
-                SideBarStack(sidebarWidth: 240, showSidebar: $showSidebar) {
-                    VStack {
-                        // Edit Profile
-                        NavigationLink(destination: ProfileEditProfileView()) {
-                            HStack {
-                                Image(systemName: "person.badge.plus")
-                                    .font(.title3)
-                                Text("Edit Profile")
-                                    .font(.system(size: 16, design: .serif))
-                            }
-                            .padding(.bottom, 10)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        // Suggest a Prompt
-                        NavigationLink(destination: ProfileSuggestPromptView()) {
-                            HStack {
-                                Image(systemName: "leaf.circle")
-                                    .font(.title3)
-                                
-                                Text("Suggest a Prompt")
-                                    .font(.system(size: 16, design: .serif))
-                            }
-                            .padding(.bottom, 10)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        // How we Analyze
-                        NavigationLink(destination: ProfileHowWeAnalyzeView()) {
-                            HStack {
-                                Image(systemName: "bolt")
-                                    .font(.title3)
-                                
-                                Text("How we Analyze")
-                                    .font(.system(size: 16, design: .serif))
-                            }
-                            .padding(.bottom, 10)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        // How we Analyze
-                        NavigationLink(destination: ProfileHowWeAnalyzeView()) {
-                            HStack {
-                                Image(systemName: "chart.bar.xaxis.ascending")
-                                    .font(.title3)
-                                
-                                Text("Advertise with Us")
-                                    .font(.system(size: 16, design: .serif))
-                            }
-                            .padding(.bottom, 10)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        // Settings
-                        Button(action: {
-                            showSettingsView = true
-                        }) {
-                            HStack {
-                                Image(systemName: "gearshape")
-                                    .font(.title3)
-                                
-                                Text("Settings")
-                                    .font(.system(size: 16, design: .serif))
-                            }
-                            .padding(.bottom, 10)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            self.isDarkMode.toggle()
-                        }) {
-                            Image(systemName: "moon.stars")
-                                .font(.title)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .padding(.top, 60)
-                    .padding(.leading, 20)
-                    .padding(.trailing, 20)
-                    .padding(.bottom, 60)
-                    
+                SideBarStack(sidebarWidth: 240, showSidebar: $profileController.showSidebar) {
+                    ProfileSidebarContentView()
                 } content: {
-                    ZStack {
-                        VStack {
-                            RoundedRectangle(cornerRadius: 0.0)
-                                .edgesIgnoringSafeArea(.top)
-                                .foregroundStyle(colorScheme == .light ? Color.black : Color.white)
-                                .opacity(1.0)
-                                .frame(minWidth: 300, maxWidth: 500, minHeight: 120, maxHeight: 120)
+                    VStack {
+                        HStack {
+                            HStack {
+                                Button(action: {
+                                    profileController.showSidebar = true
+                                }) {
+                                    Image(systemName: "text.justify")
+                                        .font(.title3)
+                                        
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                // Small Logo
+                                if (colorScheme == .light) {
+                                    Image("LogoTransparentWhiteBackground")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                } else if (colorScheme == .dark) {
+                                    Image("LogoBlackBackground")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                }
+                                
+                                Text("| The Daily Short")
+                                    .font(.system(size: 16, design: .serif))
+                                    .bold()
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            // Side Menu activate
                             
-                            Spacer()
+                            
+                            HStack {
+                                // Share Profile
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.title3)
+                                
+                                // Settings buttons
+                                Button(action: {
+                                    profileController.isSettingsShowing = true
+                                }) {
+                                    Image(systemName: "gearshape")
+                                        .font(.title3)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                            }
+//                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            
                         }
+                        .padding(.top, 15)
+                        .padding(.leading, 20)
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 10)
                         
-                        VStack {
+                        ScrollView(showsIndicators: false) {
                             VStack {
                                 HStack {
-                                    // Side Menu activate
-                                    Button(action: {
-                                        self.showSidebar = true
-                                    }) {
-                                        Image(systemName: "text.justify")
-                                            .font(.title3)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    VStack {
+                                        if let image = userController.usersProfilePicture {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .frame(maxWidth: 60, maxHeight: 60)
+                                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        } else {
+                                            Image("space-guy")
+                                                .resizable()
+                                                .frame(maxWidth: 60, maxHeight: 60)
+                                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }
+                                        
+                                        if let user = userController.user {
+                                            Text(user.firstName! + " " + user.lastName!)
+                                                .font(.system(size: 16, design: .serif))
+                                                .bold()
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        } else {
+                                            Text("Salvor Hardin")
+                                                .font(.system(size: 16, design: .serif))
+                                                .bold()
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }
+                                        
                                     }
-                                    .buttonStyle(PlainButtonStyle())
+                                    .frame(minWidth: 100, maxWidth: 140, alignment: .leading)
+                                    
                                     
                                     HStack {
-                                        // Share Profile
-                                        Image(systemName: "square.and.arrow.up")
-                                            .font(.title3)
-                                        
-                                        // Settings buttons
-                                        Button(action: {
-                                            self.showSettingsView = true
-                                        }) {
-                                            Image(systemName: "gearshape")
-                                                .font(.title3)
+                                        if let user = userController.user {
+                                            VStack {
+                                                Text("\(user.shortsCount!)")
+                                                    .font(.system(size: 18, design: .serif))
+                                                
+                                                Text("Shorts")
+                                                    .font(.system(size: 12, design: .serif))
+                                            }
+                                            .padding()
+                                            
+                                            VStack {
+                                                Text("\(user.numLikes!)")
+                                                    .font(.system(size: 18, design: .serif))
+                                                
+                                                Text("Likes")
+                                                    .font(.system(size: 12, design: .serif))
+                                            }
+                                            .padding()
+                                            
+                                            VStack {
+                                                Text("7.3")
+                                                    .font(.system(size: 18, design: .serif))
+                                                
+                                                Text("Avg")
+                                                    .font(.system(size: 12, design: .serif))
+                                            }
+                                            .padding()
+                                        } else {
+                                            VStack {
+                                                Text("0")
+                                                    .font(.system(size: 18, design: .serif))
+                                                
+                                                Text("Shorts")
+                                                    .font(.system(size: 12, design: .serif))
+                                            }
+                                            .padding()
+                                            VStack {
+                                                Text("0")
+                                                    .font(.system(size: 18, design: .serif))
+                                                
+                                                Text("Likes")
+                                                    .font(.system(size: 12, design: .serif))
+                                            }
+                                            .padding()
+                                            VStack {
+                                                Text("0")
+                                                    .font(.system(size: 18, design: .serif))
+                                                
+                                                Text("Avg")
+                                                    .font(.system(size: 12, design: .serif))
+                                            }
+                                            .padding()
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                // Streaks
+                                
+                                VStack {
+                                    HStack {
+                                        Text("Streaks")
+                                            .font(.system(size: 16, design: .serif))
+                                            .opacity(0.8)
+                                    }
+                                }
+                                .padding(.top, 10)
+                                
+                                // Your Shorts
+                                HStack {
+                                    Text("Your Shorts")
+                                        .font(.system(size: 22, design: .serif))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    HStack {
+                                        Menu {
+                                            Button("Recent", action: {
+                                                return
+                                            })
+                                            Button("Best", action: {
+                                                return
+                                            })
+                                        } label: {
+                                            HStack {
+                                                Text("Recent")
+                                                    .font(.system(size: 13, design: .serif))
+                                                
+                                                Image(systemName: "clock")
+                                                    .font(.subheadline)
+                                            }
                                         }
                                         .buttonStyle(PlainButtonStyle())
-                                        
-                                    }.frame(maxWidth: .infinity, alignment: .trailing)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
-                                .foregroundStyle(colorScheme == .light ? Color.white : Color.black)
-                                
-                                Image("space-guy")
-                                    .resizable()
-                                    .frame(width: 80, height: 80)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20.0))
-                                
-                                HStack {
-                                    Text("Salvor Hardin")
-                                        .font(.system(size: 18, design: .serif))
-                                        .bold()
-                                    
-                                    // TODO(bendreyer): streaks
-                                    
-                                }
-                                .frame(maxWidth: .infinity, alignment: .center)
                             }
                             .padding(.leading, 20)
                             .padding(.trailing, 20)
-                            .padding(.top, 50)
                             
-                            ScrollView(showsIndicators: false) {
-                                VStack {
-                                    HStack {
-                                        VStack {
-                                            Text("63")
-                                                .font(.system(size: 20, design: .serif))
-                                            
-                                            Text("Shorts")
-                                                .font(.system(size: 12, design: .serif))
-                                        }
-                                        //                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding()
-                                        
-                                        
-                                        VStack {
-                                            Text("1.4k")
-                                                .font(.system(size: 20, design: .serif))
-                                            
-                                            Text("Likes")
-                                                .font(.system(size: 12, design: .serif))
-                                        }
-                                        //                                    .frame(maxWidth: .infinity, alignment: .center)
-                                        .padding()
-                                        
-                                        VStack {
-                                            Text("8.1")
-                                                .font(.system(size: 20, design: .serif))
-                                            
-                                            Text("Avg")
-                                                .font(.system(size: 12, design: .serif))
-                                        }
-                                        //                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                        .padding()
-                                    }
-                                    // Streaks
-                                    
-                                    // Recent Posts
-                                    
-                                    HStack {
-                                        Text("Your Shorts")
-                                            .font(.system(size: 22, design: .serif))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        
-                                        HStack {
-                                            Menu {
-                                                Button("Recent", action: {
-                                                    return
-                                                })
-                                                Button("Best", action: {
-                                                    return
-                                                })
-                                            } label: {
-                                                HStack {
-                                                    Text("Recent")
-                                                        .font(.system(size: 13, design: .serif))
-                                                    
-                                                    Image(systemName: "clock")
-                                                        .font(.subheadline)
-                                                }
-                                            }
-                                            .buttonStyle(PlainButtonStyle())
-                                        }
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                    }
-                                }
-                                .padding(.leading, 20)
-                                .padding(.trailing, 20)
-                                
-                                VStack(spacing: 0.5) {
-                                    HStack(spacing: 0.5) {
-                                        ResponsePreview(promptImage: "prompt1", date: "6.7.24")
-                                        ResponsePreview(promptImage: "prompt2", date: "6.1.24")
-                                        ResponsePreview(promptImage: "prompt5", date: "6.1.24")
-                                    }
-                                    
-                                    HStack(spacing: 0.5) {
-                                        ResponsePreview(promptImage: "prompt3", date: "5.27.24")
-                                        ResponsePreview(promptImage: "prompt4", date: "4.28.24")
-                                        ResponsePreview(promptImage: "prompt6", date: "4.28.24")
-                                    }
-                                    HStack(spacing: 0.5) {
-                                        ResponsePreview(promptImage: "prompt5", date: "4.13.24")
-                                        ResponsePreview(promptImage: "prompt6", date: "4.07.24")
-                                        ResponsePreview(promptImage: "prompt2", date: "4.07.24")
-                                    }
+                            VStack(spacing: 0.5) {
+                                HStack(spacing: 0.5) {
+                                    ResponsePreview(promptImage: "prompt1", date: "6.7.24")
+                                    ResponsePreview(promptImage: "prompt2", date: "6.1.24")
+                                    ResponsePreview(promptImage: "prompt5", date: "6.1.24")
                                 }
                                 
-                                VStack {
-                                    // Logo
-                                    if (colorScheme == .light) {
-                                        Image("LogoTransparentWhiteBackground")
-                                            .resizable()
-                                            .frame(width: 80, height: 80)
-                                    } else if (colorScheme == .dark) {
-                                        Image("LogoBlackBackground")
-                                            .resizable()
-                                            .frame(width: 80, height: 80)
-                                    }
-                                    
-                                    Text("Promptly")
-                                        .font(.system(size: 15, design: .serif))
-                                        .frame(maxWidth: .infinity, alignment: .bottom)
-                                        .opacity(0.8)
-                                    Text("version 1.1 june 2024")
-                                        .font(.system(size: 11, design: .serif))
-                                        .frame(maxWidth: .infinity, alignment: .bottom)
-                                        .opacity(0.8)
+                                HStack(spacing: 0.5) {
+                                    ResponsePreview(promptImage: "prompt3", date: "5.27.24")
+                                    ResponsePreview(promptImage: "prompt4", date: "4.28.24")
+                                    ResponsePreview(promptImage: "prompt6", date: "4.28.24")
                                 }
+                                HStack(spacing: 0.5) {
+                                    ResponsePreview(promptImage: "prompt5", date: "4.13.24")
+                                    ResponsePreview(promptImage: "prompt6", date: "4.07.24")
+                                    ResponsePreview(promptImage: "prompt2", date: "4.07.24")
+                                }
+                            }
+                            
+                            VStack {
+                                // Logo
+                                if (colorScheme == .light) {
+                                    Image("LogoTransparentWhiteBackground")
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+                                } else if (colorScheme == .dark) {
+                                    Image("LogoBlackBackground")
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+                                }
+                                
+                                Text("The Daily Short")
+                                    .font(.system(size: 15, design: .serif))
+                                    .frame(maxWidth: .infinity, alignment: .bottom)
+                                    .opacity(0.8)
+                                Text("version 1.1 june 2024")
+                                    .font(.system(size: 11, design: .serif))
+                                    .frame(maxWidth: .infinity, alignment: .bottom)
+                                    .opacity(0.8)
                             }
                             //                            .padding(.top, 50)
                         }
-                        .sheet(isPresented: $showSettingsView) {
+                        .sheet(isPresented: $profileController.isSettingsShowing) {
                             ProfileSettingsView()
                         }
-                        .blur(radius: showSidebar ? 4.0 : 0.0)
+                        .blur(radius: profileController.showSidebar ? 4.0 : 0.0)
                     }
-                    .edgesIgnoringSafeArea(.top)
-                    //                .padding(.top, 10)
                 }
             }
             .padding(.bottom, 25)
@@ -296,6 +265,8 @@ struct ProfileMainView: View {
 
 #Preview {
     ProfileMainView()
+        .environmentObject(ProfileController())
+        .environmentObject(UserController())
 }
 
 

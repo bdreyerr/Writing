@@ -10,10 +10,8 @@ import Foundation
 public struct Prompt : Codable {
     // dates
     
-    // Formated Date e,g, "Jun 1, 2024"
+    // Formated Date e,g, "20240612"
     var date: String?
-    // Figure out how supabase can do timestamp, this was a firebase thing in the past. We need this for sorting by recent
-//    var rawTimestamp: Timestamp?
     
     // Prompt Content
     var promptRawText: String?

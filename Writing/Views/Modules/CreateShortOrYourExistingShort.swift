@@ -10,6 +10,7 @@ import SwiftUI
 struct CreateShortOrYourExistingShort: View {
     @EnvironmentObject var homeController: HomeController
     // TODO: put the userController here and pass in info that way about the author
+    @EnvironmentObject var userController: UserController
     
     var body: some View {
         VStack {
@@ -21,7 +22,8 @@ struct CreateShortOrYourExistingShort: View {
                     .font(.system(size: 16, design: .serif))
                     .bold()
                 // Image name hardcoded for now
-                SingleLimitedCommunityResponse(imageName: "wolf", authorHandle: short.authorFirstName!, timePosted: short.rawTimestamp!.dateValue().formatted(date: .omitted, time: .shortened), responseLimited: short.shortRawText!, numLikes: short.likeCount!, numComments: short.commentCount!)
+//                SingleLimitedCommunityResponse(image: userController.usersProfilePicture ?? UIImage(named: "not-signed-in-profile")!, authorHandle: short.authorFirstName!, timePosted: short.rawTimestamp!.dateValue().formatted(date: .omitted, time: .shortened), response: short.shortRawText!, numLikes: short.likeCount!, numComments: short.commentCount!)
+                SingleLimitedCommunityResponse(short: short, isOwnedShort: true)
             } else {
                 // Else have the button
                 NavigationLink(destination: CreateResponseView()) {
@@ -35,7 +37,7 @@ struct CreateShortOrYourExistingShort: View {
                                     .font(.system(size: 14, design: .serif))
                                     .bold()
                                 
-                                Image(systemName: "plus.circle")
+                                Image(systemName: "pencil.and.scribble")
                                 
                             }
                         }
@@ -53,4 +55,5 @@ struct CreateShortOrYourExistingShort: View {
 #Preview {
     CreateShortOrYourExistingShort()
         .environmentObject(HomeController())
+        .environmentObject(UserController())
 }

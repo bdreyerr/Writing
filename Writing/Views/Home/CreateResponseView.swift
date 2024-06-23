@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct CreateResponseView: View {
     @AppStorage("isTabBarShowing") private var isTabBarShowing = true
@@ -40,9 +41,11 @@ struct CreateResponseView: View {
                                 .frame(height: 2)
                         }
                     )
+                // character limit
+                    .onReceive(Just(createShortController.shortContent)) { _ in createShortController.limitTextLength(createShortController.characterLimit) }
                 HStack {
                     // Character Count
-                    Text("\(createShortController.shortContent.count) / 1500 Characters")
+                    Text("\(createShortController.shortContent.count) / 2500 Characters")
                         .font(.system(size: 12, design: .serif))
                     
                     Button(action: {
@@ -50,7 +53,12 @@ struct CreateResponseView: View {
                         if let user = userController.user {
                             // Ensure a prompt is focused
                             if let prompt = homeController.focusedPrompt {
-                                createShortController.submitShort(user: user, prompt: prompt)
+                                Task {
+                                    createShortController.submitShort(user: user, prompt: prompt)
+                                    
+                                    // refresh, so the just submitted short will show up back on home view
+                                    homeController.retrieveSignedInUsersShort()
+                                }
                             } else {
                                 print("prompt not available")
                             }
@@ -62,7 +70,6 @@ struct CreateResponseView: View {
                             .font(.callout)
                             .foregroundStyle(Color.green)
                     }
-                    
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 

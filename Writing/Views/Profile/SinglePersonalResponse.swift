@@ -121,8 +121,8 @@ struct SinglePersonalResponse: View {
                         .font(.system(size: 13, design: .serif))
                     
                     // Response Comments (hardcoded 3 for now)
-                    CommunityResponseComment(imageName: "wolf", authorHandle: "southxx", timePosted: "7:45am", comment: "Really a substantial comment I appreciate your resiliancy in this area, lie forreal")
-                    CommunityResponseComment(imageName: "hoop-guy", authorHandle: "jokic", timePosted: "9:32pm", comment: "I'm not really sure how this relates to basketball at all. Please try again, 4/10.")
+//                    CommunityResponseComment(imageName: "wolf", authorHandle: "southxx", timePosted: "7:45am", comment: "Really a substantial comment I appreciate your resiliancy in this area, lie forreal")
+//                    CommunityResponseComment(imageName: "hoop-guy", authorHandle: "jokic", timePosted: "9:32pm", comment: "I'm not really sure how this relates to basketball at all. Please try again, 4/10.")
                     
                     
                 }

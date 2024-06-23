@@ -5,75 +5,107 @@
 //  Created by Ben Dreyer on 6/3/24.
 //
 
+import FirebaseFirestore
 import SwiftUI
 
 struct SingleLimitedCommunityResponse: View {
+    @EnvironmentObject var homeController: HomeController
+    @EnvironmentObject var userController: UserController
     
-    var imageName: String
-    var authorHandle: String
-    var timePosted: String
-    var responseLimited: String
-    var numLikes: Int
-    var numComments: Int
-    
+    // The short to be displayed (limied means preview, only show like first 200 characters of response)
+    var short: Short
+    // If the short belongs to the user, else it's a community short.
+    var isOwnedShort: Bool
     
     var body: some View {
-        VStack {
-            HStack {
-                // Profile Picture
-                Image(imageName)
-                    .resizable()
-                    .clipShape(Circle())
-                    .frame(width: 40, height: 40)
-                
-                
-                VStack {
-                    // Handle
-                    Text(authorHandle)
-                        .font(.system(size: 12, design: .serif))
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        Button(action: {
+            homeController.focusSingleShort(short: self.short, isOwned: isOwnedShort)
+            homeController.isFullCommunityResposneSheetShowing = true
+        }) {
+            VStack {
+                HStack {
+                    // Profile Picture
+                    if isOwnedShort {
+                        if let image = userController.usersProfilePicture {
+                            Image(uiImage: image)
+                                .resizable()
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
+                        } else {
+                            Image("not-signed-in-profile")
+                                .resizable()
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
+                        }
+                    } else {
+                        if let image = homeController.communityProfilePictures[short.authorId!] {
+                            Image(uiImage: image)
+                                .resizable()
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
+                        } else {
+                            Image("not-signed-in-profile")
+                                .resizable()
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
+                        }
+                    }
                     
-                    // Date posted
-                    Text(timePosted)
-                        .font(.system(size: 12, design: .serif))
-                        .opacity(0.6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    
+                    
+                    
+                    VStack {
+                        // Handle
+                        Text(short.authorFirstName! + " " + short.authorLastName!)
+                            .font(.system(size: 12, design: .serif))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        // Date posted
+                        Text(short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
+                            .font(.system(size: 12, design: .serif))
+                            .opacity(0.6)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    
                 }
                 
-            }
-            
-            // Response
-            Text(responseLimited)
-                .font(.system(size: 13, design: .serif))
+                // Response
+                Text(short.shortRawText!.prefix(200))
+                    .font(.system(size: 13, design: .serif))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                HStack {
+                    HStack {
+                        // Comment image
+                        Image(systemName: "hand.thumbsup")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                        // comment number
+                        Text("\(short.likeCount!)")
+                            .font(.system(size: 13, design: .serif))
+                    }
+                    
+                    HStack {
+                        // Comment image
+                        Image(systemName: "message")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                        // comment number
+                        Text("\(short.commentCount!)")
+                            .font(.system(size: 13, design: .serif))
+                    }
+                }
                 .frame(maxWidth: .infinity, alignment: .leading)
-            
-            HStack {
-                HStack {
-                    // Comment image
-                    Image(systemName: "hand.thumbsup")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                    // comment number
-                    Text("\(numLikes)")
-                        .font(.system(size: 13, design: .serif))
-                }
-                
-                HStack {
-                    // Comment image
-                    Image(systemName: "message")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                    // comment number
-                    Text("\(numComments)")
-                        .font(.system(size: 13, design: .serif))
-                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom, 10)
         }
-        .padding(.bottom, 10)
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
 #Preview {
-    SingleLimitedCommunityResponse(imageName: "wolf", authorHandle: "bob", timePosted: "1:41pm", responseLimited: "The big bear walked up the way and he was frolicking so nice and it was big and gay and throbbing wtf", numLikes: 14, numComments: 2)
+    SingleLimitedCommunityResponse(short: Short(date: "20240620", rawTimestamp: Timestamp(), authorId: "123", authorFirstName: "Ben", authorLastName: "Dreyer", authorProfilePictureUrl: "123", authorNumShorts: 12, authorNumLikes: 144, shortRawText: "This is a response for a good prompt and it was a great prompt to be honest so yearh.", likeCount: 4, commentCount: 1), isOwnedShort: false)
+        .environmentObject(HomeController())
+        .environmentObject(UserController())
 }

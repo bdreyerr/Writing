@@ -21,7 +21,7 @@ struct User : Codable {
     var shortsCount: Int?
     var numLikes: Int?
     // The average score of the user's writings
-    var avgWritingScore: Int?
+    var avgWritingScore: Float?
     var isAdmin: Bool?
     // Map of userIds : isBlocked
     var blockedUsers: [String: Bool]?

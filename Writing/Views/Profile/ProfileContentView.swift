@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ProfileContentView: View {
-    
     @AppStorage("isSignedIn") private var isSignedIn = false
     
     var body: some View {
@@ -17,14 +16,7 @@ struct ProfileContentView: View {
                 .opacity(isSignedIn ? 0.0 : 1.0)
             ProfileMainView()
                 .opacity(isSignedIn ? 1.0 : 0.0)
-            
-//            if self.isSignedIn == false {
-//                ProfileMainViewNotSignedIn()
-//            } else {
-//                ProfileMainView()
-//            }
         }
-//        .padding(.bottom, 25)
     }
 }
 

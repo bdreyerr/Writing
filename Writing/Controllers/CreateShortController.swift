@@ -15,6 +15,7 @@ class CreateShortController : ObservableObject {
     
     // State
     @Published var shortContent: String = ""
+    let characterLimit = 2500
     
     // Firebase
     let db = Firestore.firestore()
@@ -50,7 +51,13 @@ class CreateShortController : ObservableObject {
                 print("error updating short count on prompt: ", error.localizedDescription)
             }
         }
-        
         return
+    }
+    
+    // this function is called whenever a new character is added to the text field. Making sure it doesn't exceed the text length.
+    func limitTextLength(_ upper: Int) {
+        if self.shortContent.count > upper {
+            self.shortContent = String(self.shortContent.prefix(upper))
+        }
     }
 }

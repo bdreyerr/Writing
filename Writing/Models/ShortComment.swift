@@ -6,21 +6,35 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
-struct ShortComment {
-    // Dates
-    var date: String?
-    var time: String?
-    // rawtimestamp
+struct ShortComment : Codable, Identifiable {
+    @DocumentID var id: String?
     
     // Parent - the Id of the short this comment is on
-    var parentShort: String?
+    var parentShortId: String?
+    
+    // rawtimestamp
+    var rawTimestamp: Timestamp?
+    
     
     // Author
-    var commentAuthorId: String?
-    var commentAuthorName: String?
-    var commentAuthorProfilePictureUrl: String?
+    var authorId: String?
+    var authorFirstName: String?
+    var authorLastName: String?
+    var authorProfilePictureUrl: String?
     
     // Content
     var commentRawText: String?
+    
+    enum CodingKeys : String, CodingKey {
+        case id
+        case parentShortId
+        case rawTimestamp
+        case authorId
+        case authorFirstName
+        case authorLastName
+        case authorProfilePictureUrl
+        case commentRawText
+    }
 }

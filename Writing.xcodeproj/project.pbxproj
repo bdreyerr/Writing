@@ -11,6 +11,8 @@
 		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
 		1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB72C221CE500C8F5FD /* UserController.swift */; };
 		1A6FDDBA2C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB92C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift */; };
+		1A6FDDBC2C27525700C8F5FD /* CreateCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDBB2C27525700C8F5FD /* CreateCommentView.swift */; };
+		1A6FDDBE2C27799700C8F5FD /* ProfileSidebarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDBD2C27799700C8F5FD /* ProfileSidebarContentView.swift */; };
 		1A7944D32C0C050000757A7E /* HistoryAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */; };
 		1A7944D72C0C257000757A7E /* HomeMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944D62C0C257000757A7E /* HomeMainView.swift */; };
 		1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944E02C0E759F00757A7E /* SingleCommunityResponseView.swift */; };
@@ -61,6 +63,8 @@
 		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
 		1A6FDDB72C221CE500C8F5FD /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		1A6FDDB92C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortOrYourExistingShort.swift; sourceTree = "<group>"; };
+		1A6FDDBB2C27525700C8F5FD /* CreateCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCommentView.swift; sourceTree = "<group>"; };
+		1A6FDDBD2C27799700C8F5FD /* ProfileSidebarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSidebarContentView.swift; sourceTree = "<group>"; };
 		1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAnalysisView.swift; sourceTree = "<group>"; };
 		1A7944D62C0C257000757A7E /* HomeMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainView.swift; sourceTree = "<group>"; };
 		1A7944E02C0E759F00757A7E /* SingleCommunityResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCommunityResponseView.swift; sourceTree = "<group>"; };
@@ -135,6 +139,7 @@
 				1A7944DB2C0E753F00757A7E /* CommunityResponses */,
 				1A7944D62C0C257000757A7E /* HomeMainView.swift */,
 				1A7944E42C0E75C000757A7E /* CreateResponseView.swift */,
+				1A6FDDBB2C27525700C8F5FD /* CreateCommentView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -160,6 +165,7 @@
 				1ABF08F62C1809FD00F2E6AF /* ProfileSettingsView.swift */,
 				1ABF09042C1CDCA400F2E6AF /* ProfileMainViewNotSignedIn.swift */,
 				1ABF09172C1E147700F2E6AF /* ProfileContentView.swift */,
+				1A6FDDBD2C27799700C8F5FD /* ProfileSidebarContentView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -380,6 +386,7 @@
 				1A8172D32C1FE2F9004217AA /* FreeWriteSingleEntryView.swift in Sources */,
 				1A7944D32C0C050000757A7E /* HistoryAnalysisView.swift in Sources */,
 				1A6FDDBA2C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift in Sources */,
+				1A6FDDBC2C27525700C8F5FD /* CreateCommentView.swift in Sources */,
 				1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */,
 				1A7944EF2C0E7E4300757A7E /* HistorySingleResponseView.swift in Sources */,
 				1AA1A4FE2C0BD15D009D9233 /* WritingApp.swift in Sources */,
@@ -399,6 +406,7 @@
 				1ABF09032C1CD5B200F2E6AF /* SignUpOrIn.swift in Sources */,
 				1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */,
 				1A7944E82C0E75E500757A7E /* ProfileMainView.swift in Sources */,
+				1A6FDDBE2C27799700C8F5FD /* ProfileSidebarContentView.swift in Sources */,
 				1ABF08ED2C165D9E00F2E6AF /* SideBarStack.swift in Sources */,
 				1A97B0912C0FD9BA00F597AB /* NavBarView.swift in Sources */,
 				1ABF08F52C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift in Sources */,

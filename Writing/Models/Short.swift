@@ -7,8 +7,11 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
-struct Short : Codable {
+struct Short : Codable, Identifiable {
+    @DocumentID var id: String?
+//    var id: String?
     // Date -- also the firestore Id of the prompt this short was written for.
     var date: String?
     // Exact time the short was submitted, used for sorting.
@@ -30,6 +33,7 @@ struct Short : Codable {
     var commentCount: Int?
     
     enum CodingKeys: String, CodingKey {
+        case id
         case date
         case rawTimestamp
         case authorId

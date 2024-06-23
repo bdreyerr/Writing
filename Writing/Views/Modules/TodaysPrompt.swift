@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TodaysPrompt: View {
     @EnvironmentObject var homeController: HomeController
+    @EnvironmentObject var userController: UserController
     
     var image: UIImage?
     var imageText: String?
@@ -52,7 +53,7 @@ struct TodaysPrompt: View {
                 }
             }
             
-            // Likes and Responses Buttons
+            // Likes, Responses, Feedback, report, and admin button
             HStack {
                 // Likes
                 Button(action: {
@@ -106,9 +107,25 @@ struct TodaysPrompt: View {
                     
                 }
                 
-                // Report Prompt
-                Image(systemName: "exclamationmark.circle")
+                // Info popup (where you can report, give feedback, etc..)
+                Image(systemName: "info.circle")
                     .font(.caption)
+                    .padding(.trailing, 5)
+                
+                // Admin button to add responses (for testing) (not AI yet)
+                if let user = userController.user {
+                    if user.isAdmin! == true {
+                        Button(action: {
+                            homeController.addCommunityShorts()
+                        }) {
+                            Image(systemName: "plus.circle")
+                                .font(.caption)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .foregroundStyle(Color.green)
+                        .padding(.trailing, 5)
+                    }
+                }
                 
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -120,4 +137,5 @@ struct TodaysPrompt: View {
 #Preview {
     TodaysPrompt(imageText: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike", "Buboy"], likeCount: 173, responseCount: 47, includeResponseCount: true)
         .environmentObject(HomeController())
+        .environmentObject(UserController())
 }

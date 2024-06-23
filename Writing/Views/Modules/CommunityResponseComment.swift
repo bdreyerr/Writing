@@ -5,32 +5,38 @@
 //  Created by Ben Dreyer on 6/4/24.
 //
 
+import FirebaseFirestore
 import SwiftUI
 
 struct CommunityResponseComment: View {
+    @EnvironmentObject var homeController: HomeController
     
-    var imageName: String
-    var authorHandle: String
-    var timePosted: String
-    var comment: String
+    var comment: ShortComment
     
     var body: some View {
         VStack {
             HStack {
                 // Profile Picture
-                Image(imageName)
-                    .resizable()
-                    .clipShape(Circle())
-                    .frame(width: 30, height: 30)
+                if let image = homeController.communityProfilePictures[comment.authorId!] {
+                    Image(uiImage: image)
+                        .resizable()
+                        .clipShape(Circle())
+                        .frame(width: 30, height: 30)
+                } else {
+                    Image("not-signed-in-profile")
+                        .resizable()
+                        .clipShape(Circle())
+                        .frame(width: 30, height: 30)
+                }
                 
                 VStack {
                     // Handle
-                    Text(authorHandle)
+                    Text(comment.authorFirstName! + " " + comment.authorLastName!)
                         .font(.system(size: 11, design: .serif))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     // Date posted
-                    Text(timePosted)
+                    Text(comment.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
                         .font(.system(size: 11, design: .serif))
                         .opacity(0.6)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -41,7 +47,7 @@ struct CommunityResponseComment: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             
             // Response
-            Text(comment)
+            Text(comment.commentRawText!)
                 .font(.system(size: 12, design: .serif))
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -49,5 +55,5 @@ struct CommunityResponseComment: View {
 }
 
 #Preview {
-    CommunityResponseComment(imageName: "space-guy", authorHandle: "southxx", timePosted: "7:45am", comment: "This is a substantial story, it really has a lot of vigor. Well done.")
+    CommunityResponseComment(comment: ShortComment(rawTimestamp: Timestamp(), authorFirstName: "Ben", authorLastName: "Dreyer", commentRawText: "This is a substantial story, it really has a lot of vigor. Well done."))
 }

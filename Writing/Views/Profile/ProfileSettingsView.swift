@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileSettingsView: View {
     
     @EnvironmentObject var authController: AuthController
+    @EnvironmentObject var userController: UserController
     
     var body: some View {
         VStack {
@@ -22,8 +23,10 @@ struct ProfileSettingsView: View {
                 
                 Section(header: Text("Account")) {
                     Button(action: {
-                        // Sign out of account
+                        // Sign out of account - auth
                         authController.logOut()
+                        // Set the user back to nil
+                        userController.user = nil
                     }) {
                         Text("Sign Out")
                     }
@@ -42,4 +45,6 @@ struct ProfileSettingsView: View {
 
 #Preview {
     ProfileSettingsView()
+        .environmentObject(AuthController())
+        .environmentObject(UserController())
 }
