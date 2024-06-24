@@ -195,7 +195,7 @@ struct CommunityResponses : View {
                                 .frame(width: 130, height: 40)
                                 .overlay {
                                     HStack {
-                                        Text("All Comments")
+                                        Text("All Shorts")
                                             .font(.system(size: 11, design: .serif))
                                         
                                         Image(systemName: "message")

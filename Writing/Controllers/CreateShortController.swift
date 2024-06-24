@@ -29,7 +29,7 @@ class CreateShortController : ObservableObject {
         print("user is signed in we are good to go")
         
         // Create a new short
-        let short = Short(date: prompt.date, rawTimestamp: Timestamp(date: Date()), authorId: user.id, authorFirstName: user.firstName, authorLastName: user.lastName, authorProfilePictureUrl: user.profilePictureUrl, authorNumShorts: user.shortsCount, authorNumLikes: user.numLikes, shortRawText: self.shortContent, likeCount: 0, commentCount: 0)
+        let short = Short(date: prompt.date, rawTimestamp: Timestamp(date: Date()), authorId: user.id, authorFirstName: user.firstName, authorLastName: user.lastName, authorProfilePictureUrl: user.profilePictureUrl, authorNumShorts: user.shortsCount, authorNumLikes: user.numLikes, promptRawText: prompt.promptRawText!, shortRawText: self.shortContent, likeCount: 0, commentCount: 0)
         
         Task {
             // Write the short to firebase

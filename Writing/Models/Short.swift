@@ -26,6 +26,7 @@ struct Short : Codable, Identifiable {
     var authorNumLikes: Int?
     
     // Content
+    var promptRawText: String?
     var shortRawText: String?
     
     // Stats
@@ -42,8 +43,14 @@ struct Short : Codable, Identifiable {
         case authorProfilePictureUrl
         case authorNumShorts
         case authorNumLikes
+        case promptRawText
         case shortRawText
         case likeCount
         case commentCount
     }
+}
+
+struct ArrayOfShort : Identifiable {
+    let id = UUID()
+    var shorts = [Short]()
 }

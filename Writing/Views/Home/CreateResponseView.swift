@@ -14,6 +14,7 @@ struct CreateResponseView: View {
     @StateObject var createShortController = CreateShortController()
     @EnvironmentObject var userController: UserController
     @EnvironmentObject var homeController: HomeController
+    @EnvironmentObject var profileController: ProfileController
     
 //    @State private var response: String = ""
     var body: some View {
@@ -58,6 +59,9 @@ struct CreateResponseView: View {
                                     
                                     // refresh, so the just submitted short will show up back on home view
                                     homeController.retrieveSignedInUsersShort()
+                                    
+                                    // refresh the profile view, so the new short shows up on the profile
+                                    profileController.retrieveShorts()
                                 }
                             } else {
                                 print("prompt not available")

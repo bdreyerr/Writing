@@ -169,15 +169,6 @@ struct ProfileMainView: View {
                                 
                                 // Streaks
                                 
-                                VStack {
-                                    HStack {
-                                        Text("Streaks")
-                                            .font(.system(size: 16, design: .serif))
-                                            .opacity(0.8)
-                                    }
-                                }
-                                .padding(.top, 10)
-                                
                                 // Your Shorts
                                 HStack {
                                     Text("Your Shorts")
@@ -186,19 +177,43 @@ struct ProfileMainView: View {
                                     
                                     HStack {
                                         Menu {
-                                            Button("Recent", action: {
-                                                return
-                                            })
-                                            Button("Best", action: {
-                                                return
-                                            })
+                                            Button(action: {
+                                                profileController.sortShorts(byDate: true)
+                                            }) {
+                                                HStack {
+                                                    Text("Recent")
+                                                        .font(.system(size: 13, design: .serif))
+                                                    
+                                                    Image(systemName: "clock")
+                                                        .font(.subheadline)
+                                                }
+                                                
+                                            }
+                                            Button(action: {
+                                                profileController.sortShorts(byDate: false)
+                                            }) {
+                                                HStack {
+                                                    Text("Best")
+                                                        .font(.system(size: 13, design: .serif))
+                                                    
+                                                    Image(systemName: "crown")
+                                                        .font(.subheadline)
+                                                }
+                                            }
                                         } label: {
                                             HStack {
-                                                Text("Recent")
-                                                    .font(.system(size: 13, design: .serif))
                                                 
-                                                Image(systemName: "clock")
+                                                if profileController.areShortsSortedByDate {
+                                                    Text("Recent")
+                                                        .font(.system(size: 13, design: .serif))
+                                                } else {
+                                                    Text("Best")
+                                                        .font(.system(size: 13, design: .serif))
+                                                }
+                                                
+                                                Image(systemName: "chevron.down")
                                                     .font(.subheadline)
+                                                
                                             }
                                         }
                                         .buttonStyle(PlainButtonStyle())
@@ -209,24 +224,8 @@ struct ProfileMainView: View {
                             .padding(.leading, 20)
                             .padding(.trailing, 20)
                             
-                            VStack(spacing: 0.5) {
-                                HStack(spacing: 0.5) {
-                                    ResponsePreview(promptImage: "prompt1", date: "6.7.24")
-                                    ResponsePreview(promptImage: "prompt2", date: "6.1.24")
-                                    ResponsePreview(promptImage: "prompt5", date: "6.1.24")
-                                }
-                                
-                                HStack(spacing: 0.5) {
-                                    ResponsePreview(promptImage: "prompt3", date: "5.27.24")
-                                    ResponsePreview(promptImage: "prompt4", date: "4.28.24")
-                                    ResponsePreview(promptImage: "prompt6", date: "4.28.24")
-                                }
-                                HStack(spacing: 0.5) {
-                                    ResponsePreview(promptImage: "prompt5", date: "4.13.24")
-                                    ResponsePreview(promptImage: "prompt6", date: "4.07.24")
-                                    ResponsePreview(promptImage: "prompt2", date: "4.07.24")
-                                }
-                            }
+                            
+                            ProfileShortGrid()
                             
                             VStack {
                                 // Logo
@@ -254,6 +253,9 @@ struct ProfileMainView: View {
                         .sheet(isPresented: $profileController.isSettingsShowing) {
                             ProfileSettingsView()
                         }
+                        .sheet(isPresented: $profileController.isFocusedShortSheetShowing) {
+                            ProfileFocusedShortView()
+                        }
                         .blur(radius: profileController.showSidebar ? 4.0 : 0.0)
                     }
                 }
@@ -270,41 +272,41 @@ struct ProfileMainView: View {
 }
 
 
-struct ResponsePreview: View {
-    
-    var promptImage: String
-    var date: String
-    @State private var isSinglePersonalResponsePopupShowing: Bool = false
-    
-    var body: some View {
-        Button(action: {
-            self.isSinglePersonalResponsePopupShowing.toggle()
-        }) {
-            ZStack(alignment: .topTrailing) {
-                Image(promptImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: 400, maxHeight: 300)
-                
-                VStack {
-                    HStack {
-                        RoundedRectangle(cornerRadius: 30.0)
-                            .frame(width: 50, height: 20)
-                            .foregroundStyle(Color.black)
-                            .opacity(0.6)
-                        
-                            .overlay {
-                                Text(date)
-                                    .font(.system(size: 11, design: .serif))
-                                    .foregroundStyle(Color.white)
-                            }
-                    }
-                }
-                .padding(8)
-            }
-        }
-        .sheet(isPresented: $isSinglePersonalResponsePopupShowing) {
-            SinglePersonalResponse(imageName: "space-guy", authorHandle: "Salvor Hardin", timePosted: "3:23pm", prompt: "The inconcievable universe seemed increddibly large for almost all of it's inhabitants. Except for Jackal Lend, maybe one of the only men in the Universe who truly understood its scale.", response: "Jackal Lend stood on the bridge of his starship, gazing out at the swirling galaxies beyond. To most, the cosmos was an endless expanse of mystery and wonder. But to Jackal, it was a map he had memorized long ago. He had traveled to the furthest reaches, seen stars born and die, and navigated the black holes' perilous edges. The universe’s vastness was no longer daunting; it was a puzzle he had pieced together, every fragment a testament to his relentless exploration. For Jackal Lend, the universe wasn't vast; it was home.", numLikes: 42, numComments: 13)
-        }
-    }
-}
+//struct ResponsePreview: View {
+//    
+//    var promptImage: String
+//    var date: String
+//    @State private var isSinglePersonalResponsePopupShowing: Bool = false
+//    
+//    var body: some View {
+//        Button(action: {
+//            self.isSinglePersonalResponsePopupShowing.toggle()
+//        }) {
+//            ZStack(alignment: .topTrailing) {
+//                Image(promptImage)
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fill)
+//                    .frame(maxWidth: 400, maxHeight: 300)
+//                
+//                VStack {
+//                    HStack {
+//                        RoundedRectangle(cornerRadius: 30.0)
+//                            .frame(width: 50, height: 20)
+//                            .foregroundStyle(Color.black)
+//                            .opacity(0.6)
+//                        
+//                            .overlay {
+//                                Text(date)
+//                                    .font(.system(size: 11, design: .serif))
+//                                    .foregroundStyle(Color.white)
+//                            }
+//                    }
+//                }
+//                .padding(8)
+//            }
+//        }
+//        .sheet(isPresented: $isSinglePersonalResponsePopupShowing) {
+//            SinglePersonalResponse(imageName: "space-guy", authorHandle: "Salvor Hardin", timePosted: "3:23pm", prompt: "The inconcievable universe seemed increddibly large for almost all of it's inhabitants. Except for Jackal Lend, maybe one of the only men in the Universe who truly understood its scale.", response: "Jackal Lend stood on the bridge of his starship, gazing out at the swirling galaxies beyond. To most, the cosmos was an endless expanse of mystery and wonder. But to Jackal, it was a map he had memorized long ago. He had traveled to the furthest reaches, seen stars born and die, and navigated the black holes' perilous edges. The universe’s vastness was no longer daunting; it was a puzzle he had pieced together, every fragment a testament to his relentless exploration. For Jackal Lend, the universe wasn't vast; it was home.", numLikes: 42, numComments: 13)
+//        }
+//    }
+//}

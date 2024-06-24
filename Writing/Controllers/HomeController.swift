@@ -506,6 +506,12 @@ class HomeController : ObservableObject {
         }
     }
     
+    func clearShortOnSignOut() {
+        self.usersFocusedShort = nil
+        self.cachedUserShorts = [:]
+    }
+    
+    
     // limit comment length function
     
     
@@ -516,11 +522,11 @@ class HomeController : ObservableObject {
         if let prompt = self.focusedPrompt {
             // Build a couple of short objects
             
-            let short1 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "NfoTqlNKlqsZmObbP90z", authorFirstName: "George", authorLastName: "Kittle", authorProfilePictureUrl: "asdasd", authorNumShorts: 12, authorNumLikes: 72, shortRawText: "This is a test and isn't actually for popular purposes yok jnow.", likeCount: 1, commentCount: 14)
+            let short1 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "NfoTqlNKlqsZmObbP90z", authorFirstName: "George", authorLastName: "Kittle", authorProfilePictureUrl: "asdasd", authorNumShorts: 12, authorNumLikes: 72, promptRawText: prompt.promptRawText!, shortRawText: "This is a test and isn't actually for popular purposes yok jnow.", likeCount: 1, commentCount: 14)
             
-            let short2 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "S0mE0rS3RfSY2O21Yyk9", authorFirstName: "Josh", authorLastName: "Green", authorProfilePictureUrl: "asdasd", authorNumShorts: 32, authorNumLikes: 12, shortRawText: "A second test for testing purposes is like the ultimate thing isnt it.", likeCount: 14, commentCount: 1)
+            let short2 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "S0mE0rS3RfSY2O21Yyk9", authorFirstName: "Josh", authorLastName: "Green", authorProfilePictureUrl: "asdasd", authorNumShorts: 32, authorNumLikes: 12, promptRawText: prompt.promptRawText!, shortRawText: "A second test for testing purposes is like the ultimate thing isnt it.", likeCount: 14, commentCount: 1)
             
-            let short3 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "pWXYaNd6cAsAM9GxpsN8", authorFirstName: "Kelly", authorLastName: "Ball", authorProfilePictureUrl: "asdasd", authorNumShorts: 82, authorNumLikes: 72, shortRawText: "This short is from Kelly Ball and I really like the prompt. I don't know how to write anything though lol.", likeCount: 54, commentCount: 31)
+            let short3 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "pWXYaNd6cAsAM9GxpsN8", authorFirstName: "Kelly", authorLastName: "Ball", authorProfilePictureUrl: "asdasd", authorNumShorts: 82, authorNumLikes: 72, promptRawText: prompt.promptRawText!, shortRawText: "This short is from Kelly Ball and I really like the prompt. I don't know how to write anything though lol.", likeCount: 54, commentCount: 31)
             
             let shorts = [short1, short2, short3]
             // Write all three shorts to firestore

@@ -67,4 +67,9 @@ class UserController : ObservableObject {
             
         }
     }
+    
+    func logOut() {
+        self.user = nil
+        self.usersProfilePicture = nil
+    }
 }
