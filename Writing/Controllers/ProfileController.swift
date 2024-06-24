@@ -20,8 +20,12 @@ class ProfileController : ObservableObject {
     
     @Published var focusedShort: Short?
     
+    @Published var newShortText: String = ""
+    let characterLimit = 2500
+    
     // vars that control the view
     
+    @Published var isSignUpViewShowing: Bool = false
     @Published var isSettingsShowing: Bool = false
     @Published var showSidebar: Bool = false
     @Published var areShortsSortedByDate: Bool = true
@@ -116,6 +120,47 @@ class ProfileController : ObservableObject {
         self.isFocusedShortSheetShowing = true
     }
     
+    // Update the focused short to the new text stored in this controller
+    func editShort() {
+        // make sure a short is focused
+        if let short = self.focusedShort {
+            // Make sure the text has changed
+            if self.newShortText == short.shortRawText! {
+                print("the text didn't change at all")
+                return
+            }
+            
+            // Check text length
+            if self.newShortText.count == 0 {
+                print("new short text is empty")
+                return
+            }
+            
+            // Else update Firestore
+            Task {
+                let docRef = db.collection("shorts").document(short.id!)
+                
+                do {
+                    try await docRef.updateData([
+                        "shortRawText": self.newShortText
+                    ])
+                    print("changed text")
+                } catch let error {
+                    print("error updating short: ", error.localizedDescription)
+                }
+                
+                DispatchQueue.main.async {
+                    // Refresh the shorts stored on profile
+                    self.retrieveShorts()
+                    // close the views
+                    self.isFocusedShortSheetShowing = false
+                    // nil the focused short
+                    self.focusedShort = nil
+                }
+            }
+        }
+    }
+    
     // use this function to display a short's prompt's date in the profile view.
     func convertDateString(intDateString: String) -> String {
         // Step 1: Create a DateFormatter for the input format
@@ -182,6 +227,13 @@ class ProfileController : ObservableObject {
         for chunk in chunks {
             let arrayofShort = ArrayOfShort(shorts: chunk)
             self.chunksOfShorts.append(arrayofShort)
+        }
+    }
+    
+    // limits the number of characters you can write when editing your short (2500 characters)
+    func limitTextLength(_ upper: Int) {
+        if self.newShortText.count > upper {
+            self.newShortText = String(self.newShortText.prefix(upper))
         }
     }
 }

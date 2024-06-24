@@ -80,19 +80,15 @@ struct HomeMainView: View {
                         
                         Spacer()
                         
-                        Button(action: {
-                            authController.isAuthPopupShowing.toggle()
-                        }) {
-                            // Logo
-                            if (colorScheme == .light) {
-                                Image("LogoTransparentWhiteBackground")
-                                    .resizable()
-                                    .frame(width: 80, height: 80)
-                            } else if (colorScheme == .dark) {
-                                Image("LogoBlackBackground")
-                                    .resizable()
-                                    .frame(width: 80, height: 80)
-                            }
+                        // Logo
+                        if (colorScheme == .light) {
+                            Image("LogoTransparentWhiteBackground")
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                        } else if (colorScheme == .dark) {
+                            Image("LogoBlackBackground")
+                                .resizable()
+                                .frame(width: 80, height: 80)
                         }
                         Text("The Daily Short")
                             .font(.system(size: 15, design: .serif))

@@ -48,7 +48,7 @@ struct NavBarView: View {
                 RoundedRectangle(cornerRadius: 35)
                     .stroke(colorScheme == .light ? Color.black : Color.white, lineWidth: 1) // 1 px border
             )
-            .padding(.horizontal, 26)
+            .padding(.horizontal, 80)
             // tab bar visibility
             .opacity(self.isTabBarShowing ? 1.0 : 0.0)
             
@@ -73,6 +73,10 @@ struct NavBarView: View {
 #Preview {
     NavBarView()
         .environmentObject(AuthController())
+        .environmentObject(ProfileController())
+        .environmentObject(UserController())
+        .environmentObject(HomeController())
+        .environmentObject(CreateShortController())
 }
 
 enum TabbedItems : Int, CaseIterable {
@@ -116,10 +120,10 @@ extension NavBarView{
                 .foregroundColor(colorScheme == .light ? isActive ? .white : .gray : isActive ? .black : .gray)
                 .frame(width: 20, height: 20)
             if isActive{
-                Text(title)
-                    .font(.system(size: 14))
-//                    .foregroundColor(isActive ? .black : .gray)
-                    .foregroundColor(colorScheme == .light ? .white : .black)
+//                Text(title)
+//                    .font(.system(size: 14))
+////                    .foregroundColor(isActive ? .black : .gray)
+//                    .foregroundColor(colorScheme == .light ? .white : .black)
             }
             Spacer()
         }

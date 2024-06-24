@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct CreateShortOrYourExistingShort: View {
+    @AppStorage("isSignedIn") private var isSignedIn = false
+    
     @EnvironmentObject var homeController: HomeController
     // TODO: put the userController here and pass in info that way about the author
     @EnvironmentObject var userController: UserController
+    @EnvironmentObject var authController: AuthController
+    
     
     var body: some View {
         VStack {
@@ -22,28 +26,54 @@ struct CreateShortOrYourExistingShort: View {
                     .font(.system(size: 16, design: .serif))
                     .bold()
                 // Image name hardcoded for now
-//                SingleLimitedCommunityResponse(image: userController.usersProfilePicture ?? UIImage(named: "not-signed-in-profile")!, authorHandle: short.authorFirstName!, timePosted: short.rawTimestamp!.dateValue().formatted(date: .omitted, time: .shortened), response: short.shortRawText!, numLikes: short.likeCount!, numComments: short.commentCount!)
                 SingleLimitedCommunityResponse(short: short, isOwnedShort: true)
             } else {
-                // Else have the button
-                NavigationLink(destination: CreateResponseView()) {
-                    RoundedRectangle(cornerRadius: 25.0)
-                        .stroke(lineWidth: 1)
-                        .frame(width: 200, height: 40)
-                        .overlay {
-                            HStack {
-                                // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
-                                Text("Once upon a time...")
-                                    .font(.system(size: 14, design: .serif))
-                                    .bold()
-                                
-                                Image(systemName: "pencil.and.scribble")
-                                
+                // Otherwise the user can create a short.
+                // But if they are not logged in force them to log in
+                if (isSignedIn) {
+                    NavigationLink(destination: CreateResponseView()) {
+                        RoundedRectangle(cornerRadius: 25.0)
+                            .stroke(lineWidth: 1)
+                            .frame(width: 200, height: 40)
+                            .overlay {
+                                HStack {
+                                    // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
+                                    Text("Once upon a time...")
+                                        .font(.system(size: 14, design: .serif))
+                                        .bold()
+                                    
+                                    Image(systemName: "pencil.and.scribble")
+                                    
+                                }
                             }
-                        }
-                        .padding(.bottom, 10)
+                            .padding(.bottom, 10)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                } else {
+                    Button(action: {
+                        // enable show auth screen
+                        authController.isAuthPopupShowing = true
+                    }) {
+                        RoundedRectangle(cornerRadius: 25.0)
+                            .stroke(lineWidth: 1)
+                            .frame(width: 200, height: 40)
+                            .overlay {
+                                HStack {
+                                    // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
+                                    Text("Once upon a time...")
+                                        .font(.system(size: 14, design: .serif))
+                                        .bold()
+                                    
+                                    Image(systemName: "pencil.and.scribble")
+                                    
+                                }
+                            }
+                            .padding(.bottom, 10)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
+                
+                
             }
             
             
@@ -56,4 +86,5 @@ struct CreateShortOrYourExistingShort: View {
     CreateShortOrYourExistingShort()
         .environmentObject(HomeController())
         .environmentObject(UserController())
+        .environmentObject(AuthController())
 }

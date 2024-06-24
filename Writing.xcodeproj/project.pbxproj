@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A3C05EF2C2A10AE00BDB3F2 /* ProfileEditShortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05EE2C2A10AE00BDB3F2 /* ProfileEditShortView.swift */; };
 		1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */; };
 		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
 		1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB72C221CE500C8F5FD /* UserController.swift */; };
@@ -41,7 +42,6 @@
 		1AA1A5002C0BD15D009D9233 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA1A4FF2C0BD15D009D9233 /* ContentView.swift */; };
 		1AA1A5022C0BD15E009D9233 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA1A5012C0BD15E009D9233 /* Assets.xcassets */; };
 		1AA1A5052C0BD15E009D9233 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AA1A5042C0BD15E009D9233 /* Preview Assets.xcassets */; };
-		1ABF08EB2C16562C00F2E6AF /* SinglePersonalResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08EA2C16562C00F2E6AF /* SinglePersonalResponse.swift */; };
 		1ABF08ED2C165D9E00F2E6AF /* SideBarStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08EC2C165D9E00F2E6AF /* SideBarStack.swift */; };
 		1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */; };
 		1ABF08F32C16B51E00F2E6AF /* ProfileSuggestPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */; };
@@ -62,6 +62,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A3C05EE2C2A10AE00BDB3F2 /* ProfileEditShortView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditShortView.swift; sourceTree = "<group>"; };
 		1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSignedOutView.swift; sourceTree = "<group>"; };
 		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
 		1A6FDDB72C221CE500C8F5FD /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
@@ -96,7 +97,6 @@
 		1AA1A4FF2C0BD15D009D9233 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1AA1A5012C0BD15E009D9233 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1AA1A5042C0BD15E009D9233 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		1ABF08EA2C16562C00F2E6AF /* SinglePersonalResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePersonalResponse.swift; sourceTree = "<group>"; };
 		1ABF08EC2C165D9E00F2E6AF /* SideBarStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarStack.swift; sourceTree = "<group>"; };
 		1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditProfileView.swift; sourceTree = "<group>"; };
 		1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSuggestPromptView.swift; sourceTree = "<group>"; };
@@ -144,11 +144,11 @@
 		1A723BA72C28CF9200B0244A /* ProfileMainView-SignedIn */ = {
 			isa = PBXGroup;
 			children = (
-				1ABF08EA2C16562C00F2E6AF /* SinglePersonalResponse.swift */,
 				1A7944E72C0E75E500757A7E /* ProfileMainView.swift */,
 				1A723BA82C28CFBB00B0244A /* ProfileShortPreview.swift */,
 				1A723BAA2C28D13400B0244A /* ProfileShortGrid.swift */,
 				1A723BAC2C28EB6D00B0244A /* ProfileFocusedShortView.swift */,
+				1A3C05EE2C2A10AE00BDB3F2 /* ProfileEditShortView.swift */,
 			);
 			path = "ProfileMainView-SignedIn";
 			sourceTree = "<group>";
@@ -423,10 +423,10 @@
 				1A723BA92C28CFBB00B0244A /* ProfileShortPreview.swift in Sources */,
 				1A7944E32C0E75AC00757A7E /* ListCommunityResponseView.swift in Sources */,
 				1A8172BE2C1E20D6004217AA /* HomeController.swift in Sources */,
+				1A3C05EF2C2A10AE00BDB3F2 /* ProfileEditShortView.swift in Sources */,
 				1A8172CA2C1F98F1004217AA /* ApplicationUtility.swift in Sources */,
 				1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */,
 				1ABF08F32C16B51E00F2E6AF /* ProfileSuggestPromptView.swift in Sources */,
-				1ABF08EB2C16562C00F2E6AF /* SinglePersonalResponse.swift in Sources */,
 				1ABF09132C1D562800F2E6AF /* AuthController.swift in Sources */,
 				1A8172C02C1E20E2004217AA /* ProfileController.swift in Sources */,
 				1ABF08F72C1809FD00F2E6AF /* ProfileSettingsView.swift in Sources */,

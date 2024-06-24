@@ -85,7 +85,7 @@ struct ProfileMainView: View {
                                                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                         } else {
-                                            Image("space-guy")
+                                            Image("not-signed-in-profile")
                                                 .resizable()
                                                 .frame(maxWidth: 60, maxHeight: 60)
                                                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
@@ -98,7 +98,7 @@ struct ProfileMainView: View {
                                                 .bold()
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                         } else {
-                                            Text("Salvor Hardin")
+                                            Text("Guest Writer")
                                                 .font(.system(size: 16, design: .serif))
                                                 .bold()
                                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -166,6 +166,7 @@ struct ProfileMainView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.bottom, 20)
                                 
                                 // Streaks
                                 

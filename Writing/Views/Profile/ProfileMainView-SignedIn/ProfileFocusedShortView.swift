@@ -84,8 +84,8 @@ struct ProfileFocusedShortView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         HStack {
-                            // Edit Response
-                            NavigationLink(destination: CreateResponseView()) {
+                            // Edit Short
+                            NavigationLink(destination: ProfileEditShortView()) {
                                 RoundedRectangle(cornerRadius: 25.0)
                                     .stroke(lineWidth: 1)
                                     .frame(width: 150, height: 40)
