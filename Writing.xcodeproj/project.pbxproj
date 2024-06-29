@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1A3C05EF2C2A10AE00BDB3F2 /* ProfileEditShortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05EE2C2A10AE00BDB3F2 /* ProfileEditShortView.swift */; };
+		1A3C05F12C2E76F200BDB3F2 /* ProfileChangePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F02C2E76F200BDB3F2 /* ProfileChangePhotoView.swift */; };
+		1A3C05F32C2F6E4B00BDB3F2 /* PromptSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F22C2F6E4B00BDB3F2 /* PromptSuggestion.swift */; };
+		1A3C05F52C308A5A00BDB3F2 /* FreeWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F42C308A5A00BDB3F2 /* FreeWrite.swift */; };
+		1A3C05F72C308C7A00BDB3F2 /* FreeWriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F62C308C7A00BDB3F2 /* FreeWriteController.swift */; };
+		1A3C05F92C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */; };
 		1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */; };
 		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
 		1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB72C221CE500C8F5FD /* UserController.swift */; };
@@ -63,6 +68,11 @@
 
 /* Begin PBXFileReference section */
 		1A3C05EE2C2A10AE00BDB3F2 /* ProfileEditShortView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditShortView.swift; sourceTree = "<group>"; };
+		1A3C05F02C2E76F200BDB3F2 /* ProfileChangePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileChangePhotoView.swift; sourceTree = "<group>"; };
+		1A3C05F22C2F6E4B00BDB3F2 /* PromptSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptSuggestion.swift; sourceTree = "<group>"; };
+		1A3C05F42C308A5A00BDB3F2 /* FreeWrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWrite.swift; sourceTree = "<group>"; };
+		1A3C05F62C308C7A00BDB3F2 /* FreeWriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteController.swift; sourceTree = "<group>"; };
+		1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteEntryPreviewView.swift; sourceTree = "<group>"; };
 		1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSignedOutView.swift; sourceTree = "<group>"; };
 		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
 		1A6FDDB72C221CE500C8F5FD /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
@@ -137,6 +147,7 @@
 				1ABF08F42C16B53F00F2E6AF /* ProfileHowWeAnalyzeView.swift */,
 				1ABF08F22C16B51E00F2E6AF /* ProfileSuggestPromptView.swift */,
 				1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */,
+				1A3C05F02C2E76F200BDB3F2 /* ProfileChangePhotoView.swift */,
 			);
 			path = SidebarViews;
 			sourceTree = "<group>";
@@ -214,6 +225,7 @@
 				1A8172D22C1FE2F9004217AA /* FreeWriteSingleEntryView.swift */,
 				1A8172D42C20D4DA004217AA /* FreeWriteContentView.swift */,
 				1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */,
+				1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */,
 			);
 			path = FreeWrite;
 			sourceTree = "<group>";
@@ -248,6 +260,7 @@
 				1A8172C82C1F7F85004217AA /* Info.plist */,
 				1A8172C62C1F7EB4004217AA /* GoogleService-Info.plist */,
 				1ABF09142C1D5EC100F2E6AF /* Writing.entitlements */,
+				1A8172C92C1F98F1004217AA /* ApplicationUtility.swift */,
 				1ABF09112C1D561B00F2E6AF /* Controllers */,
 				1ABF08F82C1A4CF800F2E6AF /* Models */,
 				1AA1A50B2C0BD5B0009D9233 /* Views */,
@@ -288,6 +301,8 @@
 				1ABF08FB2C1A58BF00F2E6AF /* Prompt.swift */,
 				1ABF08FD2C1A59E700F2E6AF /* Short.swift */,
 				1ABF08FF2C1A5A7C00F2E6AF /* ShortComment.swift */,
+				1A3C05F22C2F6E4B00BDB3F2 /* PromptSuggestion.swift */,
+				1A3C05F42C308A5A00BDB3F2 /* FreeWrite.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -306,9 +321,9 @@
 				1ABF09122C1D562800F2E6AF /* AuthController.swift */,
 				1A8172BD2C1E20D6004217AA /* HomeController.swift */,
 				1A8172BF2C1E20E2004217AA /* ProfileController.swift */,
-				1A8172C92C1F98F1004217AA /* ApplicationUtility.swift */,
 				1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */,
 				1A6FDDB72C221CE500C8F5FD /* UserController.swift */,
+				1A3C05F62C308C7A00BDB3F2 /* FreeWriteController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -402,6 +417,7 @@
 				1A7944EB2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift in Sources */,
 				1A8172CD2C1FA3C5004217AA /* FreeWriteMainView.swift in Sources */,
 				1A723BAD2C28EB6D00B0244A /* ProfileFocusedShortView.swift in Sources */,
+				1A3C05F92C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift in Sources */,
 				1A7944E52C0E75C000757A7E /* CreateResponseView.swift in Sources */,
 				1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */,
 				1ABF08FE2C1A59E700F2E6AF /* Short.swift in Sources */,
@@ -413,12 +429,16 @@
 				1A7944D32C0C050000757A7E /* HistoryAnalysisView.swift in Sources */,
 				1A6FDDBA2C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift in Sources */,
 				1A6FDDBC2C27525700C8F5FD /* CreateCommentView.swift in Sources */,
+				1A3C05F72C308C7A00BDB3F2 /* FreeWriteController.swift in Sources */,
+				1A3C05F52C308A5A00BDB3F2 /* FreeWrite.swift in Sources */,
 				1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */,
 				1A7944EF2C0E7E4300757A7E /* HistorySingleResponseView.swift in Sources */,
+				1A3C05F32C2F6E4B00BDB3F2 /* PromptSuggestion.swift in Sources */,
 				1AA1A4FE2C0BD15D009D9233 /* WritingApp.swift in Sources */,
 				1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */,
 				1A7944D72C0C257000757A7E /* HomeMainView.swift in Sources */,
 				1ABF08FA2C1A4D0800F2E6AF /* User.swift in Sources */,
+				1A3C05F12C2E76F200BDB3F2 /* ProfileChangePhotoView.swift in Sources */,
 				1A97B08E2C0FD58F00F597AB /* CommunityResponseComment.swift in Sources */,
 				1A723BA92C28CFBB00B0244A /* ProfileShortPreview.swift in Sources */,
 				1A7944E32C0E75AC00757A7E /* ListCommunityResponseView.swift in Sources */,

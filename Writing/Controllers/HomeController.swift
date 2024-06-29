@@ -141,7 +141,12 @@ class HomeController : ObservableObject {
                             self.focusedPromptImage = image
                             
                             // Add image to cache
-                            self.cachedPromptImages[self.focusedPrompt!.date!]  = image
+                            // making sure the focusedPrompt exists and has a date
+                            if let prompt = self.focusedPrompt {
+                                if let date = prompt.date {
+                                    self.cachedPromptImages[date]  = image
+                                }
+                            }
                         }
                     }
                 }

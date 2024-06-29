@@ -39,6 +39,9 @@ struct WritingApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(isDarkMode ? .dark : .light)
+                .onAppear {
+                    self.isTabBarShowing = true
+                }
         }
     }
 }

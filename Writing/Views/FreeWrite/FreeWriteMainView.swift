@@ -9,6 +9,10 @@ import SwiftUI
 
 struct FreeWriteMainView: View {
     @Environment(\.colorScheme) var colorScheme
+    
+    @StateObject var freeWriteController = FreeWriteController()
+    @EnvironmentObject var userController: UserController
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -42,11 +46,10 @@ struct FreeWriteMainView: View {
                     
                     ScrollView(showsIndicators: false) {
                         VStack {
-                            
                             // Writing Stats
                             HStack {
                                 VStack {
-                                    Text("14")
+                                    Text("\(userController.user?.freeWriteCount ?? 0)")
                                         .font(.system(size: 20, design: .serif))
                                     
                                     Text("Entries")
@@ -55,7 +58,7 @@ struct FreeWriteMainView: View {
                                 .padding()
                                 
                                 VStack {
-                                    Text("105")
+                                    Text("\(userController.user?.freeWriteAverageWordCount ?? 0)")
                                         .font(.system(size: 20, design: .serif))
                                     
                                     Text("Avg Word Count")
@@ -76,13 +79,14 @@ struct FreeWriteMainView: View {
                             }
                             .padding(.bottom, 10)
                             
-                            EntryPreview(date: Date(), title: "Poetry 34", numWords: 144, icon: "sun.max")
                             
-                            EntryPreview(date: Date() - 144123123, title: "I Love him not", numWords: 34, icon: "figure.fishing")
-                            
-                            EntryPreview(date: Date() - 123123123, title: "The whisper", numWords: 204, icon: "flag.checkered")
-                            
-                            EntryPreview(date: Date() - 13132, title: "That evening of torture", numWords: 12, icon: "volleyball")
+                            ForEach(freeWriteController.freeWrites) { freeWrite in
+                                FreeWriteEntryPreviewView(freeWrite: freeWrite)
+                                    .onTapGesture {
+                                        print("it happened, clicked")
+                                        freeWriteController.focusFreeWrite(freeWrite: freeWrite)
+                                    }
+                            }
                             
                             NavigationLink(destination: FreeWriteCreateEntryView()) {
                                 RoundedRectangle(cornerRadius: 25.0)
@@ -129,68 +133,20 @@ struct FreeWriteMainView: View {
                         .padding(.trailing, 20)
                     }
                 }
+                .sheet(isPresented: $freeWriteController.isSingleFreeWriteSheetShowing) {
+                    FreeWriteSingleEntryView()
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.automatic)
+                }
             }
             .padding(.bottom, 25)
         }
+        .environmentObject(freeWriteController)
     }
 }
 
 #Preview {
     FreeWriteMainView()
-}
-
-struct EntryPreview : View {
-    
-    var date: Date
-    var title: String
-    var numWords: Int
-    var icon: String
-    
-    let calendar = Calendar.current
-    
-    var body: some View {
-        NavigationLink(destination: FreeWriteSingleEntryView(profilePicture: "wolf", authorHandle: "Salvor Hardin", title: "The Battle of Hardholm", content: "The air was ice. Fifty feet across the water Jon saw death. Thousands of dead men, women and children staring soullessly across the lake at Jon and his men. The stench hit him first. A tide of decay washing over them, thick and cloying. It was the smell of hopelessness, of a battle long since lost.\n\nJon tightened his grip on his sword, the leather slick beneath his sweating palms. He could hear the ragged gasps of his men, the fear a palpable presence in the thin air. A raven circled overhead, its harsh caw echoing across the desolate landscape. Jon shivered, not just from the cold, but from a deeper dread that gnawed at him. How many lives had been lost here, defending this forgotten corner of the world? And for what? The dead offered no answers, only a silent accusation.", icon: "sun.max")) {
-            VStack {
-                HStack {
-                    VStack {
-                        Text("\(calendar.component(.day, from: date))")
-                            .font(.system(size: 18, design: .serif))
-                        
-                        Text("Jun")
-                            .font(.system(size: 12, design: .serif))
-                    }
-                    
-                    
-                    Text("|")
-                        .font(.system(size: 25, design: .serif))
-                    
-                    VStack {
-                        Text(title)
-                            .font(.system(size: 18, design: .serif))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        HStack {
-                            Text("Last Updated \(date.formatted(date: .omitted, time: .shortened))")
-                                .font(.system(size: 12, design: .serif))
-                            
-                            Text("●")
-                                .font(.system(size: 12, design: .serif))
-                            
-                            Text("\(numWords) words")
-                                .font(.system(size: 12, design: .serif))
-                            
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    
-                    Image(systemName: icon)
-                        .font(.headline)
-                    
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.bottom, 5)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
+        .environmentObject(FreeWriteController())
+        .environmentObject(UserController())
 }

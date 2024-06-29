@@ -5,42 +5,53 @@
 //  Created by Ben Dreyer on 6/16/24.
 //
 
+import Combine
 import SwiftUI
 
 struct FreeWriteCreateEntryView: View {
     @AppStorage("isTabBarShowing") private var isTabBarShowing = true
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
-    @State private var title: String = ""
-    @State private var icon: String = "sun.max"
-    @State private var entryText: String = ""
+    @EnvironmentObject var freeWriteController: FreeWriteController
+    @EnvironmentObject var userController: UserController
     
     var body: some View {
-        
-        
         ZStack {
             VStack {
-                
                 HStack {
-                    TextField("A poem about ..", text: $title)
+                    TextField("A poem about...", text: $freeWriteController.titleText)
                         .font(.system(size: 20, design: .serif))
                     
                     HStack {
-                        Image(systemName: "sun.max")
+//                        Image(systemName: freeWriteController.iconName)
                         
-                        Button(action: {
-                            
-                        }) {
-                            Image(systemName: "arrowtriangle.down.fill")
-                                .resizable()
-                                .frame(width: 15, height: 10)
+                        Picker("", selection: $freeWriteController.iconName) {
+                            ForEach(freeWriteController.iconOptions, id: \.self) { image in
+                                Image(systemName: image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)  // Adjust size as needed
+                                    .foregroundColor(.black)
+                                    .tag(freeWriteController.iconOptions.firstIndex(of: image)!)
+                            }
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .pickerStyle(DefaultPickerStyle())
+                        .accentColor(self.isDarkMode ? Color.white : Color.black)
+                        
+//                        Button(action: {
+//                            
+//                        }) {
+//                            Image(systemName: "arrowtriangle.down.fill")
+//                                .resizable()
+//                                .frame(width: 15, height: 10)
+//                        }
+//                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.bottom, 10)
+                
                 ScrollView(showsIndicators: false) {
-                    TextField("Once upon a time...",text: $entryText, axis: .vertical)
-                    //                    .modifier(KeyboardAdaptive())
+                    TextField("Once upon a time...",text: $freeWriteController.contentText, axis: .vertical)
                         .font(.system(size: 16, design: .serif))
                     // Styling
                         .padding(.vertical, 8)
@@ -51,14 +62,37 @@ struct FreeWriteCreateEntryView: View {
                                     .frame(height: 2)
                             }
                         )
+                        .onChange(of: freeWriteController.contentText) {
+                            freeWriteController.updateWordCount()
+                        }
+                    
                     HStack {
                         // Character Count
-                        Text("\(self.entryText.count) / 3000 Characters")
+                        Text("\(freeWriteController.wordCount) Words")
                             .font(.system(size: 12, design: .serif))
                         
-                        Image(systemName: "arrowshape.right.circle")
-                            .font(.callout)
-                            .foregroundStyle(Color.green)
+                        
+                        Button(action: {
+                            if let user = userController.user {
+                                Task {
+                                    freeWriteController.submitFreeWrite(freeWriteCount: user.freeWriteCount!, freeWriteAverageWordCount: user.freeWriteAverageWordCount!)
+                                    
+                                    // re-pull the freewrites for the user
+                                    freeWriteController.retrieveFreeWrites()
+                                    
+                                    // re-pull the user in user controller
+                                    userController.retrieveUserFromFirestore(userId: user.id!)
+                                }
+                            }
+                            
+                        }) {
+                            Image(systemName: "arrowshape.right.circle")
+                                .font(.callout)
+                                .foregroundStyle(Color.green)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .disabled(freeWriteController.titleText.isEmpty || freeWriteController.contentText.isEmpty)
+                        
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
@@ -78,4 +112,6 @@ struct FreeWriteCreateEntryView: View {
 
 #Preview {
     FreeWriteCreateEntryView()
+        .environmentObject(FreeWriteController())
+        .environmentObject(UserController())
 }

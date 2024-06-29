@@ -179,7 +179,7 @@ struct ProfileMainView: View {
                                     HStack {
                                         Menu {
                                             Button(action: {
-                                                profileController.sortShorts(byDate: true)
+                                                profileController.sortShorts(byDateWritten: true, byNumLikes: false, byPromptDate: false)
                                             }) {
                                                 HStack {
                                                     Text("Recent")
@@ -191,7 +191,7 @@ struct ProfileMainView: View {
                                                 
                                             }
                                             Button(action: {
-                                                profileController.sortShorts(byDate: false)
+                                                profileController.sortShorts(byDateWritten: false, byNumLikes: true, byPromptDate: false)
                                             }) {
                                                 HStack {
                                                     Text("Best")
@@ -201,14 +201,28 @@ struct ProfileMainView: View {
                                                         .font(.subheadline)
                                                 }
                                             }
+                                            Button(action: {
+                                                profileController.sortShorts(byDateWritten: false, byNumLikes: false, byPromptDate: true)
+                                            }) {
+                                                HStack {
+                                                    Text("Prompt Date")
+                                                        .font(.system(size: 13, design: .serif))
+                                                    
+                                                    Image(systemName: "calendar.circle")
+                                                        .font(.subheadline)
+                                                }
+                                            }
                                         } label: {
                                             HStack {
                                                 
-                                                if profileController.areShortsSortedByDate {
+                                                if profileController.shortsSortingMethod == 0 {
                                                     Text("Recent")
                                                         .font(.system(size: 13, design: .serif))
-                                                } else {
+                                                } else if profileController.shortsSortingMethod == 1 {
                                                     Text("Best")
+                                                        .font(.system(size: 13, design: .serif))
+                                                } else if profileController.shortsSortingMethod == 2 {
+                                                    Text("Prompt date")
                                                         .font(.system(size: 13, design: .serif))
                                                 }
                                                 

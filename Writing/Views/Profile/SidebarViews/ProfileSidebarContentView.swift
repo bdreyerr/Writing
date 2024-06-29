@@ -14,76 +14,183 @@ struct ProfileSidebarContentView: View {
     @EnvironmentObject var profileController: ProfileController
     var body: some View {
         VStack {
-            // Edit Profile
-            NavigationLink(destination: ProfileEditProfileView()) {
-                HStack {
-                    Image(systemName: "person.badge.plus")
-                        .font(.title3)
-                    Text("Edit Profile")
-                        .font(.system(size: 16, design: .serif))
-                }
-                .padding(.bottom, 10)
-            }
-            .buttonStyle(PlainButtonStyle())
-            .frame(maxWidth: .infinity, alignment: .leading)
             
-            // Suggest a Prompt
-            NavigationLink(destination: ProfileSuggestPromptView()) {
-                HStack {
-                    Image(systemName: "leaf.circle")
-                        .font(.title3)
-                    
-                    Text("Suggest a Prompt")
-                        .font(.system(size: 16, design: .serif))
-                }
-                .padding(.bottom, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .buttonStyle(PlainButtonStyle())
             
-            // How we Analyze
-            NavigationLink(destination: ProfileHowWeAnalyzeView()) {
-                HStack {
-                    Image(systemName: "bolt")
-                        .font(.title3)
+            // Icons
+            HStack {
+                VStack {
+                    // Edit Profile
+                    NavigationLink(destination: ProfileEditProfileView()) {
+                        Image(systemName: "person.badge.plus")
+                            .font(.title3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
                     
-                    Text("How we Analyze")
-                        .font(.system(size: 16, design: .serif))
+                    // Suggest a prompt
+                    NavigationLink(destination: ProfileSuggestPromptView()) {
+                        Image(systemName: "leaf.circle")
+                            .font(.title3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    // How we analyze
+                    NavigationLink(destination: ProfileHowWeAnalyzeView()) {
+                        Image(systemName: "bolt")
+                            .font(.title3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    // Advertise with us
+                    NavigationLink(destination: ProfileHowWeAnalyzeView()) {
+                        Image(systemName: "chart.bar.xaxis.ascending")
+                            .font(.title3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    
+                    // Settings
+                    Button(action: {
+                        profileController.isSettingsShowing = true
+                    }) {
+                        Image(systemName: "gearshape")
+                            .font(.title3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.bottom, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: 25)
+                
+                // Text
+                VStack {
+                    // Edit profile
+                    NavigationLink(destination: ProfileEditProfileView()) {
+                        Text("Edit Profile")
+                            .font(.system(size: 17, design: .serif))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    
+                    // Suggest a Prompt
+                    NavigationLink(destination: ProfileSuggestPromptView()) {
+                        Text("Suggest a Prompt")
+                            .font(.system(size: 17, design: .serif))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    NavigationLink(destination: ProfileHowWeAnalyzeView()) {
+                        Text("How we Analyze")
+                            .font(.system(size: 17, design: .serif))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    // How we Analyze
+                    NavigationLink(destination: ProfileHowWeAnalyzeView()) {
+                        Text("Advertise with Us")
+                            .font(.system(size: 17, design: .serif))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    // Settings
+                    Button(action: {
+                        profileController.isSettingsShowing = true
+                    }) {
+                        Text("Settings")
+                            .font(.system(size: 17, design: .serif))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 3)
+                }
             }
-            .buttonStyle(PlainButtonStyle())
             
-            // How we Analyze
-            NavigationLink(destination: ProfileHowWeAnalyzeView()) {
-                HStack {
-                    Image(systemName: "chart.bar.xaxis.ascending")
-                        .font(.title3)
-                    
-                    Text("Advertise with Us")
-                        .font(.system(size: 16, design: .serif))
-                }
-                .padding(.bottom, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .buttonStyle(PlainButtonStyle())
             
-            // Settings
-            Button(action: {
-                profileController.isSettingsShowing = true
-            }) {
-                HStack {
-                    Image(systemName: "gearshape")
-                        .font(.title3)
-                    
-                    Text("Settings")
-                        .font(.system(size: 16, design: .serif))
-                }
-                .padding(.bottom, 10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .buttonStyle(PlainButtonStyle())
+            
+//            // Edit Profile
+//            NavigationLink(destination: ProfileEditProfileView()) {
+//                HStack {
+//                    Image(systemName: "person.badge.plus")
+//                        .font(.title3)
+//                    Text("Edit Profile")
+//                        .font(.system(size: 16, design: .serif))
+//                }
+//                .padding(.bottom, 10)
+//            }
+//            .buttonStyle(PlainButtonStyle())
+//            .frame(maxWidth: .infinity, alignment: .leading)
+//            
+//            // Suggest a Prompt
+//            NavigationLink(destination: ProfileSuggestPromptView()) {
+//                HStack {
+//                    Image(systemName: "leaf.circle")
+//                        .font(.title3)
+//                    
+//                    Text("Suggest a Prompt")
+//                        .font(.system(size: 16, design: .serif))
+//                }
+//                .padding(.bottom, 10)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//            }
+//            .buttonStyle(PlainButtonStyle())
+//            
+//            // How we Analyze
+//            NavigationLink(destination: ProfileHowWeAnalyzeView()) {
+//                HStack {
+//                    Image(systemName: "bolt")
+//                        .font(.title3)
+//                    
+//                    Text("How we Analyze")
+//                        .font(.system(size: 16, design: .serif))
+//                }
+//                .padding(.bottom, 10)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//            }
+//            .buttonStyle(PlainButtonStyle())
+//            
+//            // How we Analyze
+//            NavigationLink(destination: ProfileHowWeAnalyzeView()) {
+//                HStack {
+//                    Image(systemName: "chart.bar.xaxis.ascending")
+//                        .font(.title3)
+//                    
+//                    Text("Advertise with Us")
+//                        .font(.system(size: 16, design: .serif))
+//                }
+//                .padding(.bottom, 10)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//            }
+//            .buttonStyle(PlainButtonStyle())
+//            
+//            // Settings
+//            Button(action: {
+//                profileController.isSettingsShowing = true
+//            }) {
+//                HStack {
+//                    Image(systemName: "gearshape")
+//                        .font(.title3)
+//                    
+//                    Text("Settings")
+//                        .font(.system(size: 16, design: .serif))
+//                }
+//                .padding(.bottom, 10)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//            }
+//            .buttonStyle(PlainButtonStyle())
             
             
             Spacer()

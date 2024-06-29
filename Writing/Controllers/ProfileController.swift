@@ -9,6 +9,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import Foundation
+import PhotosUI
 import SwiftUI
 
 class ProfileController : ObservableObject {
@@ -23,13 +24,23 @@ class ProfileController : ObservableObject {
     @Published var newShortText: String = ""
     let characterLimit = 2500
     
+    // Changing profile picture vars
+    @Published var data: Data?
+    @Published var selectedItem: [PhotosPickerItem] = []
+    
+    // Prompt suggestion
+    @Published var suggestedPromptText: String = ""
+    
     // vars that control the view
     
     @Published var isSignUpViewShowing: Bool = false
     @Published var isSettingsShowing: Bool = false
     @Published var showSidebar: Bool = false
-    @Published var areShortsSortedByDate: Bool = true
+    // Sorting method (0 = byDateWritten, 1 = byLikeCount, 2 = byPromptDate)
+    @Published var shortsSortingMethod: Int = 0
     @Published var isFocusedShortSheetShowing: Bool = false
+    @Published var isChangeNameAlertShowing: Bool = false
+    @Published var isChangePhotoSheetShowing: Bool = false
     
     // Firebase
     let db = Firestore.firestore()
@@ -207,19 +218,28 @@ class ProfileController : ObservableObject {
     }
     
     // Either sort the shorts by date or by likeCount
-    func sortShorts(byDate: Bool) {
+    func sortShorts(byDateWritten: Bool, byNumLikes: Bool, byPromptDate: Bool) {
         // set the bool (controls view dropdown text)
-        self.areShortsSortedByDate = byDate
         
         // clear the chunks
         self.chunksOfShorts = []
         // sort by date
-        if byDate {
+        if byDateWritten {
+            self.shortsSortingMethod = 0
             // Sort by timestamp (converted to date)
             self.shorts = self.shorts.sorted(by: {$0.rawTimestamp!.dateValue() > $1.rawTimestamp!.dateValue()} )
-        } else {
-            // sort by like count
+        }
+        
+        // sort by like count
+        if byNumLikes {
+            self.shortsSortingMethod = 1
             self.shorts = self.shorts.sorted(by: {$0.likeCount! > $1.likeCount! })
+        }
+        
+        // sort by prompt date
+        if byPromptDate {
+            self.shortsSortingMethod = 2
+            self.shorts = self.shorts.sorted(by: {$0.date! > $1.date! })
         }
         
         // rebuild the chunks
@@ -227,6 +247,31 @@ class ProfileController : ObservableObject {
         for chunk in chunks {
             let arrayofShort = ArrayOfShort(shorts: chunk)
             self.chunksOfShorts.append(arrayofShort)
+        }
+    }
+    
+    func submitPromptSuggestion(user: User) {
+        if self.suggestedPromptText.isEmpty { return }
+        
+        Task {
+            let promptSuggestion = PromptSuggestion(authorId: user.id!, authorFirstName: user.firstName!, authorLastName: user.lastName!, rawText: self.suggestedPromptText)
+            
+            do {
+                try db.collection("promptSuggestions").addDocument(from: promptSuggestion)
+                print("prompt suggestion written")
+                
+                DispatchQueue.main.async {
+                    self.suggestedPromptText = ""
+                }
+            } catch let error {
+                print("error uploading prompt suggestion: ", error.localizedDescription)
+            }
+        }
+    }
+    
+    func limitTextLengthSuggestedPrompt(_ upper: Int) {
+        if self.suggestedPromptText.count > upper {
+            self.suggestedPromptText = String(self.suggestedPromptText.prefix(upper))
         }
     }
     

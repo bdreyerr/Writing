@@ -22,6 +22,11 @@ struct User : Codable {
     var numLikes: Int?
     // The average score of the user's writings
     var avgWritingScore: Float?
+    
+    // Free Write Info
+    var freeWriteCount: Int?
+    var freeWriteAverageWordCount: Int?
+    
     var isAdmin: Bool?
     // Map of userIds : isBlocked
     var blockedUsers: [String: Bool]?
@@ -35,6 +40,8 @@ struct User : Codable {
         case shortsCount
         case numLikes
         case avgWritingScore
+        case freeWriteCount
+        case freeWriteAverageWordCount
         case isAdmin
         case blockedUsers
     }

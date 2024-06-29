@@ -137,51 +137,6 @@ struct ProfileMainViewNotSignedIn: View {
                                 Text("Your Shorts")
                                     .font(.system(size: 22, design: .serif))
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                HStack {
-                                    Menu {
-                                        Button(action: {
-                                            profileController.sortShorts(byDate: true)
-                                        }) {
-                                            HStack {
-                                                Text("Recent")
-                                                    .font(.system(size: 13, design: .serif))
-                                                
-                                                Image(systemName: "clock")
-                                                    .font(.subheadline)
-                                            }
-                                            
-                                        }
-                                        Button(action: {
-                                            profileController.sortShorts(byDate: false)
-                                        }) {
-                                            HStack {
-                                                Text("Best")
-                                                    .font(.system(size: 13, design: .serif))
-                                                
-                                                Image(systemName: "crown")
-                                                    .font(.subheadline)
-                                            }
-                                        }
-                                    } label: {
-                                        HStack {
-                                            
-                                            if profileController.areShortsSortedByDate {
-                                                Text("Recent")
-                                                    .font(.system(size: 13, design: .serif))
-                                            } else {
-                                                Text("Best")
-                                                    .font(.system(size: 13, design: .serif))
-                                            }
-                                            
-                                            Image(systemName: "chevron.down")
-                                                .font(.subheadline)
-                                            
-                                        }
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                }
-                                .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                         }
                         .padding(.leading, 20)
