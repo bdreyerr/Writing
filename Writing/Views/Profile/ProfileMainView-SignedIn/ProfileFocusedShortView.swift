@@ -10,6 +10,8 @@ import SwiftUI
 struct ProfileFocusedShortView: View {
     @EnvironmentObject var profileController: ProfileController
     
+    @State var isEditShortViewActive: Bool = false
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -85,7 +87,7 @@ struct ProfileFocusedShortView: View {
                         
                         HStack {
                             // Edit Short
-                            NavigationLink(destination: ProfileEditShortView()) {
+                            NavigationLink(destination: ProfileEditShortView(), isActive: $isEditShortViewActive) {
                                 RoundedRectangle(cornerRadius: 25.0)
                                     .stroke(lineWidth: 1)
                                     .frame(width: 150, height: 40)

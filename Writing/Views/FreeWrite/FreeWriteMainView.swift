@@ -73,9 +73,13 @@ struct FreeWriteMainView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .bold()
                                 
-                                Text("View All")
-                                    .font(.system(size: 12, design: .serif))
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                NavigationLink(destination: FreeWriteFullListView()) {
+                                    Text("View All")
+                                        .font(.system(size: 12, design: .serif))
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
                             }
                             .padding(.bottom, 10)
                             

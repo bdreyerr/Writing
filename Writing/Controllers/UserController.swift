@@ -75,6 +75,27 @@ class UserController : ObservableObject {
     func logOut() {
         self.user = nil
         self.usersProfilePicture = nil
+        print("log out - local user")
+    }
+    
+    func deleteUser() {
+        // Delete the current user in firestore (not auth)
+        Task {
+            if let user = self.user {
+                do {
+                    try await db.collection("users").document(user.id!).delete()
+                    print("Document successfully removed!")
+                    DispatchQueue.main.async {
+                        self.logOut()
+                    }
+                    
+                } catch {
+                    print("Error removing document: \(error)")
+                }
+            } else {
+                print("no user and we can't delete it")
+            }
+        }
     }
     
     func changeName() {

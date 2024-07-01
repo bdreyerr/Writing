@@ -266,6 +266,20 @@ class AuthController : UIViewController, ObservableObject {
         print("The user logged out")
     }
     
+    func deleteAuthUser() {
+        let user = Auth.auth().currentUser
+        user?.delete { error in
+          if let error = error {
+              print("error deleting auth account: ", error)
+          } else {
+            // Account deleted.
+              print("auth accound deleted successfully")
+              self.logOut()
+          }
+        }
+    }
+    
+    
     // Functions for apple sign in flow
     
     // Generate a random Nonce used to make sure the ID token you get was granted specifically in response to your app's authentication request.

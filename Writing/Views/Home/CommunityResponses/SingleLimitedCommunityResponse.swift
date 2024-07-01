@@ -61,11 +61,24 @@ struct SingleLimitedCommunityResponse: View {
                             .font(.system(size: 12, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        // Date posted
-                        Text(short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
-                            .font(.system(size: 12, design: .serif))
-                            .opacity(0.6)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack {
+                            // Author title
+                            Text("Distinguished Author")
+                                .font(.system(size: 10, design: .serif))
+                                .opacity(0.6)
+//                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Text("●")
+                                .font(.system(size: 12, design: .serif))
+                                .opacity(0.4)
+                            
+                            // Date posted
+                            Text(short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
+                                .font(.system(size: 10, design: .serif))
+                                .opacity(0.6)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                     
                 }

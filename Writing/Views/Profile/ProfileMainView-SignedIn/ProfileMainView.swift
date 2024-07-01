@@ -104,6 +104,12 @@ struct ProfileMainView: View {
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                         }
                                         
+                                        // Profile Title
+                                        Text("Novice Author")
+                                            .font(.system(size: 12, design: .serif))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .opacity(0.7)
+                                        
                                     }
                                     .frame(minWidth: 100, maxWidth: 140, alignment: .leading)
                                     

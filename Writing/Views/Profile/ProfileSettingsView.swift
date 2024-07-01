@@ -14,6 +14,8 @@ struct ProfileSettingsView: View {
     @EnvironmentObject var homeController: HomeController
     @EnvironmentObject var profileController: ProfileController
     
+    @State var isConfirmDeleteAccountAlertShowing: Bool = false
+    
     var body: some View {
         VStack {
             List {
@@ -31,6 +33,8 @@ struct ProfileSettingsView: View {
                         userController.logOut()
                         // reset the shorts on home screen
                         homeController.clearShortOnSignOut()
+                        // reset the shorts on profile screen
+                        profileController.clearShorts()
                         // dismiss the settings sheet
                         profileController.isSettingsShowing = false
                     }) {
@@ -38,10 +42,34 @@ struct ProfileSettingsView: View {
                     }
                     
                     Button(action: {
-//                        self.confirmDelete = true
+                        self.isConfirmDeleteAccountAlertShowing = true
+                        
+                        
                     }) {
                         Text("Delete Account")
                             .foregroundColor(.red)
+                    }
+                    .alert("Are you sure?", isPresented: $isConfirmDeleteAccountAlertShowing) {
+                        Button("Confirm") {
+                            Task {
+                                // delete local user
+                                userController.deleteUser()
+                                // delete auth
+                                authController.deleteAuthUser()
+//                                // Log out - auth
+//                                authController.logOut()
+//                                // log out - local
+//                                userController.logOut()
+                                // reset the shorts on home screen
+                                DispatchQueue.main.async {
+                                    homeController.clearShortOnSignOut()
+                                    // dismiss the settings sheet
+                                    profileController.isSettingsShowing = false
+                                }
+                            }
+                        }
+                        
+                        Button("Cancel", role: .cancel) { }
                     }
                 }
             }

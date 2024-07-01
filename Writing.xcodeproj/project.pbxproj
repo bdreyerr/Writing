@@ -13,6 +13,8 @@
 		1A3C05F52C308A5A00BDB3F2 /* FreeWrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F42C308A5A00BDB3F2 /* FreeWrite.swift */; };
 		1A3C05F72C308C7A00BDB3F2 /* FreeWriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F62C308C7A00BDB3F2 /* FreeWriteController.swift */; };
 		1A3C05F92C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */; };
+		1A3C05FB2C31E62E00BDB3F2 /* FreeWriteFullListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05FA2C31E62E00BDB3F2 /* FreeWriteFullListView.swift */; };
+		1A3C05FD2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05FC2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift */; };
 		1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */; };
 		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
 		1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB72C221CE500C8F5FD /* UserController.swift */; };
@@ -73,6 +75,8 @@
 		1A3C05F42C308A5A00BDB3F2 /* FreeWrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWrite.swift; sourceTree = "<group>"; };
 		1A3C05F62C308C7A00BDB3F2 /* FreeWriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteController.swift; sourceTree = "<group>"; };
 		1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteEntryPreviewView.swift; sourceTree = "<group>"; };
+		1A3C05FA2C31E62E00BDB3F2 /* FreeWriteFullListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteFullListView.swift; sourceTree = "<group>"; };
+		1A3C05FC2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteEditEntryView.swift; sourceTree = "<group>"; };
 		1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSignedOutView.swift; sourceTree = "<group>"; };
 		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
 		1A6FDDB72C221CE500C8F5FD /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
@@ -226,6 +230,8 @@
 				1A8172D42C20D4DA004217AA /* FreeWriteContentView.swift */,
 				1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */,
 				1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */,
+				1A3C05FA2C31E62E00BDB3F2 /* FreeWriteFullListView.swift */,
+				1A3C05FC2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift */,
 			);
 			path = FreeWrite;
 			sourceTree = "<group>";
@@ -432,6 +438,7 @@
 				1A3C05F72C308C7A00BDB3F2 /* FreeWriteController.swift in Sources */,
 				1A3C05F52C308A5A00BDB3F2 /* FreeWrite.swift in Sources */,
 				1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */,
+				1A3C05FB2C31E62E00BDB3F2 /* FreeWriteFullListView.swift in Sources */,
 				1A7944EF2C0E7E4300757A7E /* HistorySingleResponseView.swift in Sources */,
 				1A3C05F32C2F6E4B00BDB3F2 /* PromptSuggestion.swift in Sources */,
 				1AA1A4FE2C0BD15D009D9233 /* WritingApp.swift in Sources */,
@@ -443,6 +450,7 @@
 				1A723BA92C28CFBB00B0244A /* ProfileShortPreview.swift in Sources */,
 				1A7944E32C0E75AC00757A7E /* ListCommunityResponseView.swift in Sources */,
 				1A8172BE2C1E20D6004217AA /* HomeController.swift in Sources */,
+				1A3C05FD2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift in Sources */,
 				1A3C05EF2C2A10AE00BDB3F2 /* ProfileEditShortView.swift in Sources */,
 				1A8172CA2C1F98F1004217AA /* ApplicationUtility.swift in Sources */,
 				1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */,

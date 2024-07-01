@@ -269,6 +269,11 @@ class ProfileController : ObservableObject {
         }
     }
     
+    func clearShorts() {
+        self.shorts = []
+        self.chunksOfShorts = []
+    }
+    
     func limitTextLengthSuggestedPrompt(_ upper: Int) {
         if self.suggestedPromptText.count > upper {
             self.suggestedPromptText = String(self.suggestedPromptText.prefix(upper))

@@ -5,6 +5,7 @@
 //  Created by Ben Dreyer on 6/14/24.
 //
 
+import FirebaseAuth
 import SwiftUI
 import AuthenticationServices
 import GoogleSignIn
@@ -15,6 +16,7 @@ struct SignUpOrIn: View {
     @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var authController: AuthController
+    @EnvironmentObject var userController: UserController
     
     var body: some View {
             VStack {
@@ -51,7 +53,17 @@ struct SignUpOrIn: View {
                         request.nonce = authController.sha256(nonce)
                     },
                     onCompletion: { result in
-                        authController.appleSignInButtonOnCompletion(result: result)
+                        Task {
+                            authController.appleSignInButtonOnCompletion(result: result)
+                            
+                            // check if auth is ready by then lol
+                            if let user = Auth.auth().currentUser {
+                                userController.retrieveUserFromFirestore(userId: user.uid)
+                            } else {
+                                print("no auth user yet lol nice try")
+                            }
+                            
+                        }
                     }
                 )
                 .frame(maxWidth: 250, maxHeight: 40)
@@ -105,5 +117,6 @@ struct SignUpOrIn: View {
 #Preview {
     SignUpOrIn()
         .environmentObject(AuthController())
+        .environmentObject(UserController())
 }
 
