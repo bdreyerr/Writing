@@ -35,11 +35,46 @@ struct CommunityResponseComment: View {
                         .font(.system(size: 11, design: .serif))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    // Date posted
-                    Text(comment.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
-                        .font(.system(size: 11, design: .serif))
-                        .opacity(0.6)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    HStack {
+                        // Date posted
+                        Text(comment.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
+                            .font(.system(size: 11, design: .serif))
+                            .opacity(0.6)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        // Info popup (where you can report, give feedback, etc..)
+                        Button(action: {
+                            homeController.isReportCommentAlertShowing = true
+                        }) {
+                            Image(systemName: "info.circle")
+                                .font(.caption)
+                                .padding(.trailing, 5)
+                        }
+                        .padding(.leading, 5)
+                        .buttonStyle(PlainButtonStyle())
+                        .alert("Report Comment", isPresented: $homeController.isReportCommentAlertShowing) {
+                            Button("Offensive") {
+                                homeController.reportComment(reportReason: "Offensive", commentId: self.comment.id!)
+                            }
+                            
+                            Button("Harmful or Abusive") {
+                                homeController.reportComment(reportReason: "Harmful or Abusive", commentId: self.comment.id!)
+                            }
+                            
+                            Button("Graphic content") {
+                                homeController.reportComment(reportReason: "Graphic content", commentId: self.comment.id!)
+                            }
+                            
+                            Button("Poor Quality / Image does not match text") {
+                                homeController.reportComment(reportReason: "Poor Quality / Image does not match text", commentId: self.comment.id!)
+                            }
+                            
+                            Button("Cancel", role: .cancel) { }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
                 
@@ -50,6 +85,9 @@ struct CommunityResponseComment: View {
             Text(comment.commentRawText!)
                 .font(.system(size: 12, design: .serif))
                 .frame(maxWidth: .infinity, alignment: .leading)
+            
+            
+            
         }
     }
 }

@@ -63,8 +63,10 @@ class HomeController : ObservableObject {
     // Vars for controlling views (sheets, popups etc..)
     
     @Published var isFullCommunityResposneSheetShowing: Bool = false
-    
     @Published var isCreateCommentSheetShowing: Bool = false
+    @Published var isReportPromptAlertShowing: Bool = false
+    @Published var isReportShortAlertShowing: Bool = false
+    @Published var isReportCommentAlertShowing: Bool = false
     
     // Firestore
     let db = Firestore.firestore()
@@ -514,6 +516,107 @@ class HomeController : ObservableObject {
     func clearShortOnSignOut() {
         self.usersFocusedShort = nil
         self.cachedUserShorts = [:]
+    }
+    
+    func reportPrompt(reportReason: String) {
+        // ensure a user is authd
+        if let user = Auth.auth().currentUser {
+            // ensure a prompt is focused
+            if self.focusedPrompt == nil { return }
+            
+            // Else write the following info in a document into firestore
+            // Prompt date
+            // Report reason
+            // Reporting user id
+            // Date(timestamp) of report
+            
+            let promptDate: String = (self.focusedPrompt?.date!)!
+            let reportingUserId = user.uid
+            let date = Timestamp()
+            
+            Task {
+                do {
+                    let ref = try await db.collection("promptReports").addDocument(data: [
+                        "promptDate": promptDate,
+                        "reportReason": reportReason,
+                        "reportingUserId": reportingUserId,
+                        "date": date
+                    ])
+                    print("prompt report successfuly filed into firestore: ", ref.documentID)
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        } else {
+            print("no auth")
+        }
+    }
+    
+    func reportShort(reportReason: String) {
+        // ensure a user is authd
+        if let user = Auth.auth().currentUser {
+            // ensure a short is focused
+            if self.focusedSingleShort == nil {
+                return
+            }
+            
+            // Write the following info into a document into firestore
+            // Short Id
+            // Report Reason
+            // Reporting user id
+            // Date(timestamp) of report
+            
+            let focusedShortId : String = (self.focusedSingleShort?.id!)!
+            let reportingUserId = user.uid
+            let date = Timestamp()
+            
+            Task {
+                do {
+                    let ref = try await db.collection("shortReports").addDocument(data: [
+                        "shortId": focusedShortId,
+                        "reportReason": reportReason,
+                        "reportingUserId": reportingUserId,
+                        "date": date
+                    ])
+                    print("short report successfuly filed into firestore: ", ref.documentID)
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        } else {
+            print("no auth")
+        }
+    }
+    
+    func reportComment(reportReason: String, commentId: String) {
+        // ensure a user is authd
+        if let user = Auth.auth().currentUser {
+            
+            // Write the following info into a document into firestore
+            // Comment Id
+            // Report Reason
+            // Reporting user id
+            // Date(timestamp) of report
+            
+            let reportingUserId = user.uid
+            let date = Timestamp()
+            
+            Task {
+                do {
+                    let ref = try await db.collection("commentReports").addDocument(data: [
+                        "commentId": commentId,
+                        "reportReason": reportReason,
+                        "reportingUserId": reportingUserId,
+                        "date": date
+                    ])
+                    print("comment report successfuly filed into firestore: ", ref.documentID)
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        } else {
+            print("no auth")
+        }
     }
     
     

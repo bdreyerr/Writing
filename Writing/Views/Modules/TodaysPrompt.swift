@@ -108,10 +108,34 @@ struct TodaysPrompt: View {
                 }
                 
                 // Info popup (where you can report, give feedback, etc..)
-                Image(systemName: "info.circle")
-                    .font(.caption)
-                    .padding(.trailing, 5)
-                
+                Button(action: {
+                    homeController.isReportPromptAlertShowing = true
+                }) {
+                    Image(systemName: "info.circle")
+                        .font(.caption)
+                        .padding(.trailing, 5)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .alert("Report Prompt", isPresented: $homeController.isReportPromptAlertShowing) {
+                    Button("Offensive") {
+                        homeController.reportPrompt(reportReason: "Offensive")
+                    }
+                    
+                    Button("Harmful or Abusive") {
+                        homeController.reportPrompt(reportReason: "Harmful or Abusive")
+                    }
+                    
+                    Button("Graphic content") {
+                        homeController.reportPrompt(reportReason: "Graphic content")
+                    }
+                    
+                    Button("Poor Quality / Image does not match text") {
+                        homeController.reportPrompt(reportReason: "Poor Quality / Image does not match text")
+                    }
+                    
+                    Button("Cancel", role: .cancel) { }
+                }
+                                
                 // Admin button to add responses (for testing) (not AI yet)
                 if let user = userController.user {
                     if user.isAdmin! == true {

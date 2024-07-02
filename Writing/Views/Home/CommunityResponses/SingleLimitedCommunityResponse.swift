@@ -108,6 +108,10 @@ struct SingleLimitedCommunityResponse: View {
                         Text("\(short.commentCount!)")
                             .font(.system(size: 13, design: .serif))
                     }
+                    
+                    // Report Short
+                    Image(systemName: "info.circle")
+                        .font(.caption)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }

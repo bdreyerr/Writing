@@ -187,11 +187,34 @@ struct SingleCommunityResponseView: View {
                                     .font(.system(size: 13, design: .serif))
                             }
                             
-                            HStack {
-                                // Report Short
-                                Image(systemName: "exclamationmark.circle")
-                                    .resizable()
-                                    .frame(width: 15, height: 15)
+                            
+                            
+                            
+                            Button(action: {
+                                homeController.isReportShortAlertShowing = true
+                            }) {
+                                Image(systemName: "info.circle")
+                                    .font(.caption)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .alert("Report Short", isPresented: $homeController.isReportShortAlertShowing) {
+                                Button("Offensive") {
+                                    homeController.reportShort(reportReason: "Offensive")
+                                }
+                                
+                                Button("Harmful or Abusive") {
+                                    homeController.reportShort(reportReason: "Harmful or Abusive")
+                                }
+                                
+                                Button("Graphic content") {
+                                    homeController.reportShort(reportReason: "Graphic content")
+                                }
+                                
+                                Button("Poor Quality / Image does not match text") {
+                                    homeController.reportShort(reportReason: "Poor Quality / Image does not match text")
+                                }
+                                
+                                Button("Cancel", role: .cancel) { }
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
