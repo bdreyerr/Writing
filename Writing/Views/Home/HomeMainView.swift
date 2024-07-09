@@ -142,6 +142,7 @@ struct HomeMainView: View {
 
 struct CommunityResponses : View {
     @EnvironmentObject var homeController: HomeController
+    @EnvironmentObject var userController: UserController
     
     @State private var areTopCommentsShowing: Bool = false
     
@@ -149,7 +150,9 @@ struct CommunityResponses : View {
         VStack {
             Button(action: {
                 if (!areTopCommentsShowing) {
-                    homeController.retrieveTopCommunityShorts()
+                    if let user = userController.user {
+                        homeController.retrieveTopCommunityShorts(blockedUsers: user.blockedUsers ?? [:])
+                    }
                 }
                 areTopCommentsShowing.toggle()
             }) {

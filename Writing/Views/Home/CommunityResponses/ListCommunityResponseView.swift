@@ -10,6 +10,7 @@ import SwiftUI
 // A full list of the community responses to a prompt (infinite scroll)
 struct ListCommunityResponseView: View {
     @EnvironmentObject var homeController: HomeController
+    @EnvironmentObject var userController: UserController
     
 //    @State private var isSingleCommunityResponsePopupShowing: Bool = false
     
@@ -123,7 +124,10 @@ struct ListCommunityResponseView: View {
         }
         .padding(.bottom, 25)
         .onAppear {
-            homeController.retrieveFullCommunityShorts()
+            if let user = userController.user {
+                homeController.retrieveFullCommunityShorts(blockedUsers: user.blockedUsers ?? [:])
+            }
+            
         }
     }
 }
@@ -131,4 +135,5 @@ struct ListCommunityResponseView: View {
 #Preview {
     ListCommunityResponseView()
         .environmentObject(HomeController())
+        .environmentObject(UserController())
 }

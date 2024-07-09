@@ -41,6 +41,12 @@ class HomeController : ObservableObject {
     // Determines if the focused short is from the user, or from the community
     var isFocusedShortOwned: Bool = false
     
+    
+    // The author of the focused short (used to display stats about the author)
+    @Published var focusedShortAuthor: User?
+    // Cached authors of previosuly focused shorts
+    var cachedShortAuthors: [String : User] = [:]
+    
     // focused comments, on the foccused single short
     @Published var focusedShortComments: [ShortComment] = []
     // cached comments [shortId : [ShortComment]]
@@ -242,7 +248,7 @@ class HomeController : ObservableObject {
         }
     }
     
-    func retrieveTopCommunityShorts() {
+    func retrieveTopCommunityShorts(blockedUsers: [String : Bool]) {
         self.focusedTopCommunityShorts = []
         
         // make sure a prompt is focused
@@ -265,6 +271,11 @@ class HomeController : ObservableObject {
                             // There will be at most 3 shorts, at least 1
                             for document in querySnapshot.documents {
                                 if let short = try? document.data(as: Short.self) {
+                                    // Before adding the short, make sure the user isn't blocking the author of one of the shorts (this will result in less than 3 shorts showing up as the top shorts).
+                                    if let isBlocked = blockedUsers[short.authorId ?? "0"] {
+                                        if isBlocked { continue }
+                                    }
+                                    
                                     self.focusedTopCommunityShorts.append(short)
                                     print("checking if the short has an id: ", short.id ?? "nil id lol")
                                     
@@ -291,7 +302,7 @@ class HomeController : ObservableObject {
     }
     
     // Fetches the full list of community shorts for the focused prompt (Uses infinite scroll, aka we load 8 at a time then fetch the next 8)
-    func retrieveFullCommunityShorts() {
+    func retrieveFullCommunityShorts(blockedUsers: [String : Bool]) {
         self.focusedFullCommunityShorts = []
         
         // Make sure a prompt is focused
@@ -316,6 +327,11 @@ class HomeController : ObservableObject {
                             // There will be at most 8 shorts, at least 1
                             for document in querySnapshot.documents {
                                 if let short = try? document.data(as: Short.self) {
+                                    // Check if the author is being blocked by the user
+                                    if let isBlocked = blockedUsers[short.authorId!] {
+                                        if isBlocked { continue }
+                                    }
+                                    
                                     self.focusedFullCommunityShorts.append(short)
                                     
                                     // get the profile picture for the author of the short
@@ -390,7 +406,33 @@ class HomeController : ObservableObject {
         self.focusedSingleShort = short
         self.isFocusedShortOwned = isOwned
         self.retrieveShortComments(refresh: false)
+        self.focusAuthor(authorId: short.authorId ?? "1")
     }
+    
+    func focusAuthor(authorId: String) {
+        // Check if the author is already cached
+        if let author = self.cachedShortAuthors[authorId] {
+            self.focusedShortAuthor = author
+            return
+        }
+        
+        // Fetch the author from firestore, store it in the focused author var and cache it
+        Task {
+            let docRef = self.db.collection("users").document(authorId)
+            
+            do {
+                let author = try await docRef.getDocument(as: User.self)
+                
+                DispatchQueue.main.async {
+                    self.focusedShortAuthor = author
+                    self.cachedShortAuthors[authorId] = author
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     
     func likePrompt() {
         // If a prompt is focused, process it for a like.
@@ -619,8 +661,13 @@ class HomeController : ObservableObject {
         }
     }
     
+    // limits the number of characters you can write when editing your short (2500 characters)
+    func limitCommentTextLength(_ upper: Int) {
+        if self.commentText.count > upper {
+            self.commentText = String(self.commentText.prefix(upper))
+        }
+    }
     
-    // limit comment length function
     
     
     // Adds community shorts to the focused Prompt (For testing)

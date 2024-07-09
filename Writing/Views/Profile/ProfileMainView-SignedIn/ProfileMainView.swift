@@ -104,11 +104,19 @@ struct ProfileMainView: View {
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                         }
                                         
+                                        
                                         // Profile Title
-                                        Text("Novice Author")
-                                            .font(.system(size: 12, design: .serif))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .opacity(0.7)
+                                        if let user = userController.user {
+                                            Text(user.title ?? "")
+                                                .font(.system(size: 12, design: .serif))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .opacity(0.7)
+                                        } else {
+                                            Text("Novice Author")
+                                                .font(.system(size: 12, design: .serif))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .opacity(0.7)
+                                        }
                                         
                                     }
                                     .frame(minWidth: 100, maxWidth: 140, alignment: .leading)
@@ -174,12 +182,35 @@ struct ProfileMainView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.bottom, 20)
                                 
-                                // Streaks
+                                
+                                NavigationLink(destination: ProfileStreaksAndAwardsView()) {
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .stroke(lineWidth: 1)
+                                        .frame(width: 150, height: 40)
+                                        .overlay {
+                                            HStack {
+                                                // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
+                                                Text("Streaks & Awards")
+                                                    .font(.system(size: 12, design: .serif))
+    //                                                .bold()
+                                                
+                                                Image(systemName: "trophy")
+                                                
+                                            }
+                                        }
+                                        .padding(.bottom, 10)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                               
+                                
+                                
                                 
                                 // Your Shorts
                                 HStack {
                                     Text("Your Shorts")
-                                        .font(.system(size: 22, design: .serif))
+                                        .bold()
+                                        .font(.system(size: 16, design: .serif))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     
                                     HStack {

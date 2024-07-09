@@ -50,24 +50,29 @@ struct CreateResponseView: View {
                         .font(.system(size: 12, design: .serif))
                     
                     Button(action: {
-                        // Ensure user is available
-                        if let user = userController.user {
-                            // Ensure a prompt is focused
-                            if let prompt = homeController.focusedPrompt {
-                                Task {
-                                    createShortController.submitShort(user: user, prompt: prompt)
-                                    
-                                    // refresh, so the just submitted short will show up back on home view
-                                    homeController.retrieveSignedInUsersShort()
-                                    
-                                    // refresh the profile view, so the new short shows up on the profile
-                                    profileController.retrieveShorts()
+                        // Rate Limiting check
+                        if let rateLimit = userController.processFirestoreWrite() {
+                            print(rateLimit)
+                        } else {
+                            // Ensure user is available
+                            if let user = userController.user {
+                                // Ensure a prompt is focused
+                                if let prompt = homeController.focusedPrompt {
+                                    Task {
+                                        createShortController.submitShort(user: user, prompt: prompt)
+                                        
+                                        // refresh, so the just submitted short will show up back on home view
+                                        homeController.retrieveSignedInUsersShort()
+                                        
+                                        // refresh the profile view, so the new short shows up on the profile
+                                        profileController.retrieveShorts()
+                                    }
+                                } else {
+                                    print("prompt not available")
                                 }
                             } else {
-                                print("prompt not available")
+                                print("user not available")
                             }
-                        } else {
-                            print("user not available")
                         }
                     }) {
                         Image(systemName: "arrowshape.right.circle")

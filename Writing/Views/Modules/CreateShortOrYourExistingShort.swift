@@ -11,7 +11,6 @@ struct CreateShortOrYourExistingShort: View {
     @AppStorage("isSignedIn") private var isSignedIn = false
     
     @EnvironmentObject var homeController: HomeController
-    // TODO: put the userController here and pass in info that way about the author
     @EnvironmentObject var userController: UserController
     @EnvironmentObject var authController: AuthController
     
@@ -34,11 +33,11 @@ struct CreateShortOrYourExistingShort: View {
                     NavigationLink(destination: CreateResponseView()) {
                         RoundedRectangle(cornerRadius: 25.0)
                             .stroke(lineWidth: 1)
-                            .frame(width: 200, height: 40)
+                            .frame(width: 160, height: 40)
                             .overlay {
                                 HStack {
                                     // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
-                                    Text("Once upon a time...")
+                                    Text("Create Short")
                                         .font(.system(size: 14, design: .serif))
                                         .bold()
                                     
@@ -56,11 +55,11 @@ struct CreateShortOrYourExistingShort: View {
                     }) {
                         RoundedRectangle(cornerRadius: 25.0)
                             .stroke(lineWidth: 1)
-                            .frame(width: 200, height: 40)
+                            .frame(width: 160, height: 40)
                             .overlay {
                                 HStack {
                                     // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
-                                    Text("Once upon a time...")
+                                    Text("Create Short")
                                         .font(.system(size: 14, design: .serif))
                                         .bold()
                                     

@@ -5,6 +5,7 @@
 //  Created by Ben Dreyer on 6/22/24.
 //
 
+import Combine
 import SwiftUI
 
 struct CreateCommentView: View {
@@ -77,7 +78,7 @@ struct CreateCommentView: View {
                                     .frame(height: 2)
                             }
                         )
-                    // TODO limit comment length
+                        .onReceive(Just(homeController.commentText)) { _ in homeController.limitCommentTextLength(250) }
                     
                     
                     HStack {
@@ -86,21 +87,26 @@ struct CreateCommentView: View {
                             .font(.system(size: 12, design: .serif))
                         
                         Button(action: {
-                            // Ensure user is available
-                            if let user = userController.user {
-                                // Ensure a prompt is focused
-                                if let _ = homeController.focusedPrompt {
-                                    Task {
-                                         // Submit comment
-                                        homeController.submitComment(user: user)
-                                        // refresh the comment list, so the newly submitted one will show up
-//                                        homeController.retrieveSignedInUsersShort()
+                            // Rate Limiting check
+                            if let rateLimit = userController.processFirestoreWrite() {
+                                print(rateLimit)
+                            } else {
+                                // Ensure user is available
+                                if let user = userController.user {
+                                    // Ensure a prompt is focused
+                                    if let _ = homeController.focusedPrompt {
+                                        Task {
+                                             // Submit comment
+                                            homeController.submitComment(user: user)
+                                            // refresh the comment list, so the newly submitted one will show up
+    //                                        homeController.retrieveSignedInUsersShort()
+                                        }
+                                    } else {
+                                        print("prompt not available")
                                     }
                                 } else {
-                                    print("prompt not available")
+                                    print("user not available")
                                 }
-                            } else {
-                                print("user not available")
                             }
                         }) {
                             if homeController.commentText.isEmpty {

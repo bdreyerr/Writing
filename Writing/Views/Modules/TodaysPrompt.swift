@@ -57,7 +57,12 @@ struct TodaysPrompt: View {
             HStack {
                 // Likes
                 Button(action: {
-                    homeController.likePrompt()
+                    // Rate Limiting check
+                    if let rateLimit = userController.processFirestoreWrite() {
+                        print(rateLimit)
+                    } else {
+                        homeController.likePrompt()
+                    }
                 }) {
                     ZStack {
                         HStack {
@@ -118,19 +123,39 @@ struct TodaysPrompt: View {
                 .buttonStyle(PlainButtonStyle())
                 .alert("Report Prompt", isPresented: $homeController.isReportPromptAlertShowing) {
                     Button("Offensive") {
-                        homeController.reportPrompt(reportReason: "Offensive")
+                        // Rate Limiting check
+                        if let rateLimit = userController.processFirestoreWrite() {
+                            print(rateLimit)
+                        } else {
+                            homeController.reportPrompt(reportReason: "Offensive")
+                        }
                     }
                     
                     Button("Harmful or Abusive") {
-                        homeController.reportPrompt(reportReason: "Harmful or Abusive")
+                        // Rate Limiting check
+                        if let rateLimit = userController.processFirestoreWrite() {
+                            print(rateLimit)
+                        } else {
+                            homeController.reportPrompt(reportReason: "Harmful or Abusive")
+                        }
                     }
                     
                     Button("Graphic content") {
-                        homeController.reportPrompt(reportReason: "Graphic content")
+                        // Rate Limiting check
+                        if let rateLimit = userController.processFirestoreWrite() {
+                            print(rateLimit)
+                        } else {
+                            homeController.reportPrompt(reportReason: "Graphic content")
+                        }
                     }
                     
                     Button("Poor Quality / Image does not match text") {
-                        homeController.reportPrompt(reportReason: "Poor Quality / Image does not match text")
+                        // Rate Limiting check
+                        if let rateLimit = userController.processFirestoreWrite() {
+                            print(rateLimit)
+                        } else {
+                            homeController.reportPrompt(reportReason: "Poor Quality / Image does not match text")
+                        }
                     }
                     
                     Button("Cancel", role: .cancel) { }

@@ -39,10 +39,14 @@ struct ProfileSuggestPromptView: View {
                     .font(.system(size: 12, design: .serif))
                 
                 Button(action: {
-                    if let user = userController.user {
-                        profileController.submitPromptSuggestion(user: user)
+                    // Rate Limiting check
+                    if let rateLimit = userController.processFirestoreWrite() {
+                        print(rateLimit)
+                    } else {
+                        if let user = userController.user {
+                            profileController.submitPromptSuggestion(user: user)
+                        }
                     }
-                    
                 }) {
                     if !profileController.suggestedPromptText.isEmpty {
                         Image(systemName: "arrowshape.right.circle")

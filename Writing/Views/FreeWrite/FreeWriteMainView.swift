@@ -95,15 +95,15 @@ struct FreeWriteMainView: View {
                             NavigationLink(destination: FreeWriteCreateEntryView()) {
                                 RoundedRectangle(cornerRadius: 25.0)
                                     .stroke(lineWidth: 1)
-                                    .frame(width: 220, height: 40)
+                                    .frame(width: 160, height: 40)
                                     .overlay {
                                         HStack {
                                             // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
-                                            Text("In a land far far away...")
+                                            Text("Create Entry")
                                                 .font(.system(size: 14, design: .serif))
                                                 .bold()
                                             
-                                            Image(systemName: "plus.circle")
+                                            Image(systemName: "pencil.and.scribble")
                                             
                                         }
                                     }

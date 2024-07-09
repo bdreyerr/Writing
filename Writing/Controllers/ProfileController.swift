@@ -42,6 +42,9 @@ class ProfileController : ObservableObject {
     @Published var isChangeNameAlertShowing: Bool = false
     @Published var isChangePhotoSheetShowing: Bool = false
     
+    // Temp 2d array to fill in the contribution grid
+    var contributions = [[1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1], [1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1], [0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1], [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1]]
+    
     // Firebase
     let db = Firestore.firestore()
     let storage = Storage.storage()

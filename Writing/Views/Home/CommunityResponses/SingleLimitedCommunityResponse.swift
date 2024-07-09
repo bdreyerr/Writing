@@ -29,24 +29,24 @@ struct SingleLimitedCommunityResponse: View {
                         if let image = userController.usersProfilePicture {
                             Image(uiImage: image)
                                 .resizable()
-                                .clipShape(Circle())
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .frame(width: 40, height: 40)
                         } else {
                             Image("not-signed-in-profile")
                                 .resizable()
-                                .clipShape(Circle())
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .frame(width: 40, height: 40)
                         }
                     } else {
                         if let image = homeController.communityProfilePictures[short.authorId!] {
                             Image(uiImage: image)
                                 .resizable()
-                                .clipShape(Circle())
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .frame(width: 40, height: 40)
                         } else {
                             Image("not-signed-in-profile")
                                 .resizable()
-                                .clipShape(Circle())
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .frame(width: 40, height: 40)
                         }
                     }
@@ -64,20 +64,20 @@ struct SingleLimitedCommunityResponse: View {
                         
                         HStack {
                             // Author title
-                            Text("Distinguished Author")
-                                .font(.system(size: 10, design: .serif))
-                                .opacity(0.6)
-//                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Text("●")
-                                .font(.system(size: 12, design: .serif))
-                                .opacity(0.4)
-                            
-                            // Date posted
-                            Text(short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
+                            Text(short.authorTitle ?? "")
                                 .font(.system(size: 10, design: .serif))
                                 .opacity(0.6)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                            
+//                            Text("●")
+//                                .font(.system(size: 12, design: .serif))
+//                                .opacity(0.4)
+//                            
+//                            // Date posted
+//                            Text(short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
+//                                .font(.system(size: 10, design: .serif))
+//                                .opacity(0.6)
+//                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     

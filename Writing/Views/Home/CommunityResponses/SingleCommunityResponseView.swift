@@ -18,63 +18,7 @@ struct SingleCommunityResponseView: View {
             if let short = homeController.focusedSingleShort {
                 VStack {
                     ScrollView(showsIndicators: false) {
-                        // Handle
-                        Text(short.authorFirstName! + " " + short.authorLastName!)
-                            .font(.system(size: 14, design: .serif))
                         
-                        HStack {
-                            
-                            HStack {
-                                // Image
-                                if homeController.isFocusedShortOwned {
-                                    if let image = userController.usersProfilePicture {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .clipShape(Circle())
-                                            .frame(width: 40, height: 40)
-                                    } else {
-                                        Image("not-signed-in-profile")
-                                            .resizable()
-                                            .clipShape(Circle())
-                                            .frame(width: 40, height: 40)
-                                    }
-                                } else {
-                                    if let image = homeController.communityProfilePictures[short.authorId!] {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .clipShape(Circle())
-                                            .frame(width: 40, height: 40)
-                                    } else {
-                                        Image("not-signed-in-profile")
-                                            .resizable()
-                                            .clipShape(Circle())
-                                            .frame(width: 40, height: 40)
-                                    }
-                                }
-                            }
-                            .padding()
-                            
-                            VStack {
-                                Text("\(short.authorNumShorts!)")
-                                    .font(.system(size: 16, design: .serif))
-                                    .foregroundStyle(Color.green)
-                                
-                                Text("Shorts")
-                                    .font(.system(size: 12, design: .serif))
-                                
-                            }
-                            
-                            VStack {
-                                Text("\(short.authorNumLikes!)")
-                                    .font(.system(size: 16, design: .serif))
-                                    .foregroundStyle(Color.blue)
-                                
-                                Text("Likes")
-                                    .font(.system(size: 12, design: .serif))
-                                
-                            }
-                            
-                        }
                         
                         // Prompt
                         if let prompt = homeController.focusedPrompt {
@@ -82,58 +26,102 @@ struct SingleCommunityResponseView: View {
                                 .font(.system(size: 14, design: .serif))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .italic()
-                                .padding(.bottom, 5)
+                                .padding(.bottom, 20)
                         } else {
                             Text("prompt not loaded")
                                 .font(.system(size: 14, design: .serif))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .italic()
-                                .padding(.bottom, 5)
+                                .padding(.bottom, 20)
                         }
                         
                         
                         HStack {
+                            // Image
                             // Profile Picture
                             if homeController.isFocusedShortOwned {
                                 if let image = userController.usersProfilePicture {
                                     Image(uiImage: image)
                                         .resizable()
-                                        .clipShape(Circle())
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
                                         .frame(width: 40, height: 40)
                                 } else {
                                     Image("not-signed-in-profile")
                                         .resizable()
-                                        .clipShape(Circle())
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
                                         .frame(width: 40, height: 40)
                                 }
                             } else {
                                 if let image = homeController.communityProfilePictures[short.authorId!] {
                                     Image(uiImage: image)
                                         .resizable()
-                                        .clipShape(Circle())
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
                                         .frame(width: 40, height: 40)
                                 } else {
                                     Image("not-signed-in-profile")
                                         .resizable()
-                                        .clipShape(Circle())
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
                                         .frame(width: 40, height: 40)
                                 }
                             }
                             
                             VStack {
-                                // Handle
+                                // Name
                                 Text(short.authorFirstName! + " " + short.authorLastName!)
-                                    .font(.system(size: 12, design: .serif))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                
+                                    .font(.system(size: 15, design: .serif))
+                                    .frame(maxWidth: 140, alignment: .leading)
+                                    
                                 // Date posted
                                 Text(short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
                                     .font(.system(size: 12, design: .serif))
                                     .opacity(0.6)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .frame(maxWidth: 140, alignment: .leading)
                             }
+//                            .frame(maxWidth: 140, alignment: .leading)
+                            .padding(.trailing, 10)
                             
+                            
+                            // Num Shorts
+                            VStack {
+                                if let author = homeController.focusedShortAuthor {
+                                    Text("\(author.shortsCount!)")
+                                        .font(.system(size: 16, design: .serif))
+                                        .foregroundStyle(Color.green)
+                                } else {
+                                    Text("")
+                                        .font(.system(size: 16, design: .serif))
+                                        .foregroundStyle(Color.green)
+                                }
+                                
+                                
+                                Text("Shorts")
+                                    .font(.system(size: 12, design: .serif))
+                                
+                            }
+                            .padding(.leading, 15)
+                            
+                            // Num Likes
+                            VStack {
+                                if let author = homeController.focusedShortAuthor {
+                                    Text("\(author.numLikes!)")
+                                        .font(.system(size: 16, design: .serif))
+                                        .foregroundStyle(Color.blue)
+                                } else {
+                                    Text("")
+                                        .font(.system(size: 16, design: .serif))
+                                        .foregroundStyle(Color.blue)
+                                }
+                                
+                                
+                                Text("Likes")
+                                    .font(.system(size: 12, design: .serif))
+                                
+                            }
+                            .padding(.leading, 15)
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, 5)
+                    
                         
                         // Response
                         Text(short.shortRawText!)
@@ -143,7 +131,12 @@ struct SingleCommunityResponseView: View {
                         HStack {
                             
                             Button(action: {
-                                homeController.likeShort()
+                                // Rate Limiting check
+                                if let rateLimit = userController.processFirestoreWrite() {
+                                    print(rateLimit)
+                                } else {
+                                    homeController.likeShort()
+                                }
                             }) {
                                 ZStack {
                                     HStack {
@@ -199,19 +192,51 @@ struct SingleCommunityResponseView: View {
                             .buttonStyle(PlainButtonStyle())
                             .alert("Report Short", isPresented: $homeController.isReportShortAlertShowing) {
                                 Button("Offensive") {
-                                    homeController.reportShort(reportReason: "Offensive")
+                                    // Rate Limiting check
+                                    if let rateLimit = userController.processFirestoreWrite() {
+                                        print(rateLimit)
+                                    } else {
+                                        homeController.reportShort(reportReason: "Offensive")
+                                    }
                                 }
                                 
                                 Button("Harmful or Abusive") {
-                                    homeController.reportShort(reportReason: "Harmful or Abusive")
+                                    // Rate Limiting check
+                                    if let rateLimit = userController.processFirestoreWrite() {
+                                        print(rateLimit)
+                                    } else {
+                                        homeController.reportShort(reportReason: "Harmful or Abusive")
+                                    }
                                 }
                                 
                                 Button("Graphic content") {
-                                    homeController.reportShort(reportReason: "Graphic content")
+                                    // Rate Limiting check
+                                    if let rateLimit = userController.processFirestoreWrite() {
+                                        print(rateLimit)
+                                    } else {
+                                        homeController.reportShort(reportReason: "Graphic content")
+                                    }
                                 }
                                 
                                 Button("Poor Quality / Image does not match text") {
-                                    homeController.reportShort(reportReason: "Poor Quality / Image does not match text")
+                                    // Rate Limiting check
+                                    if let rateLimit = userController.processFirestoreWrite() {
+                                        print(rateLimit)
+                                    } else {
+                                        homeController.reportShort(reportReason: "Poor Quality / Image does not match text")
+                                    }
+                                }
+                                
+                                Button("Block User") {
+                                    // Rate Limiting check
+                                    if let rateLimit = userController.processFirestoreWrite() {
+                                        print(rateLimit)
+                                    } else {
+                                        if let short = homeController.focusedSingleShort {
+                                            userController.blockUser(userId: short.authorId!)
+                                        }
+                                        
+                                    }
                                 }
                                 
                                 Button("Cancel", role: .cancel) { }
@@ -248,8 +273,8 @@ struct SingleCommunityResponseView: View {
                         .padding(.leading, 2)
                         
                         // Response Comments (hardcoded 3 for now)
-//                        CommunityResponseComment(imageName: "space-guy", authorHandle: "southxx", timePosted: "7:45am", comment: "Really a substantial comment I appreciate your resiliancy in this area, lie forreal")
-//                        CommunityResponseComment(imageName: "hoop-guy", authorHandle: "jokic", timePosted: "9:32pm", comment: "I'm not really sure how this relates to basketball at all. Please try again, 4/10.")
+                        //                        CommunityResponseComment(imageName: "space-guy", authorHandle: "southxx", timePosted: "7:45am", comment: "Really a substantial comment I appreciate your resiliancy in this area, lie forreal")
+                        //                        CommunityResponseComment(imageName: "hoop-guy", authorHandle: "jokic", timePosted: "9:32pm", comment: "I'm not really sure how this relates to basketball at all. Please try again, 4/10.")
                         
                         // comments for the short
                         ForEach(homeController.focusedShortComments) { comment in

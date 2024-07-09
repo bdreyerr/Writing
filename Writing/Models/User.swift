@@ -23,6 +23,9 @@ struct User : Codable {
     // The average score of the user's writings
     var avgWritingScore: Float?
     
+    // Title
+    var title: String?
+    
     // Free Write Info
     var freeWriteCount: Int?
     var freeWriteAverageWordCount: Int?
@@ -40,6 +43,7 @@ struct User : Codable {
         case shortsCount
         case numLikes
         case avgWritingScore
+        case title
         case freeWriteCount
         case freeWriteAverageWordCount
         case isAdmin

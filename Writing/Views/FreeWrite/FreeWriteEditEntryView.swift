@@ -72,19 +72,23 @@ struct FreeWriteEditEntryView: View {
                         
                         
                         Button(action: {
-                            if let user = userController.user {
-                                Task {
-                                    freeWriteController.editFreeWrite(freeWriteCount: user.freeWriteCount!, freeWriteOldAverageWordCount: user.freeWriteAverageWordCount!)
-                                    
-                                    
-                                    // re-pull the freewrites for the user
-                                    freeWriteController.retrieveFreeWrites()
-                                    
-                                    // re-pull the user in user controller
-                                    userController.retrieveUserFromFirestore(userId: user.id!)
+                            // Rate Limiting check
+                            if let rateLimit = userController.processFirestoreWrite() {
+                                print(rateLimit)
+                            } else {
+                                if let user = userController.user {
+                                    Task {
+                                        freeWriteController.editFreeWrite(freeWriteCount: user.freeWriteCount!, freeWriteOldAverageWordCount: user.freeWriteAverageWordCount!)
+                                        
+                                        
+                                        // re-pull the freewrites for the user
+                                        freeWriteController.retrieveFreeWrites()
+                                        
+                                        // re-pull the user in user controller
+                                        userController.retrieveUserFromFirestore(userId: user.id!)
+                                    }
                                 }
                             }
-                            
                         }) {
                             Image(systemName: "arrowshape.right.circle")
                                 .font(.callout)

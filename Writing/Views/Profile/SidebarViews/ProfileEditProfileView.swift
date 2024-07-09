@@ -17,7 +17,12 @@ struct ProfileEditProfileView: View {
             VStack {
                 HStack {
                     Button(action: {
-                        profileController.isChangePhotoSheetShowing = true
+                        // Rate Limiting check
+                        if let rateLimit = userController.processFirestoreWrite() {
+                            print(rateLimit)
+                        } else {
+                            profileController.isChangePhotoSheetShowing = true
+                        }
                     }) {
                         // current profile picture
                         if let image = userController.usersProfilePicture {
@@ -72,9 +77,13 @@ struct ProfileEditProfileView: View {
                                 profileController.isChangeNameAlertShowing = false
                             }.foregroundColor(.red)
                             Button("Save", role: .none) {
-                                
-                                userController.changeName()
-                                profileController.isChangeNameAlertShowing = false
+                                // Rate Limiting check
+                                if let rateLimit = userController.processFirestoreWrite() {
+                                    print(rateLimit)
+                                } else {
+                                    userController.changeName()
+                                    profileController.isChangeNameAlertShowing = false
+                                }
                             }.foregroundColor(.blue)
                         }
                     }

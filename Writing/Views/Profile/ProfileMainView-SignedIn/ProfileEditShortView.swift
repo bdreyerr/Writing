@@ -61,18 +61,23 @@ struct ProfileEditShortView: View {
                             .font(.system(size: 12, design: .serif))
                         
                         Button(action: {
-                            // Ensure user is available
-                            if let _ = userController.user {
-                                // Ensure a short is focused
-                                if let _ = profileController.focusedShort {
-                                    Task {
-                                        profileController.editShort()
+                            // Rate Limiting check
+                            if let rateLimit = userController.processFirestoreWrite() {
+                                print(rateLimit)
+                            } else {
+                                // Ensure user is available
+                                if let _ = userController.user {
+                                    // Ensure a short is focused
+                                    if let _ = profileController.focusedShort {
+                                        Task {
+                                            profileController.editShort()
+                                        }
+                                    } else {
+                                        print("prompt not available")
                                     }
                                 } else {
-                                    print("prompt not available")
+                                    print("user not available")
                                 }
-                            } else {
-                                print("user not available")
                             }
                         }) {
                             Image(systemName: "arrowshape.right.circle")

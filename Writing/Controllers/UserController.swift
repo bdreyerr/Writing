@@ -12,11 +12,11 @@ import FirebaseStorage
 import Foundation
 
 class UserController : ObservableObject {
-    // Firestore
-    let db = Firestore.firestore()
     
-    // Storage
-    let storage = Storage.storage()
+    
+    // Rate Limiting
+    @Published var numActionsInLastMinute: Int = 0
+    @Published var firstActionDate: Date?
     
     // User object - used to reference user throughout the app (signed in only)
     @Published var user: User?
@@ -26,6 +26,12 @@ class UserController : ObservableObject {
     // Edit profile vars
     @Published var newFirstName: String = ""
     @Published var newLastName: String = ""
+    
+    // Firestore
+    let db = Firestore.firestore()
+    
+    // Storage
+    let storage = Storage.storage()
     
     init() {
         // Retrieve the user on init if auth'd
@@ -150,7 +156,7 @@ class UserController : ObservableObject {
             // compress image
             if let newData = compressImageData(imageData: data, maxSizeInBytes: (1 * 1024 * 1024)) {
                 print("after compression function the size in bytes is: ", newData.count)
-                        
+                
                 
                 imageRef.putData(newData, metadata: metadata) { (metadata, error) in
                     if let error = error {
@@ -169,7 +175,6 @@ class UserController : ObservableObject {
     }
     
     func compressImageData(imageData: Data, maxSizeInBytes: Int) -> Data? {
-
         
         print("image data size: ", imageData.count)
         var compressionScaler = 1.0
@@ -196,5 +201,78 @@ class UserController : ObservableObject {
         
         print("after compression, size is: ", newImageData!.count)
         return newImageData
+    }
+    
+    func blockUser(userId: String) {
+        // blocks the userId passed in from the arguments (if the user is not already blocked)
+        
+        if let user = self.user {
+            // cannot block yourself
+            if user.id! == userId { return }
+            
+            // if user is already blocked
+            if let isBlocked = user.blockedUsers![userId] {
+                if isBlocked { return }
+            }
+            
+            // add the blocked user into the map in firestore
+            Task {
+                let docRef = db.collection("users").document(user.id!)
+                
+                do {
+                    try await docRef.updateData([
+                        "blockedUsers.\(userId)": true
+                    ])
+                    
+                    // then add the user directly to the local map
+                    DispatchQueue.main.async {
+                        self.user!.blockedUsers![userId] = true
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
+    }
+    
+    // Rate limiting - limits firestore writes and blocks spamming in a singular user session. app is still prone to attacks in multiple app sessions (closing and re-opening)
+    // Limits users to 5 writes in one minute
+    func processFirestoreWrite() -> String? {
+        
+        // Cases:
+        // 1. This is the first action - first action date doesn't exist
+        // Set first action to Date()
+        // set num actions = 1
+        // 2. First action exists - currentAction is less than one minute from first action
+        // Allow action if numActions < 5
+        // set num actions += 1
+        // Block action if numActions >= 5
+        // 3. First action exists - current action is greater than one minute from first action
+        // allow action
+        // set first action date to Date()
+        // set num action = 1
+        
+        if let firstActionDate = self.firstActionDate {
+            
+            // Get firstActionDate + 60 seconds
+            let oneMinFromFirst = Calendar.current.date(byAdding: .second, value: 60, to: firstActionDate)
+            
+            if Date() < oneMinFromFirst! {
+                if self.numActionsInLastMinute < 5 {
+                    self.numActionsInLastMinute += 1
+                } else {
+                    return "Too many actions in one minute"
+                }
+            } else {
+                self.firstActionDate = Date()
+                self.numActionsInLastMinute = 1
+            }
+        } else {
+            self.firstActionDate = Date()
+            self.numActionsInLastMinute = 1
+        }
+        
+        return nil
     }
 }
