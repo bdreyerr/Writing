@@ -66,6 +66,9 @@ struct CreateResponseView: View {
                                         
                                         // refresh the profile view, so the new short shows up on the profile
                                         profileController.retrieveShorts()
+                                        
+                                        // refresh user stats
+                                        userController.retrieveUserFromFirestore(userId: user.id!)
                                     }
                                 } else {
                                     print("prompt not available")

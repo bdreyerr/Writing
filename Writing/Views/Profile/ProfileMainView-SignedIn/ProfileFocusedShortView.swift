@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileFocusedShortView: View {
     @EnvironmentObject var profileController: ProfileController
+    @EnvironmentObject var userController: UserController
     
     @State var isEditShortViewActive: Bool = false
     
@@ -37,11 +38,17 @@ struct ProfileFocusedShortView: View {
                         
                         HStack {
                             // Profile Picture
-                            Image("not-signed-in-profile")
-                                .resizable()
-                                .clipShape(Circle())
-                                .frame(width: 40, height: 40)
-                            
+                            if let image = userController.usersProfilePicture {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width: 40, height: 40)
+                            } else {
+                                Image("not-signed-in-profile")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width: 40, height: 40)
+                            }
                             
                             VStack {
                                 // Handle
@@ -129,4 +136,5 @@ struct ProfileFocusedShortView: View {
 #Preview {
     ProfileFocusedShortView()
         .environmentObject(ProfileController())
+        .environmentObject(UserController())
 }

@@ -105,7 +105,13 @@ struct FreeWriteCreateEntryView: View {
             .padding(.leading, 20)
             .padding(.trailing, 20)
             .onAppear {
+                // hide tab bar when keyboard can be shown
                 self.isTabBarShowing = false
+                
+                // reset create entry vars to initial state
+                freeWriteController.titleText = ""
+                freeWriteController.iconName = "sun.max"
+                freeWriteController.contentText = ""
             }
             .onDisappear {
                 self.isTabBarShowing = true

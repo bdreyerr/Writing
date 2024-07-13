@@ -44,6 +44,7 @@ class UserController : ObservableObject {
     }
     
     func retrieveUserFromFirestore(userId: String) {
+        self.user = nil
         let docRef = db.collection("users").document(userId)
         docRef.getDocument(as: User.self) { result in
             switch result {

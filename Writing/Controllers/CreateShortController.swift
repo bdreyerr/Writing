@@ -50,6 +50,32 @@ class CreateShortController : ObservableObject {
             } catch let error {
                 print("error updating short count on prompt: ", error.localizedDescription)
             }
+            
+            // Update the user's stats
+            do {
+                var addToStreak = false
+                // Check if the currentStreak is active
+                if isYesterdayOrToday(date: user.lastShortWrittenDate!.dateValue()) {
+                    // Switch the bool meaning we should increment the value, not reset it
+                    addToStreak = true
+                }
+                
+                // value to add to bestStreak
+                var bestStreak = 0
+                if user.currentStreak == user.bestStreak && addToStreak {
+                    bestStreak = 1
+                }
+                
+                let userRef = db.collection("users").document(user.id!)
+                try await userRef.updateData([
+                    "shortsCount": FieldValue.increment(Int64(1)),
+                    "currentStreak": addToStreak ? FieldValue.increment(Int64(1)) : 1,
+                    "bestStreak": FieldValue.increment(Int64(bestStreak)),
+                    "lastShortWrittenDate": Timestamp()
+                ])
+            } catch let error {
+                print(error.localizedDescription)
+            }
         }
         return
     }
@@ -59,5 +85,11 @@ class CreateShortController : ObservableObject {
         if self.shortContent.count > upper {
             self.shortContent = String(self.shortContent.prefix(upper))
         }
+    }
+    
+    func isYesterdayOrToday(date: Date) -> Bool {
+        let calendar = Calendar.current
+        
+        return calendar.isDateInToday(date) || calendar.isDateInYesterday(date)
     }
 }

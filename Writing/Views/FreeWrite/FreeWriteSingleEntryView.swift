@@ -71,7 +71,7 @@ struct FreeWriteSingleEntryView: View {
                                     .frame(width: 150, height: 40)
                                     .overlay {
                                         HStack {
-                                            Text("Edit Your Short")
+                                            Text("Edit Your Entry")
                                                 .font(.system(size: 13, design: .serif))
                                                 .bold()
                                             Image(systemName: "square.and.pencil")
@@ -90,7 +90,7 @@ struct FreeWriteSingleEntryView: View {
                                     .frame(width: 170, height: 40)
                                     .overlay {
                                         HStack {
-                                            Text("Delete Your Short")
+                                            Text("Delete Your Entry")
                                                 .font(.system(size: 13, design: .serif))
                                                 .bold()
                                             Image(systemName: "trash")
