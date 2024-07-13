@@ -24,7 +24,7 @@ struct Short : Codable, Identifiable {
     var authorProfilePictureUrl: String?
     var authorNumShorts: Int?
     var authorNumLikes: Int?
-    var authorTitle: String?
+    var authorTitle: Int?
     
     // Content
     var promptRawText: String?

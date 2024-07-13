@@ -289,6 +289,55 @@ class ProfileController : ObservableObject {
             self.newShortText = String(self.newShortText.prefix(upper))
         }
     }
+    
+    func convertTitleIntToString(int : Int) -> String {
+        switch int {
+        case 0:
+            return "Pupil"
+        case 1:
+            return "Novice Author"
+        case 2:
+            return "Storyteller"
+        case 3:
+            return "Scribe"
+        case 4:
+            return "Seasoned Wordsmith"
+        case 5:
+            return "Accomplished Novelist"
+        case 6:
+            return "Renowned Author"
+        case 7:
+            return "Literary Master"
+        default:
+            return ""
+        }
+    }
+    
+    func getNextTitleCriteria(curLevel: Int, numShorts: Int) -> String {
+        var totalShortsNeeded = 0
+        switch curLevel {
+        case 0:
+            totalShortsNeeded = 1
+        case 1:
+            totalShortsNeeded = 5
+        case 2:
+            totalShortsNeeded = 10
+        case 3:
+            totalShortsNeeded = 25
+        case 4:
+            totalShortsNeeded = 50
+        case 5:
+            totalShortsNeeded = 100
+        case 6:
+            totalShortsNeeded = 200
+        case 7:
+            totalShortsNeeded = 300
+        default:
+            return ""
+        }
+        
+        return "\(numShorts) / \(totalShortsNeeded) Shorts Written"
+    }
 }
 
 

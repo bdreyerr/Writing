@@ -661,6 +661,29 @@ class HomeController : ObservableObject {
         }
     }
     
+    func convertTitleIntToString(int : Int) -> String {
+        switch int {
+        case 0:
+            return "Pupil"
+        case 1:
+            return "Novice Author"
+        case 2:
+            return "Storyteller"
+        case 3:
+            return "Scribe"
+        case 4:
+            return "Seasoned Wordsmith"
+        case 5:
+            return "Accomplished Novelist"
+        case 6:
+            return "Renowned Author"
+        case 7:
+            return "Literary Master"
+        default:
+            return ""
+        }
+    }
+    
     // limits the number of characters you can write when editing your short (2500 characters)
     func limitCommentTextLength(_ upper: Int) {
         if self.commentText.count > upper {

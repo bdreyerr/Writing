@@ -106,12 +106,12 @@ struct ProfileStreaksAndAwardsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 HStack {
-                    Text("Current Title: ")
+                    Text("Current Title:")
                         .font(.system(size: 14, design: .serif))
                         .bold()
                         
                     if let user = userController.user {
-                        Text(user.title!)
+                        Text(profileController.convertTitleIntToString(int: user.title ?? 0))
                             .font(.system(size: 14, design: .serif))
                     } else {
                         Text("Pupil")
@@ -120,25 +120,33 @@ struct ProfileStreaksAndAwardsView: View {
                     
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, 5)
+                .padding(.bottom, 1)
                 
                 HStack {
-                    Text("Next: ")
+                    Text("Next:")
                         .font(.system(size: 14, design: .serif))
                         .bold()
-                        
-                    Text("Storyteller")
-                        .font(.system(size: 14, design: .serif))
+                    
+                    if let user = userController.user {
+                        Text(profileController.convertTitleIntToString(int: (user.title ?? 0) + 1))
+                            .font(.system(size: 14, design: .serif))
+                    }
+                    
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 1)
                 
                 HStack {
-                    Text("Criteria")
+                    Text("Criteria:")
                         .font(.system(size: 14, design: .serif))
                         .bold()
                         
-                    Text("3 / 5 Shorts Written")
-                        .font(.system(size: 14, design: .serif))
+                    
+                    if let user = userController.user {
+                        Text(profileController.getNextTitleCriteria(curLevel: user.title ?? 0, numShorts: user.shortsCount ?? 0))
+                            .font(.system(size: 14, design: .serif))
+                    }
+                    
                     
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

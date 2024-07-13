@@ -24,7 +24,7 @@ struct User : Codable {
     var avgWritingScore: Float?
     
     // Title
-    var title: String?
+    var title: Int?
     
     // Streaks
     var lastShortWrittenDate: Timestamp?

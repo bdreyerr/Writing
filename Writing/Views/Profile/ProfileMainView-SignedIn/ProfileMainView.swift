@@ -107,7 +107,7 @@ struct ProfileMainView: View {
                                         
                                         // Profile Title
                                         if let user = userController.user {
-                                            Text(user.title ?? "")
+                                            Text(profileController.convertTitleIntToString(int: user.title ?? 0))
                                                 .font(.system(size: 12, design: .serif))
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                                 .opacity(0.7)

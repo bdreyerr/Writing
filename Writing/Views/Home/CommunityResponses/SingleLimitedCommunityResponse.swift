@@ -64,7 +64,7 @@ struct SingleLimitedCommunityResponse: View {
                         
                         HStack {
                             // Author title
-                            Text(short.authorTitle ?? "")
+                            Text(homeController.convertTitleIntToString(int: short.authorTitle ?? 0))
                                 .font(.system(size: 10, design: .serif))
                                 .opacity(0.6)
                                 .frame(maxWidth: .infinity, alignment: .leading)
