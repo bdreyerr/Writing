@@ -11,9 +11,11 @@ import SwiftUI
 struct ProfileEditShortView: View {
     @AppStorage("isTabBarShowing") private var isTabBarShowing = true
     
-    
     @EnvironmentObject var profileController: ProfileController
     @EnvironmentObject var userController: UserController
+    
+    // Only need home controller to clear the cache
+    @EnvironmentObject var homeController: HomeController
     
     var body: some View {
         VStack {
@@ -68,9 +70,12 @@ struct ProfileEditShortView: View {
                                 // Ensure user is available
                                 if let _ = userController.user {
                                     // Ensure a short is focused
-                                    if let _ = profileController.focusedShort {
+                                    if let short = profileController.focusedShort {
                                         Task {
                                             profileController.editShort()
+                                            
+                                            // clear the short from the home view (must get called from firestore again)
+                                            homeController.clearEditedOrRemovedShortFromCache(shortDate: short.date!)
                                         }
                                     } else {
                                         print("prompt not available")
@@ -109,4 +114,5 @@ struct ProfileEditShortView: View {
     ProfileEditShortView()
         .environmentObject(ProfileController())
         .environmentObject(UserController())
+        .environmentObject(HomeController())
 }

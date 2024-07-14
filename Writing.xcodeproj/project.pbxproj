@@ -22,10 +22,13 @@
 		1A6FDDBC2C27525700C8F5FD /* CreateCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDBB2C27525700C8F5FD /* CreateCommentView.swift */; };
 		1A6FDDBE2C27799700C8F5FD /* ProfileSidebarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDBD2C27799700C8F5FD /* ProfileSidebarContentView.swift */; };
 		1A71B27F2C3CA5D200C7E274 /* ProfileStreaksAndAwardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B27E2C3CA5D200C7E274 /* ProfileStreaksAndAwardsView.swift */; };
+		1A71B2822C436A3D00C7E274 /* ShortAnalysisMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B2812C436A3D00C7E274 /* ShortAnalysisMainView.swift */; };
+		1A71B2862C436AE000C7E274 /* ShortAnalysisController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B2852C436AE000C7E274 /* ShortAnalysisController.swift */; };
+		1A71B2882C436BCC00C7E274 /* ShortAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B2872C436BCC00C7E274 /* ShortAnalysis.swift */; };
+		1A71B28A2C4381C600C7E274 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B2892C4381C600C7E274 /* Secrets.swift */; };
 		1A723BA92C28CFBB00B0244A /* ProfileShortPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A723BA82C28CFBB00B0244A /* ProfileShortPreview.swift */; };
 		1A723BAB2C28D13400B0244A /* ProfileShortGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A723BAA2C28D13400B0244A /* ProfileShortGrid.swift */; };
 		1A723BAD2C28EB6D00B0244A /* ProfileFocusedShortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A723BAC2C28EB6D00B0244A /* ProfileFocusedShortView.swift */; };
-		1A7944D32C0C050000757A7E /* HistoryAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */; };
 		1A7944D72C0C257000757A7E /* HomeMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944D62C0C257000757A7E /* HomeMainView.swift */; };
 		1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944E02C0E759F00757A7E /* SingleCommunityResponseView.swift */; };
 		1A7944E32C0E75AC00757A7E /* ListCommunityResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944E22C0E75AC00757A7E /* ListCommunityResponseView.swift */; };
@@ -85,10 +88,13 @@
 		1A6FDDBB2C27525700C8F5FD /* CreateCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCommentView.swift; sourceTree = "<group>"; };
 		1A6FDDBD2C27799700C8F5FD /* ProfileSidebarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSidebarContentView.swift; sourceTree = "<group>"; };
 		1A71B27E2C3CA5D200C7E274 /* ProfileStreaksAndAwardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStreaksAndAwardsView.swift; sourceTree = "<group>"; };
+		1A71B2812C436A3D00C7E274 /* ShortAnalysisMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortAnalysisMainView.swift; sourceTree = "<group>"; };
+		1A71B2852C436AE000C7E274 /* ShortAnalysisController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortAnalysisController.swift; sourceTree = "<group>"; };
+		1A71B2872C436BCC00C7E274 /* ShortAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortAnalysis.swift; sourceTree = "<group>"; };
+		1A71B2892C4381C600C7E274 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		1A723BA82C28CFBB00B0244A /* ProfileShortPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileShortPreview.swift; sourceTree = "<group>"; };
 		1A723BAA2C28D13400B0244A /* ProfileShortGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileShortGrid.swift; sourceTree = "<group>"; };
 		1A723BAC2C28EB6D00B0244A /* ProfileFocusedShortView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFocusedShortView.swift; sourceTree = "<group>"; };
-		1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAnalysisView.swift; sourceTree = "<group>"; };
 		1A7944D62C0C257000757A7E /* HomeMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainView.swift; sourceTree = "<group>"; };
 		1A7944E02C0E759F00757A7E /* SingleCommunityResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCommunityResponseView.swift; sourceTree = "<group>"; };
 		1A7944E22C0E75AC00757A7E /* ListCommunityResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCommunityResponseView.swift; sourceTree = "<group>"; };
@@ -146,6 +152,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A71B2802C436A2300C7E274 /* Analysis */ = {
+			isa = PBXGroup;
+			children = (
+				1A71B2812C436A3D00C7E274 /* ShortAnalysisMainView.swift */,
+			);
+			path = Analysis;
+			sourceTree = "<group>";
+		};
 		1A723BA62C28CF5300B0244A /* SidebarViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -161,6 +175,7 @@
 		1A723BA72C28CF9200B0244A /* ProfileMainView-SignedIn */ = {
 			isa = PBXGroup;
 			children = (
+				1A71B2802C436A2300C7E274 /* Analysis */,
 				1A7944E72C0E75E500757A7E /* ProfileMainView.swift */,
 				1A723BA82C28CFBB00B0244A /* ProfileShortPreview.swift */,
 				1A723BAA2C28D13400B0244A /* ProfileShortGrid.swift */,
@@ -174,7 +189,6 @@
 		1A7944D42C0C254B00757A7E /* History */ = {
 			isa = PBXGroup;
 			children = (
-				1A7944D22C0C050000757A7E /* HistoryAnalysisView.swift */,
 				1A7944EE2C0E7E4300757A7E /* HistorySingleResponseView.swift */,
 			);
 			path = History;
@@ -277,6 +291,7 @@
 				1AA1A4FF2C0BD15D009D9233 /* ContentView.swift */,
 				1AA1A5012C0BD15E009D9233 /* Assets.xcassets */,
 				1AA1A5032C0BD15E009D9233 /* Preview Content */,
+				1A71B2892C4381C600C7E274 /* Secrets.swift */,
 			);
 			path = Writing;
 			sourceTree = "<group>";
@@ -312,6 +327,7 @@
 				1ABF08FF2C1A5A7C00F2E6AF /* ShortComment.swift */,
 				1A3C05F22C2F6E4B00BDB3F2 /* PromptSuggestion.swift */,
 				1A3C05F42C308A5A00BDB3F2 /* FreeWrite.swift */,
+				1A71B2872C436BCC00C7E274 /* ShortAnalysis.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -333,6 +349,7 @@
 				1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */,
 				1A6FDDB72C221CE500C8F5FD /* UserController.swift */,
 				1A3C05F62C308C7A00BDB3F2 /* FreeWriteController.swift */,
+				1A71B2852C436AE000C7E274 /* ShortAnalysisController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -426,18 +443,20 @@
 				1ABF08FC2C1A58BF00F2E6AF /* Prompt.swift in Sources */,
 				1A7944EB2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift in Sources */,
 				1A8172CD2C1FA3C5004217AA /* FreeWriteMainView.swift in Sources */,
+				1A71B2862C436AE000C7E274 /* ShortAnalysisController.swift in Sources */,
 				1A723BAD2C28EB6D00B0244A /* ProfileFocusedShortView.swift in Sources */,
 				1A3C05F92C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift in Sources */,
 				1A7944E52C0E75C000757A7E /* CreateResponseView.swift in Sources */,
 				1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */,
 				1ABF08FE2C1A59E700F2E6AF /* Short.swift in Sources */,
+				1A71B2882C436BCC00C7E274 /* ShortAnalysis.swift in Sources */,
 				1A8172D12C1FE091004217AA /* FreeWriteCreateEntryView.swift in Sources */,
 				1ABF09182C1E147700F2E6AF /* ProfileContentView.swift in Sources */,
 				1ABF09052C1CDCA400F2E6AF /* ProfileMainViewNotSignedIn.swift in Sources */,
 				1A8172D52C20D4DA004217AA /* FreeWriteContentView.swift in Sources */,
 				1A8172D32C1FE2F9004217AA /* FreeWriteSingleEntryView.swift in Sources */,
-				1A7944D32C0C050000757A7E /* HistoryAnalysisView.swift in Sources */,
 				1A6FDDBA2C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift in Sources */,
+				1A71B28A2C4381C600C7E274 /* Secrets.swift in Sources */,
 				1A6FDDBC2C27525700C8F5FD /* CreateCommentView.swift in Sources */,
 				1A3C05F72C308C7A00BDB3F2 /* FreeWriteController.swift in Sources */,
 				1A3C05F52C308A5A00BDB3F2 /* FreeWrite.swift in Sources */,
@@ -462,6 +481,7 @@
 				1ABF09132C1D562800F2E6AF /* AuthController.swift in Sources */,
 				1A8172C02C1E20E2004217AA /* ProfileController.swift in Sources */,
 				1ABF08F72C1809FD00F2E6AF /* ProfileSettingsView.swift in Sources */,
+				1A71B2822C436A3D00C7E274 /* ShortAnalysisMainView.swift in Sources */,
 				1ABF09032C1CD5B200F2E6AF /* SignUpOrIn.swift in Sources */,
 				1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */,
 				1A7944E82C0E75E500757A7E /* ProfileMainView.swift in Sources */,

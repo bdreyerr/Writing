@@ -39,7 +39,9 @@ class CreateShortController : ObservableObject {
             } catch let error {
                 print("error writign short to firestore: ", error.localizedDescription)
             }
-            
+        }
+        
+        Task {
             // Update the prompt response count
             do {
                 let promptRef = db.collection("prompts").document(prompt.date!)
@@ -50,19 +52,22 @@ class CreateShortController : ObservableObject {
             } catch let error {
                 print("error updating short count on prompt: ", error.localizedDescription)
             }
-            
+        }
+        
+        Task {
             // Update the user's stats
             do {
-                var addToStreak = false
-                // Check if the currentStreak is active
-                if isYesterdayOrToday(date: user.lastShortWrittenDate!.dateValue()) {
-                    // Switch the bool meaning we should increment the value, not reset it
-                    addToStreak = true
+                var amountToAddToCurrentStreak = -1
+                
+                if isYesterday(date: user.lastShortWrittenDate!.dateValue()) {
+                    amountToAddToCurrentStreak = 1
+                } else if isToday(date: user.lastShortWrittenDate!.dateValue()) {
+                    amountToAddToCurrentStreak = 0
                 }
                 
                 // value to add to bestStreak
                 var bestStreak = 0
-                if user.currentStreak == user.bestStreak && addToStreak {
+                if user.currentStreak == user.bestStreak && amountToAddToCurrentStreak == 1 {
                     bestStreak = 1
                 }
                 
@@ -76,8 +81,8 @@ class CreateShortController : ObservableObject {
                 let userRef = db.collection("users").document(user.id!)
                 try await userRef.updateData([
                     "shortsCount": FieldValue.increment(Int64(1)),
-                    "title": shouldIncrementTitleLevel ? FieldValue.increment(Int64(1)) : 0,
-                    "currentStreak": addToStreak ? FieldValue.increment(Int64(1)) : 1,
+                    "title": shouldIncrementTitleLevel ? FieldValue.increment(Int64(1)) : FieldValue.increment(Int64(0)),
+                    "currentStreak": amountToAddToCurrentStreak >= 0 ? FieldValue.increment(Int64(amountToAddToCurrentStreak)) : 1,
                     "bestStreak": FieldValue.increment(Int64(bestStreak)),
                     "lastShortWrittenDate": Timestamp()
                 ])
@@ -132,9 +137,13 @@ class CreateShortController : ObservableObject {
         }
     }
     
-    func isYesterdayOrToday(date: Date) -> Bool {
+    func isYesterday(date: Date) -> Bool {
         let calendar = Calendar.current
-        
-        return calendar.isDateInToday(date) || calendar.isDateInYesterday(date)
+        return calendar.isDateInYesterday(date)
+    }
+    
+    func isToday(date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDateInToday(date)
     }
 }

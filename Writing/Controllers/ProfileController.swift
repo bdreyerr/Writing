@@ -36,6 +36,7 @@ class ProfileController : ObservableObject {
     @Published var isSignUpViewShowing: Bool = false
     @Published var isSettingsShowing: Bool = false
     @Published var showSidebar: Bool = false
+    @Published var isConfirmShortDelteAlertShowing: Bool = false
     // Sorting method (0 = byDateWritten, 1 = byLikeCount, 2 = byPromptDate)
     @Published var shortsSortingMethod: Int = 0
     @Published var isFocusedShortSheetShowing: Bool = false
@@ -275,6 +276,42 @@ class ProfileController : ObservableObject {
     func clearShorts() {
         self.shorts = []
         self.chunksOfShorts = []
+    }
+    
+    func deleteShort() {
+        // Ensure user is authd
+        if let user = Auth.auth().currentUser {
+            // Ensure a short is focused
+            if let short = self.focusedShort {
+                // Remove the document from firestore
+                Task {
+                    do {
+                        try await db.collection("shorts").document(short.id!).delete()
+                        print("short successfully removed!")
+                    } catch let error {
+                        print("error deleting from firestore: ", error.localizedDescription)
+                    }
+                }
+                
+                // Update the user stats
+                Task {
+                    do {
+                        let docRef = db.collection("users").document(user.uid)
+                        docRef.updateData([
+                            "shortsCount": FieldValue.increment(Int64(-1)),
+                            "numLikes": FieldValue.increment(Int64(0 - (short.likeCount ?? 0)))
+                        ])
+                        print("updated stats for user")
+                        
+                        DispatchQueue.main.async {
+                            // Clear the controller vars
+                            self.focusedShort = nil
+                            self.isFocusedShortSheetShowing = false
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func limitTextLengthSuggestedPrompt(_ upper: Int) {

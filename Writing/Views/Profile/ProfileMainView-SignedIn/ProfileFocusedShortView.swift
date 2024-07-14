@@ -11,6 +11,9 @@ struct ProfileFocusedShortView: View {
     @EnvironmentObject var profileController: ProfileController
     @EnvironmentObject var userController: UserController
     
+    // Only need home controller to update the cache from the profile.
+    @EnvironmentObject var homeController: HomeController
+    
     @State var isEditShortViewActive: Bool = false
     
     var body: some View {
@@ -92,38 +95,85 @@ struct ProfileFocusedShortView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        HStack {
-                            // Edit Short
-                            NavigationLink(destination: ProfileEditShortView(), isActive: $isEditShortViewActive) {
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .stroke(lineWidth: 1)
-                                    .frame(width: 150, height: 40)
-                                    .overlay {
-                                        HStack {
-                                            Text("Edit Your Short")
-                                                .font(.system(size: 13, design: .serif))
-                                                .bold()
-                                            Image(systemName: "square.and.pencil")
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                // Edit Short
+                                NavigationLink(destination: ProfileEditShortView(), isActive: $isEditShortViewActive) {
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .stroke(lineWidth: 1)
+                                        .frame(width: 150, height: 40)
+                                        .overlay {
+                                            HStack {
+                                                Text("Edit Your Short")
+                                                    .font(.system(size: 13, design: .serif))
+                                                    .bold()
+                                                Image(systemName: "square.and.pencil")
+                                            }
+                                        }
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .padding(.leading, 1)
+                                
+                                // Analysis
+                                NavigationLink(destination: ShortAnalysisMainView()) {
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .stroke(lineWidth: 1)
+                                        .frame(width: 150, height: 40)
+                                        .overlay {
+                                            HStack {
+                                                Text("What We Think")
+                                                    .font(.system(size: 13, design: .serif))
+                                                    .bold()
+                                                Image(systemName: "bolt")
+                                            }
+                                        }
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                // Delete Short
+                                Button(action: {
+                                    profileController.isConfirmShortDelteAlertShowing = true
+                                }) {
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .stroke(lineWidth: 1)
+                                        .frame(width: 170, height: 40)
+                                        .overlay {
+                                            HStack {
+                                                Text("Delete Your Short")
+                                                    .font(.system(size: 13, design: .serif))
+                                                    .bold()
+                                                Image(systemName: "trash")
+                                            }
+                                        }
+                                }
+                                .foregroundStyle(Color.red)
+                                .buttonStyle(PlainButtonStyle())
+                                .alert("Are you sure?", isPresented: $profileController.isConfirmShortDelteAlertShowing) {
+                                    
+                                    Button("Confirm") {
+                                        if let user = userController.user {
+                                            Task {
+                                                profileController.deleteShort()
+                                                
+                                                // repull the shorts for the user in profile
+                                                profileController.retrieveShorts()
+                                                
+                                                // re-pull the user in user controller
+                                                print("right before calling refresh user")
+                                                userController.retrieveUserFromFirestore(userId: user.id!)
+                                                
+                                                // clear the deleted short from the cache in home controller
+                                                if let short = profileController.focusedShort {
+                                                    homeController.clearEditedOrRemovedShortFromCache(shortDate: short.date!)
+                                                }
+                                            }
                                         }
                                     }
+                                    
+                                    Button("Cancel", role: .cancel) { }
+                                }
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            
-                            // Analysis
-                            NavigationLink(destination: HistoryAnalysisView()) {
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .stroke(lineWidth: 1)
-                                    .frame(width: 150, height: 40)
-                                    .overlay {
-                                        HStack {
-                                            Text("What We Think")
-                                                .font(.system(size: 13, design: .serif))
-                                                .bold()
-                                            Image(systemName: "bolt")
-                                        }
-                                    }
-                            }
-                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                 }
@@ -137,4 +187,5 @@ struct ProfileFocusedShortView: View {
     ProfileFocusedShortView()
         .environmentObject(ProfileController())
         .environmentObject(UserController())
+        .environmentObject(HomeController())
 }

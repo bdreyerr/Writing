@@ -684,6 +684,15 @@ class HomeController : ObservableObject {
         }
     }
     
+    // Call this function when you need to reload a user short which is updated or deleted.
+    func clearEditedOrRemovedShortFromCache(shortDate: String) {
+        if let removedValue = self.cachedUserShorts.removeValue(forKey: shortDate) {
+            print("Removed value: \(removedValue)")
+        } else {
+            print("Key not found")
+        }
+    }
+    
     // limits the number of characters you can write when editing your short (2500 characters)
     func limitCommentTextLength(_ upper: Int) {
         if self.commentText.count > upper {
