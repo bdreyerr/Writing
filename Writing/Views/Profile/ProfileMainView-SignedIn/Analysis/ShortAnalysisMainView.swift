@@ -19,7 +19,7 @@ struct ShortAnalysisMainView: View {
                 ScrollView(showsIndicators: false) {
                     
                     if shortAnalysisController.isLoadingAnalysis {
-                        Text("Loading...")
+                        ShortAnalysisLoadingView()
                     } else {
                         Image(systemName: "bolt.circle")
                             .font(.title)
@@ -86,7 +86,7 @@ struct ShortAnalysisMainView: View {
                                     Text(String(format: "%.1f", analysis.proseScore ?? 0.0))
                                         .font(.system(size: 24, design: .serif))
                                         .bold()
-                                        .foregroundStyle(Color.green)
+                                        .foregroundStyle(shortAnalysisController.determineScoreColor(score: analysis.proseScore ?? 0.0))
                                     
                                     Text("Prose")
                                         .font(.system(size: 14, design: .serif))
@@ -96,7 +96,7 @@ struct ShortAnalysisMainView: View {
                                     Text(String(format: "%.1f", analysis.imageryScore ?? 0.0))
                                         .font(.system(size: 24, design: .serif))
                                         .bold()
-                                        .foregroundStyle(Color.red)
+                                        .foregroundStyle(shortAnalysisController.determineScoreColor(score: analysis.imageryScore ?? 0.0))
                                     
                                     Text("Imagery")
                                         .font(.system(size: 14, design: .serif))
@@ -110,7 +110,7 @@ struct ShortAnalysisMainView: View {
                                     Text(String(format: "%.1f", analysis.flowScore ?? 0.0))
                                         .font(.system(size: 24, design: .serif))
                                         .bold()
-                                        .foregroundStyle(Color.orange)
+                                        .foregroundStyle(shortAnalysisController.determineScoreColor(score: analysis.flowScore ?? 0.0))
                                     
                                     Text("Flow")
                                         .font(.system(size: 14, design: .serif))
@@ -121,11 +121,12 @@ struct ShortAnalysisMainView: View {
                             // Text Analysis
                             Text(analysis.content ?? "")
                                 .font(.system(size: 15, design: .serif))
+                                .padding(.bottom, 10)
                             
                             Text(String(format: "%.1f", analysis.score ?? 0.0))
                                 .font(.system(size: 28, design: .serif))
                                 .bold()
-                                .foregroundStyle(Color.orange)
+                                .foregroundStyle(shortAnalysisController.determineScoreColor(score: analysis.score ?? 0.0))
                             
                             
                             Text("Overall")
@@ -155,10 +156,12 @@ struct ShortAnalysisMainView: View {
                                     Task {
                                         if let user = userController.user {
                                             if let short = profileController.focusedShort {
-                                                shortAnalysisController.createAnalysis(userId: user.id!, short: short)
+                                                shortAnalysisController.createAnalysis(user: user, short: short)
+                                                
+                                                // Update the user vars (avg writing score got updated)
+//                                                userController.retrieveUserFromFirestore(userId: user.id!)
                                             }
                                         }
-                                        
                                     }
                                 }
                                 

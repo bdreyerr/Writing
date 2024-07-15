@@ -20,8 +20,9 @@ struct User : Codable {
     // A count of how many shorts this user has written
     var shortsCount: Int?
     var numLikes: Int?
-    // The average score of the user's writings
+    // The average score of the user's writings and the number of analysis been generated
     var avgWritingScore: Float?
+    var numAnalysisGenerated: Int?
     
     // Title
     var title: Int?
@@ -48,6 +49,7 @@ struct User : Codable {
         case shortsCount
         case numLikes
         case avgWritingScore
+        case numAnalysisGenerated
         case title
         case lastShortWrittenDate
         case currentStreak

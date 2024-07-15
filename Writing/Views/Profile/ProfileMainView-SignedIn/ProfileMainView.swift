@@ -143,7 +143,7 @@ struct ProfileMainView: View {
                                             .padding()
                                             
                                             VStack {
-                                                Text("7.3")
+                                                Text(String(format: "%.1f", user.avgWritingScore ?? 0.0))
                                                     .font(.system(size: 18, design: .serif))
                                                 
                                                 Text("Avg")

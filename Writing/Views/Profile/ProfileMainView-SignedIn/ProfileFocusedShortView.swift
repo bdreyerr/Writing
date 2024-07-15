@@ -129,6 +129,7 @@ struct ProfileFocusedShortView: View {
                                             }
                                         }
                                 }
+                                .foregroundStyle(Color.blue)
                                 .buttonStyle(PlainButtonStyle())
                                 
                                 // Delete Short
@@ -174,6 +175,7 @@ struct ProfileFocusedShortView: View {
                                     Button("Cancel", role: .cancel) { }
                                 }
                             }
+                            .padding(.vertical, 2)
                         }
                     }
                 }

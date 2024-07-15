@@ -15,6 +15,7 @@
 		1A3C05F92C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */; };
 		1A3C05FB2C31E62E00BDB3F2 /* FreeWriteFullListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05FA2C31E62E00BDB3F2 /* FreeWriteFullListView.swift */; };
 		1A3C05FD2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05FC2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift */; };
+		1A6B04E12C45B1B1003CD787 /* ShortAnalysisLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6B04E02C45B1B1003CD787 /* ShortAnalysisLoadingView.swift */; };
 		1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */; };
 		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
 		1A6FDDB82C221CE500C8F5FD /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB72C221CE500C8F5FD /* UserController.swift */; };
@@ -26,6 +27,7 @@
 		1A71B2862C436AE000C7E274 /* ShortAnalysisController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B2852C436AE000C7E274 /* ShortAnalysisController.swift */; };
 		1A71B2882C436BCC00C7E274 /* ShortAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B2872C436BCC00C7E274 /* ShortAnalysis.swift */; };
 		1A71B28A2C4381C600C7E274 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A71B2892C4381C600C7E274 /* Secrets.swift */; };
+		1A71B28D2C445E9E00C7E274 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 1A71B28C2C445E9E00C7E274 /* OpenAI */; };
 		1A723BA92C28CFBB00B0244A /* ProfileShortPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A723BA82C28CFBB00B0244A /* ProfileShortPreview.swift */; };
 		1A723BAB2C28D13400B0244A /* ProfileShortGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A723BAA2C28D13400B0244A /* ProfileShortGrid.swift */; };
 		1A723BAD2C28EB6D00B0244A /* ProfileFocusedShortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A723BAC2C28EB6D00B0244A /* ProfileFocusedShortView.swift */; };
@@ -81,6 +83,7 @@
 		1A3C05F82C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteEntryPreviewView.swift; sourceTree = "<group>"; };
 		1A3C05FA2C31E62E00BDB3F2 /* FreeWriteFullListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteFullListView.swift; sourceTree = "<group>"; };
 		1A3C05FC2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteEditEntryView.swift; sourceTree = "<group>"; };
+		1A6B04E02C45B1B1003CD787 /* ShortAnalysisLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortAnalysisLoadingView.swift; sourceTree = "<group>"; };
 		1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSignedOutView.swift; sourceTree = "<group>"; };
 		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
 		1A6FDDB72C221CE500C8F5FD /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
@@ -144,6 +147,7 @@
 				1ABF090A2C1D540C00F2E6AF /* FirebaseAuth in Frameworks */,
 				1ABF09102C1D540C00F2E6AF /* FirebaseStorage in Frameworks */,
 				1A8172C52C1F7DF4004217AA /* GoogleSignInSwift in Frameworks */,
+				1A71B28D2C445E9E00C7E274 /* OpenAI in Frameworks */,
 				1ABF090C2C1D540C00F2E6AF /* FirebaseFirestore in Frameworks */,
 				1ABF090E2C1D540C00F2E6AF /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -156,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				1A71B2812C436A3D00C7E274 /* ShortAnalysisMainView.swift */,
+				1A6B04E02C45B1B1003CD787 /* ShortAnalysisLoadingView.swift */,
 			);
 			path = Analysis;
 			sourceTree = "<group>";
@@ -377,6 +382,7 @@
 				1ABF090F2C1D540C00F2E6AF /* FirebaseStorage */,
 				1A8172C22C1F7DF4004217AA /* GoogleSignIn */,
 				1A8172C42C1F7DF4004217AA /* GoogleSignInSwift */,
+				1A71B28C2C445E9E00C7E274 /* OpenAI */,
 			);
 			productName = Writing;
 			productReference = 1AA1A4FA2C0BD15D009D9233 /* Writing.app */;
@@ -409,6 +415,7 @@
 			packageReferences = (
 				1ABF09082C1D540B00F2E6AF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				1A8172C12C1F7DF4004217AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				1A71B28B2C445E9D00C7E274 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = 1AA1A4FB2C0BD15D009D9233 /* Products */;
 			projectDirPath = "";
@@ -454,6 +461,7 @@
 				1ABF09182C1E147700F2E6AF /* ProfileContentView.swift in Sources */,
 				1ABF09052C1CDCA400F2E6AF /* ProfileMainViewNotSignedIn.swift in Sources */,
 				1A8172D52C20D4DA004217AA /* FreeWriteContentView.swift in Sources */,
+				1A6B04E12C45B1B1003CD787 /* ShortAnalysisLoadingView.swift in Sources */,
 				1A8172D32C1FE2F9004217AA /* FreeWriteSingleEntryView.swift in Sources */,
 				1A6FDDBA2C224D1D00C8F5FD /* CreateShortOrYourExistingShort.swift in Sources */,
 				1A71B28A2C4381C600C7E274 /* Secrets.swift in Sources */,
@@ -714,6 +722,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A71B28B2C445E9D00C7E274 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.9;
+			};
+		};
 		1A8172C12C1F7DF4004217AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -733,6 +749,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A71B28C2C445E9E00C7E274 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A71B28B2C445E9D00C7E274 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
 		1A8172C22C1F7DF4004217AA /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1A8172C12C1F7DF4004217AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
