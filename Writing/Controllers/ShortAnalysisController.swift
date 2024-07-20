@@ -32,7 +32,7 @@ class ShortAnalysisController : ObservableObject {
     let db = Firestore.firestore()
     
     init() {
-        self.isLoadingAnalysis = true
+//        self.isLoadingAnalysis = true
     }
     
     // attempt to retrieve an analysis when you visit the corresponding view (may return nothing)
@@ -76,137 +76,99 @@ class ShortAnalysisController : ObservableObject {
         self.isLoadingAnalysis = true
         
         Task {
-            // prose Score do
+            // Get writing scores
             do {
-                let proseScore = try await getProseScore(short: short)
+                let writingScores = try await getWritingScores(short: short)
                 
-                // imagery score do
+                print("writing score is: ", writingScores)
+                let proseScore = writingScores[0]
+                let imageryScore = writingScores[1]
+                let flowScore = writingScores[2]
+                
                 do {
-                    let imageryScore = try await getImageryScore(short: short)
+                    let textAnalysis = try await getTextAnalysis(short: short)
                     
-                    // flow score do
+                    // Create overall score (average the 3)
+                    let overallScore = (proseScore + imageryScore + flowScore) / 3.0
+                    
+                    // Create the model object
+                    let shortAnalysis = ShortAnalysis(shortId: short.id!, authorId: user.id!, proseScore: proseScore, imageryScore: imageryScore, flowScore: flowScore, score: overallScore, content: textAnalysis)
+                    
+                    // Write the Free Write to Firestore
                     do {
-                        let flowScore = try await getFlowScore(short: short)
+                        try db.collection("shortAnalysis").addDocument(from: shortAnalysis)
+                        print("short analysis written to firestore")
                         
-                        // text Analysis do
+                        
+                        // Get the new writing average for the user
+                        // cur_average passed as arg
+                        let curAvg = Double(user.avgWritingScore!)
+                        // num analysis passed as arg
+                        let numAnalysis = Double(user.numAnalysisGenerated!)
+                        
+                        let newAvg = ((curAvg * numAnalysis) + overallScore) / (numAnalysis + 1)
+                        
+                        // Write new writing avg to the user's page.
                         do {
-                            let textAnalysis = try await getTextAnalysis(short: short)
+                            let userRef = db.collection("users").document(user.id!)
+                            try await userRef.updateData([
+                                "avgWritingScore": newAvg,
+                                "numAnalysisGenerated": (numAnalysis+1)
+                            ])
                             
-                            // Create overall score (average the 3)
-                            let overallScore = (proseScore + imageryScore + flowScore) / 3.0
-                            
-                            // Create the model object
-                            let shortAnalysis = ShortAnalysis(shortId: short.id!, authorId: user.id!, proseScore: proseScore, imageryScore: imageryScore, flowScore: flowScore, score: overallScore, content: textAnalysis)
-                            
-                            // Write the Free Write to Firestore
-                            do {
-                                try db.collection("shortAnalysis").addDocument(from: shortAnalysis)
-                                print("short analysis written to firestore")
+                            // Update View Controller variables
+                            DispatchQueue.main.async {
+                                self.isLoadingAnalysis = false
                                 
-                                
-                                // Get the new writing average for the user
-                                // cur_average passed as arg
-                                let curAvg = Double(user.avgWritingScore!)
-                                // num analysis passed as arg
-                                let numAnalysis = Double(user.numAnalysisGenerated!)
-                                
-                                let newAvg = ((curAvg * numAnalysis) + overallScore) / (numAnalysis + 1)
-                                
-                                // Write new writing avg to the user's page.
-                                do {
-                                    let userRef = db.collection("users").document(user.id!)
-                                    try await userRef.updateData([
-                                        "avgWritingScore": newAvg,
-                                        "numAnalysisGenerated": (numAnalysis+1)
-                                    ])
-                                    
-                                    // Update View Controller variables
-                                    DispatchQueue.main.async {
-                                        self.isLoadingAnalysis = false
-                                        
-                                        // focus the newly created analysis
-                                        self.focusedShortAnalysis = shortAnalysis
-                                        // add it to the cache too
-                                        self.cachedShortAnalysis[short.id!] = shortAnalysis
-                                    }
-                                } catch let error {
-                                    print("error updating user stats: ", error.localizedDescription)
-                                    isErrorLoadingAnalysis = true
-                                }
-                            } catch let error {
-                                print("error writing new short analysis to firestore: ", error.localizedDescription)
-                                isErrorLoadingAnalysis = true
+                                // focus the newly created analysis
+                                self.focusedShortAnalysis = shortAnalysis
+                                // add it to the cache too
+                                self.cachedShortAnalysis[short.id!] = shortAnalysis
                             }
-                        } catch {
-                            print("error getting text analysis: ", error.localizedDescription)
+                        } catch let error {
+                            print("error updating user stats: ", error.localizedDescription)
                             isErrorLoadingAnalysis = true
                         }
-                    } catch {
-                        print("error getting flow score: ", error.localizedDescription)
+                    } catch let error {
+                        print("error writing new short analysis to firestore: ", error.localizedDescription)
                         isErrorLoadingAnalysis = true
                     }
                 } catch {
-                    print("error getting imagery score: ", error.localizedDescription)
+                    print("error getting text analysis: ", error.localizedDescription)
                     isErrorLoadingAnalysis = true
                 }
                 
             } catch {
-                print("error getting prose score: ", error.localizedDescription)
+                print("error getting writing scores: ", error.localizedDescription)
                 isErrorLoadingAnalysis = true
             }
         }
     }
     
-    // AI function
-    func getProseScore(short: Short) async throws -> Double {
-        let queryToAPI = "Give me score out of 10 (8.5 for example) for the following piece of writing, based on its prose, please only respond with the number and no other text or analysis \n \(short.shortRawText!)"
+    func getWritingScores(short: Short) async throws -> [Double] {
+        let openAIPrompt = "Give me three scores out of 10 (example: 8.5) for the following piece of writing based on its prose, imagery and flow respectively. Only respond with the numbers separated by a space, with no period: \n \(short.shortRawText!)"
         
-        let query = ChatQuery(messages: [.init(role: .user, content: queryToAPI)!], model: .gpt4_o, maxTokens: 5)
+        let query = ChatQuery(messages: [.init(role: .user, content: openAIPrompt)!], model: .gpt4_o_mini, maxTokens: 10)
         do {
             let result = try await openAI.chats(query: query)
             let content = result.choices.first?.message.content?.string
-//            print("content of prose score AI query: ", content!)
-//            print("converting it to a double: \(Double(content!) ?? -1.0)")
-            return Double(content!) ?? -1.0
+            
+            // Split the string by comma, then convert to double
+            
+            print("the string we get from openAI: ", content!)
+            let splitArray = content!.components(separatedBy: " ")
+            let doubleArray = splitArray.compactMap { Double($0) }
+            print("the array we made:", doubleArray)
+            
+            if doubleArray.count != 3 {
+                print("error getting three values for writing score")
+                return [0,0,0]
+            }
+            
+            return doubleArray
         } catch {
-            print("error doing AI for prose score: ", error.localizedDescription)
-            return -1.0
-        }
-        
-    }
-    
-    // AI function
-    func getImageryScore(short: Short) async throws -> Double {
-        let queryToAPI = "Give me score out of 10 (8.5 for example) for the following piece of writing, based on its imagery, please only respond with the number and no other text or analysis \n \(short.shortRawText!)"
-        
-        let query = ChatQuery(messages: [.init(role: .user, content: queryToAPI)!], model: .gpt4_o, maxTokens: 5)
-        do {
-            let result = try await openAI.chats(query: query)
-            let content = result.choices.first?.message.content?.string
-//            print("content of imagery score AI query: ", content!)
-//            print("converting it to a double: \(Double(content!) ?? -1.0)")
-            return Double(content!) ?? -1.0
-        } catch {
-            print("error doing AI for imagery score")
-            return -1.0
-        }
-    }
-    
-    // AI function
-    func getFlowScore(short: Short) async throws -> Double {
-        let queryToAPI = "Give me score out of 10 (8.5 for example) for the following piece of writing, based on its flow, please only respond with the number and no other text or analysis \n \(short.shortRawText!)"
-        
-        let query = ChatQuery(messages: [.init(role: .user, content: queryToAPI)!], model: .gpt4_o, maxTokens: 5)
-        
-        do {
-            let result = try await openAI.chats(query: query)
-            let content = result.choices.first?.message.content?.string
-//            print("content of flow score AI query: ", content!)
-//            print("converting it to a double: \(Double(content!) ?? -1.0)")
-            return Double(content!) ?? -1.0
-        } catch {
-            print("error doing AI for imagery score")
-            return -1.0
+            print("error getting the AI writing scores: ", error.localizedDescription)
+            return [0,0,0]
         }
     }
     
@@ -214,7 +176,7 @@ class ShortAnalysisController : ObservableObject {
     func getTextAnalysis(short: Short) async throws -> String {
         let queryToAPI = "Write an analysis for the following piece of writing in 150 words or less explaining what the writer did well and what could be better: \n \(short.shortRawText!)"
         
-        let query = ChatQuery(messages: [.init(role: .user, content: queryToAPI)!], model: .gpt4_o, maxTokens: 400)
+        let query = ChatQuery(messages: [.init(role: .user, content: queryToAPI)!], model: .gpt4_o_mini, maxTokens: 400)
         
         do {
             let result = try await openAI.chats(query: query)

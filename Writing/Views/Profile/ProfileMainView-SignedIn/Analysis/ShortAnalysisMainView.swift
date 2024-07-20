@@ -178,7 +178,7 @@ struct ShortAnalysisMainView: View {
             .padding(.trailing, 20)
         }
         .onAppear {
-            if let user = userController.user {
+            if let _ = userController.user {
                 if let short = profileController.focusedShort {
                     shortAnalysisController.retrieveAnalysis(shortId: short.id!)
                 }
