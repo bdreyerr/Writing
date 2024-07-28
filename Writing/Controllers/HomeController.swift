@@ -566,86 +566,118 @@ class HomeController : ObservableObject {
     }
     
     
-    func likePrompt() {
-        // If a prompt is focused, process it for a like.
+    func likePrompt(usersPromptLikes: [String : Bool]) {
+        // make sure a prompt is focused
         if let prompt = self.focusedPrompt {
-            // if a prompt is already liked, it's in the map, and just set it to false
-            if let isLiked = self.likedPrompts[prompt.date!] {
-                if isLiked == true {
-                    self.focusedPrompt?.likeCount! -= 1
-                    self.likedPrompts[prompt.date!] = false
-                    return
-                }
-                if isLiked == false {
-                    self.focusedPrompt?.likeCount! += 1
-                    self.likedPrompts[prompt.date!] = true
-                    return
-                }
-            } else {
-                // Else this is the first time a like is being sent, so we're going to actually update that prompts like count in firestore. Even if the user unlikes the prompt, the like will remain.
-                Task {
-                    do {
-                        let promptRef = db.collection("prompts").document(prompt.date!)
-                        try await promptRef.updateData([
-                            "likeCount": FieldValue.increment(Int64(1))
-                        ])
-                        DispatchQueue.main.async {
-                            // Add the like to the map
-                            self.likedPrompts[prompt.date!] = true
-                            // Add 1 to the focusedPrompt, so it updates on the view
-                            self.focusedPrompt?.likeCount! += 1
-                        }
-                    } catch let error {
-                        print("error adding like to prompt: ", error.localizedDescription)
+            // Write to Firestore (Prompt - Adding / Subtracting like count)
+            Task {
+                do {
+                    var isLike = true
+                    if let like = usersPromptLikes[prompt.date!] {
+                        if like == true {isLike = false} else {isLike = true}
                     }
+                    
+                    let promptRef = db.collection("prompts").document(prompt.date!)
+                    try await promptRef.updateData([
+                        "likeCount": FieldValue.increment(Int64(isLike ? 1 : -1))
+                    ])
+                    // Update published vars - prompt
+                    DispatchQueue.main.async {
+                        
+                        var isLikeConcurrent = true
+                        if let like = usersPromptLikes[prompt.date!] {
+                            if like == true {isLikeConcurrent = false} else {isLikeConcurrent = true}
+                        }
+                        // Add / Subtract 1 to the focusedPrompt, so it updates on the view
+                        self.focusedPrompt?.likeCount! += isLikeConcurrent ? 1 : -1
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
                 }
             }
         }
     }
     
-    func likeShort() {
-        // get the id of the focused short
-        var shortId = ""
+    func likeShort(usersShortsLikes: [String : Bool]) {
+        // ensure a short is focused
         if let short = self.focusedSingleShort {
-            shortId = short.id!
-        } else {
-            print("not focusing a short, cannot assign like")
-            return
-        }
-        
-        // if a short has already been liked / unliked, it's already in the map, just flip its value. Don't write to db.
-        if let isLiked = self.likedShorts[shortId] {
-            self.likedShorts[shortId]?.toggle()
-            if isLiked {
-                self.focusedSingleShort?.likeCount! -= 1
-            } else {
-                self.focusedSingleShort?.likeCount! += 1
-            }
-        } else {
-            // otherwise it's the first time this short is being liked, so we're gonna update the db with a +1 like. Even if the user unlikes this short it wont change the like number lol.
             Task {
                 do {
-                    // have to get the id again, because this code doesn't run on main thread.
-                    var shortIdAsync = ""
-                    if let short = self.focusedSingleShort {
-                        shortIdAsync = short.id!
+                    // determine like or unlike
+                    var isLike = true
+                    if let like = usersShortsLikes[short.id!] {
+                        if like == true {isLike = false} else {isLike = true}
                     }
                     
-                    let shortRef = db.collection("shorts").document(shortIdAsync)
+                    let shortRef = db.collection("shorts").document(short.id!)
                     try await shortRef.updateData([
-                        "likeCount": FieldValue.increment(Int64(1))
+                        "likeCount": FieldValue.increment(Int64(isLike ? 1 : -1))
                     ])
+                    
                     DispatchQueue.main.async {
-                        // have to get the id again for the main thread.
-                        var shortIdMain = ""
-                        if let short = self.focusedSingleShort {
-                            shortIdMain = short.id!
+                        var isLikeConcurrent = true
+                        if let like = usersShortsLikes[short.id!] {
+                            if like == true {isLikeConcurrent = false} else {isLikeConcurrent = true}
                         }
-                        self.likedShorts[shortIdMain] = true
-                        self.focusedSingleShort?.likeCount! += 1
+                        // Add / Subtract 1 to the focusedShort, so it updates on the view
+                        self.focusedSingleShort?.likeCount! += isLikeConcurrent ? 1 : -1
+                        
+                        // update focused top community shorts
+                        // find the corresponding short in the array (can be 1 of 3)
+                        for topShort in self.focusedTopCommunityShorts {
+                            if topShort.id! == short.id! {
+                                
+                            }
+                        }
+                        
+                        // update the users Shorts too (the user might have liked their own short)
+                        if let userShort = self.usersFocusedShort {
+                            if userShort.id == short.id! {
+                                self.usersFocusedShort!.likeCount! += isLikeConcurrent ? 1 : -1
+                            }
+                        }
+                        
+                        // update users cached shorts
+                        if let usersCachedShort = self.cachedUserShorts[short.date!] {
+                            self.cachedUserShorts[short.date!]!.likeCount! += isLikeConcurrent ? 1 : -1
+                        }
+                        
+                        
+                        // check focusedTopCommunityShorts
+                        for i in 0..<self.focusedTopCommunityShorts.count {
+                            if self.focusedTopCommunityShorts[i].id == short.id! {
+                                self.focusedTopCommunityShorts[i].likeCount! += isLikeConcurrent ? 1 : -1
+                                
+                                // then update the cache since it exists too
+                                if let cachedArrayOfShorts = self.cachedTopCommunityShorts[short.date!] {
+                                    for i in 0..<cachedArrayOfShorts.count {
+                                        if cachedArrayOfShorts[i].id! == short.id! {
+                                            self.cachedTopCommunityShorts[short.date!]![i].likeCount! += isLikeConcurrent ? 1 : -1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // check focusedFullCommunityShorts
+                        for i in 0..<self.focusedFullCommunityShorts.count {
+                            if self.focusedFullCommunityShorts[i].id == short.id! {
+                                self.focusedFullCommunityShorts[i].likeCount! += isLikeConcurrent ? 1 : -1
+                                
+                                // then update the cache since it exists too
+                                if let cachedArrayOfShorts = self.cachedFullCommunityShorts[short.date!] {
+                                    for i in 0..<cachedArrayOfShorts.count {
+                                        if cachedArrayOfShorts[i].id! == short.id! {
+                                            self.cachedFullCommunityShorts[short.date!]![i].likeCount! += isLikeConcurrent ? 1 : -1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
                     }
                 } catch let error {
-                    print("error adding like to short: ", error.localizedDescription)
+                    print(error.localizedDescription)
                 }
             }
         }

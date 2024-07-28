@@ -76,14 +76,33 @@ struct SingleLimitedCommunityResponse: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 HStack {
-                    HStack {
-                        // Comment image
-                        Image(systemName: "hand.thumbsup")
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                        // comment number
-                        Text("\(short.likeCount!.formatted())")
-                            .font(.system(size: 13, design: .serif))
+                    
+                    ZStack {
+                        HStack {
+                            // like image
+                            Image(systemName: "hand.thumbsup")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                            // like number
+                            Text("\(short.likeCount!.formatted())")
+                                .font(.system(size: 13, design: .serif))
+                        }
+                        if let user = userController.user {
+                            if let likesShorts = user.likedShorts {
+                                if let isLike = likesShorts[self.short.id!] {
+                                    if isLike {
+                                        HStack {
+                                            Image(systemName: "hand.thumbsup")
+                                                .resizable()
+                                                .frame(width: 15, height: 15)
+                                            Text("\(short.likeCount!.formatted())")
+                                                .font(.system(size: 13, design: .serif))
+                                        }
+                                        .foregroundStyle(Color.orange)
+                                    }
+                                }
+                            }
+                        }
                     }
                     
                     HStack {

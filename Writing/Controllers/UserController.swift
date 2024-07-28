@@ -234,7 +234,81 @@ class UserController : ObservableObject {
                 }
             }
         }
-        
+    }
+    
+    func likePrompt(promptDate: String) {
+        Task {
+            do {
+                // check if we're doing a like or an unlike
+                var isLike = true
+                
+                if let likePrompts = user?.likedPrompts {
+                    if let like = likePrompts[promptDate] {
+                        isLike = !like
+                    }
+                }
+                
+                
+                let userRef = self.db.collection("users").document(user!.id!)
+                userRef.updateData([
+                    "likedPrompts.\(promptDate)": isLike
+                ])
+                
+                DispatchQueue.main.async {
+                    var isLikeConcurrent = true
+                    
+                    if let likePrompts = self.user?.likedPrompts {
+                        if let like = likePrompts[promptDate] {
+                            isLikeConcurrent = !like
+                        }
+                    }
+                    
+                    if let _ = self.user?.likedPrompts {
+                        self.user!.likedPrompts![promptDate] = isLikeConcurrent
+                    } else {
+                        self.user!.likedPrompts = [:]
+                        self.user!.likedPrompts![promptDate] = isLikeConcurrent
+                    }
+                }
+            }
+        }
+    }
+    
+    func likeShort(shortId: String) {
+        Task {
+            do {
+                // check if we're doing a like or an unlike
+                var isLike = true
+                
+                if let likeShorts = user?.likedShorts {
+                    if let like = likeShorts[shortId] {
+                        isLike = !like
+                    }
+                }
+                
+                let userRef = self.db.collection("users").document(user!.id!)
+                userRef.updateData([
+                    "likedShorts.\(shortId)": isLike
+                ])
+                
+                DispatchQueue.main.async {
+                    var isLikeConcurrent = true
+                    
+                    if let likeShorts = self.user?.likedShorts {
+                        if let like = likeShorts[shortId] {
+                            isLikeConcurrent = !like
+                        }
+                    }
+                    
+                    if let _ = self.user?.likedShorts {
+                        self.user!.likedShorts![shortId] = isLikeConcurrent
+                    } else {
+                        self.user!.likedShorts = [:]
+                        self.user!.likedShorts![shortId] = isLikeConcurrent
+                    }
+                }
+            }
+        }
     }
     
     // Rate limiting - limits firestore writes and blocks spamming in a singular user session. app is still prone to attacks in multiple app sessions (closing and re-opening)

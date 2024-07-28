@@ -61,35 +61,46 @@ struct TodaysPrompt: View {
                     if let rateLimit = userController.processFirestoreWrite() {
                         print(rateLimit)
                     } else {
-                        homeController.likePrompt()
+                        if let user = userController.user {
+                            if let userLikesPrompts = user.likedPrompts {
+                                homeController.likePrompt(usersPromptLikes: userLikesPrompts)
+                            } else {
+                                homeController.likePrompt(usersPromptLikes: [:])
+                            }
+                        }
+                        // check a prompt is focused
+                        if let prompt = homeController.focusedPrompt {
+                            userController.likePrompt(promptDate: prompt.date!)
+                        }
+                        
                     }
                 }) {
                     ZStack {
+                        // Non colored like count (when a user hasn't liked this prompt)
                         HStack {
                             Image(systemName: "hand.thumbsup")
                                 .font(.caption)
-                            //                                    .resizable()
-                            //                                    .frame(width: 15, height: 15)
                             // Like Count
                             Text("\(likeCount.formatted())")
                                 .font(.system(size: 13, design: .serif))
                         }
                         
-                        // if a prompt is focused
+                        // Colored like count (when a user has liked this prompt)
                         if let prompt = homeController.focusedPrompt {
-                            // if that prompt is liked, change the color to green
-                            if let isLiked = homeController.likedPrompts[prompt.date!] {
-                                if isLiked == true {
-                                    HStack {
-                                        Image(systemName: "hand.thumbsup")
-                                            .font(.caption)
-                                        //                                    .resizable()
-                                        //                                    .frame(width: 15, height: 15)
-                                        // Like Count
-                                        Text("\(likeCount.formatted())")
-                                            .font(.system(size: 13, design: .serif))
+                            if let user = userController.user {
+                                if let likesPrompts = user.likedPrompts {
+                                    if let isLiked = likesPrompts[prompt.date!] {
+                                        if isLiked == true {
+                                            HStack {
+                                                Image(systemName: "hand.thumbsup")
+                                                    .font(.caption)
+                                                // Like Count
+                                                Text("\(likeCount.formatted())")
+                                                    .font(.system(size: 13, design: .serif))
+                                            }
+                                            .foregroundStyle(Color.orange)
+                                        }
                                     }
-                                    .foregroundStyle(Color.orange)
                                 }
                             }
                         }

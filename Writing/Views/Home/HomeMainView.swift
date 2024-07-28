@@ -70,7 +70,7 @@ struct HomeMainView: View {
                                 TodaysPrompt(image: focusedImage, prompt: focusedPrompt.promptRawText!, tags: focusedPrompt.tags!, likeCount: focusedPrompt.likeCount!, responseCount: focusedPrompt.shortCount!, includeResponseCount: true)
                             }
                         } else {
-                            TodaysPrompt(imageText: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike"], likeCount: 173, responseCount: 47, includeResponseCount: true)
+                            TodaysPrompt(imageText: "missingPrompt", prompt: "We couldn't load the prompt for the date you selected, sorry about that, please try a different date!", tags: ["Awkward"], likeCount: 0, responseCount: 0, includeResponseCount: true)
                         }
                         
                         
@@ -159,9 +159,9 @@ struct CommunityResponses : View {
                 }
                 areTopCommentsShowing.toggle()
             }) {
-                if let user = userController.user {
+                if let _ = userController.user {
                     HStack {
-                        Text("View Top Shorts")
+                        Text("Top Community Shorts")
                             .font(.system(size: 14, design: .serif))
                             .bold()
                         
@@ -192,7 +192,6 @@ struct CommunityResponses : View {
                         // Just show nothing if there's no shorts yet, less jumpy when the view changes / loads.
                     } else {
                         ForEach(homeController.focusedTopCommunityShorts) { short in
-//                            SingleLimitedCommunityResponse(image: homeController.communityProfilePictures[short.authorId!] ?? UIImage(named: "not-signed-in-profile")!, authorHandle: short.authorFirstName! + " " + short.authorLastName!, timePosted: short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened), response: short.shortRawText!, numLikes: short.likeCount!, numComments: short.commentCount!)
                             SingleLimitedCommunityResponse(short: short, isOwnedShort: false)
                         }
                         

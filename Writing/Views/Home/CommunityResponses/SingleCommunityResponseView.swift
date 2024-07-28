@@ -135,10 +135,23 @@ struct SingleCommunityResponseView: View {
                                 if let rateLimit = userController.processFirestoreWrite() {
                                     print(rateLimit)
                                 } else {
-                                    homeController.likeShort()
+                                    if let user = userController.user {
+                                        if let shortsLikes = user.likedShorts {
+                                            homeController.likeShort(usersShortsLikes: shortsLikes)
+                                        } else {
+                                            homeController.likeShort(usersShortsLikes: [:])
+                                        }
+                                    }
+                                    
+                                    // check a short is focused
+                                    if let short = homeController.focusedSingleShort {
+                                        userController.likeShort(shortId: short.id!)
+                                    }
+                                    
                                 }
                             }) {
                                 ZStack {
+                                    // Unliked like count (no color)
                                     HStack {
                                         // Comment image
                                         Image(systemName: "hand.thumbsup")
@@ -149,20 +162,24 @@ struct SingleCommunityResponseView: View {
                                             .font(.system(size: 13, design: .serif))
                                     }
                                     
-                                    // if the short is liked, stack the orange one on top lmao
+                                    // Liked like count (color)
                                     if let short = homeController.focusedSingleShort {
-                                        if let isLiked = homeController.likedShorts[short.id!] {
-                                            if isLiked {
-                                                HStack {
-                                                    // Comment image
-                                                    Image(systemName: "hand.thumbsup")
-                                                        .resizable()
-                                                        .frame(width: 15, height: 15)
-                                                    // comment number
-                                                    Text("\(short.likeCount!.formatted())")
-                                                        .font(.system(size: 13, design: .serif))
+                                        if let user = userController.user {
+                                            if let likesShorts = user.likedShorts {
+                                                if let isLiked = likesShorts[short.id!] {
+                                                    if isLiked == true {
+                                                        HStack {
+                                                            // Comment image
+                                                            Image(systemName: "hand.thumbsup")
+                                                                .resizable()
+                                                                .frame(width: 15, height: 15)
+                                                            // comment number
+                                                            Text("\(short.likeCount!.formatted())")
+                                                                .font(.system(size: 13, design: .serif))
+                                                        }
+                                                        .foregroundStyle(Color.orange)
+                                                    }
                                                 }
-                                                .foregroundStyle(Color.orange)
                                             }
                                         }
                                     }

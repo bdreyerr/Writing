@@ -113,6 +113,9 @@ struct CreateShortOrYourExistingShort: View {
                                             
                                             // refresh user stats
                                             userController.retrieveUserFromFirestore(userId: user.id!)
+                                            
+                                            // show tab bar again
+                                            self.isTabBarShowing = true
                                         }
                                     } else {
                                         print("prompt not available")

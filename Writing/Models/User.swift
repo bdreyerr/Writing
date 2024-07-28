@@ -38,8 +38,13 @@ struct User : Codable {
     var freeWriteAverageWordCount: Int?
     
     var isAdmin: Bool?
+    
     // Map of userIds : isBlocked
     var blockedUsers: [String: Bool]?
+    
+    // Stores likes the user has sent on prompts and community shorts
+    var likedPrompts: [String : Bool]?
+    var likedShorts: [String : Bool]?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -60,5 +65,7 @@ struct User : Codable {
         case freeWriteAverageWordCount
         case isAdmin
         case blockedUsers
+        case likedPrompts
+        case likedShorts
     }
 }
