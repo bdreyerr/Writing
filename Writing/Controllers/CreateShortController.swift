@@ -84,7 +84,8 @@ class CreateShortController : ObservableObject {
                     "title": shouldIncrementTitleLevel ? FieldValue.increment(Int64(1)) : FieldValue.increment(Int64(0)),
                     "currentStreak": amountToAddToCurrentStreak >= 0 ? FieldValue.increment(Int64(amountToAddToCurrentStreak)) : 1,
                     "bestStreak": FieldValue.increment(Int64(bestStreak)),
-                    "lastShortWrittenDate": Timestamp()
+                    "lastShortWrittenDate": Timestamp(),
+                    "contributions.\(prompt.date!)": true
                 ])
             } catch let error {
                 print(error.localizedDescription)

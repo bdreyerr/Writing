@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeMainView: View {
     @Environment(\.colorScheme) var colorScheme
+    
     @EnvironmentObject var authController: AuthController
     @EnvironmentObject var homeController: HomeController
     @EnvironmentObject var userController: UserController
@@ -16,7 +17,7 @@ struct HomeMainView: View {
     // Date Range for the prompt picker
     let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
-        let startComponents = DateComponents(year: 2024, month: 6, day: 16)
+        let startComponents = DateComponents(year: 2024, month: 7, day: 1)
         let endComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         return calendar.date(from:startComponents)!
         ...
@@ -106,6 +107,7 @@ struct HomeMainView: View {
                             authController.isAuthPopupShowing = false
                         }
                     }
+                    .scrollDismissesKeyboard(.interactively)
                 }
                 .blur(radius: authController.isAuthPopupShowing ? 10.0 : 0.0)
                 
@@ -129,6 +131,7 @@ struct HomeMainView: View {
             // Retrieve the signed in users short for the selected day
             homeController.retrieveSignedInUsersShort()
         }
+        
     }
 }
 
@@ -156,21 +159,27 @@ struct CommunityResponses : View {
                 }
                 areTopCommentsShowing.toggle()
             }) {
-                HStack {
-                    Text("View Top Shorts")
+                if let user = userController.user {
+                    HStack {
+                        Text("View Top Shorts")
+                            .font(.system(size: 14, design: .serif))
+                            .bold()
+                        
+                        if (areTopCommentsShowing) {
+                            Image(systemName: "chevron.up")
+                                .resizable()
+                                .frame(width: 18, height: 10)
+                        } else {
+                            Image(systemName: "chevron.down")
+                                .resizable()
+                                .frame(width: 18, height: 10)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    Text("Log in to view community responses")
                         .font(.system(size: 14, design: .serif))
                         .bold()
-                    
-                    if (areTopCommentsShowing) {
-                        Image(systemName: "arrowtriangle.up")
-                            .resizable()
-                            .frame(width: 13, height: 10)
-                    } else {
-                        Image(systemName: "arrowtriangle.down")
-                            .resizable()
-                            .frame(width: 13, height: 10)
-                    }
-                    
                 }
             }
             .buttonStyle(PlainButtonStyle())

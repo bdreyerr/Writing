@@ -86,6 +86,9 @@ struct FreeWriteCreateEntryView: View {
                                         
                                         // re-pull the user in user controller
                                         userController.retrieveUserFromFirestore(userId: user.id!)
+                                        
+                                        // close the sheet
+                                        freeWriteController.isCreateEntrySheetShowing = false
                                     }
                                 }
                             }
@@ -101,7 +104,7 @@ struct FreeWriteCreateEntryView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
-            .padding(.top, 20)
+            .padding(.top, 40)
             .padding(.leading, 20)
             .padding(.trailing, 20)
             .onAppear {

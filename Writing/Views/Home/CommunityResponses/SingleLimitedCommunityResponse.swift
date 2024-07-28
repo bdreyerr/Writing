@@ -53,14 +53,11 @@ struct SingleLimitedCommunityResponse: View {
                     
                     
                     
-                    
-                    
                     VStack {
                         // Handle
                         Text(short.authorFirstName! + " " + short.authorLastName!)
                             .font(.system(size: 12, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        
                         
                         HStack {
                             // Author title
@@ -68,16 +65,6 @@ struct SingleLimitedCommunityResponse: View {
                                 .font(.system(size: 10, design: .serif))
                                 .opacity(0.6)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                            
-//                            Text("●")
-//                                .font(.system(size: 12, design: .serif))
-//                                .opacity(0.4)
-//                            
-//                            // Date posted
-//                            Text(short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened))
-//                                .font(.system(size: 10, design: .serif))
-//                                .opacity(0.6)
-//                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     
@@ -95,7 +82,7 @@ struct SingleLimitedCommunityResponse: View {
                             .resizable()
                             .frame(width: 15, height: 15)
                         // comment number
-                        Text("\(short.likeCount!)")
+                        Text("\(short.likeCount!.formatted())")
                             .font(.system(size: 13, design: .serif))
                     }
                     
@@ -105,7 +92,7 @@ struct SingleLimitedCommunityResponse: View {
                             .resizable()
                             .frame(width: 15, height: 15)
                         // comment number
-                        Text("\(short.commentCount!)")
+                        Text("\(short.commentCount!.formatted())")
                             .font(.system(size: 13, design: .serif))
                     }
                     

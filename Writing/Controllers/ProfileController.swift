@@ -31,8 +31,12 @@ class ProfileController : ObservableObject {
     // Prompt suggestion
     @Published var suggestedPromptText: String = ""
     
-    // vars that control the view
+    // TODO(ordering) : figure out how to retrieve prompts based on what ordering is going on
     
+    // Pagination
+    @Published var lastDoc: QueryDocumentSnapshot?
+    
+    // vars that control the view
     @Published var isSignUpViewShowing: Bool = false
     @Published var isSettingsShowing: Bool = false
     @Published var showSidebar: Bool = false
@@ -42,9 +46,13 @@ class ProfileController : ObservableObject {
     @Published var isFocusedShortSheetShowing: Bool = false
     @Published var isChangeNameAlertShowing: Bool = false
     @Published var isChangePhotoSheetShowing: Bool = false
+    @Published var areNoShortsLeftToLoad: Bool = false
     
     // Temp 2d array to fill in the contribution grid
-    var contributions = [[1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1], [1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1], [0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1], [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1]]
+//    var contributions = [[1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1], [1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1], [0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1], [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1]]
+    
+    @Published var contributions: [Int] = []
+    @Published var contributionCount: Int = 0
     
     // Firebase
     let db = Firestore.firestore()
@@ -56,7 +64,6 @@ class ProfileController : ObservableObject {
     }
     
     // Retrieves shorts the user has written, to be displayed on their profile
-    // TODO: implemnet infinite scroll / pagination
     func retrieveShorts() {
         self.shorts = []
         self.chunksOfShorts = []
@@ -65,11 +72,12 @@ class ProfileController : ObservableObject {
             // Lookup firestore shorts collection that match userId
             Task {
                 do {
-                    let querySnapshot = try await db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).getDocuments()
+                    let querySnapshot = try await db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).limit(to: 9).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
                             print("no shorts returned")
+                            self.areNoShortsLeftToLoad = true
                             return
                         }
                         
@@ -82,6 +90,16 @@ class ProfileController : ObservableObject {
                                 self.shorts.append(short)
                             }
                         }
+                        
+                        // get the last doc (for pagination)
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            print("error getting the last document snapshot")
+                            return
+                        }
+                        
+                        self.lastDoc = lastSnapshot
+                        
                         // split the short array into chunks
                         let chunks = self.shorts.chunked(into: 3)
                         for chunk in chunks {
@@ -95,6 +113,56 @@ class ProfileController : ObservableObject {
             }
         } else {
             print("no auth user yet.")
+        }
+    }
+    
+    // the function to call when loading the next N shrots on the profile
+    func retrieveNextShorts() {
+        if let user = Auth.auth().currentUser {
+            Task {
+                do {
+                    let querySnapshot = try await db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).limit(to: 9).start(afterDocument: self.lastDoc!).getDocuments()
+                    
+                    DispatchQueue.main.async {
+                        if querySnapshot.isEmpty {
+                            self.areNoShortsLeftToLoad = true
+                            return
+                        }
+                        
+                        for document in querySnapshot.documents {
+                            if let short = try? document.data(as: Short.self) {
+                                // add the short to the local array, and fetch it's prompt and picture
+                                self.retrievePromptImage(date: short.date!)
+                                print("profile - appended short to list")
+                                
+                                self.shorts.append(short)
+                            }
+                        }
+                        
+                        // get the last doc (for pagination)
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            print("error getting the last document snapshot")
+                            return
+                        }
+                        
+                        self.lastDoc = lastSnapshot
+                        
+                        
+                        // clear the chunks
+                        self.chunksOfShorts = []
+                        
+                        // split the short array into chunks
+                        let chunks = self.shorts.chunked(into: 3)
+                        for chunk in chunks {
+                            let arrayofShort = ArrayOfShort(shorts: chunk)
+                            self.chunksOfShorts.append(arrayofShort)
+                        }
+                    }
+                } catch let error {
+                    print("error retrieving the user's shorts: ", error.localizedDescription)
+                }
+            }
         }
     }
     
@@ -223,6 +291,7 @@ class ProfileController : ObservableObject {
     
     // Either sort the shorts by date or by likeCount
     func sortShorts(byDateWritten: Bool, byNumLikes: Bool, byPromptDate: Bool) {
+        
         // set the bool (controls view dropdown text)
         
         // clear the chunks
@@ -314,6 +383,43 @@ class ProfileController : ObservableObject {
         }
     }
     
+    func generateContributions(user: User) {
+        self.contributions = []
+        self.contributionCount = 0
+        
+        if let contributions = user.contributions {
+            var dates: [String] = []
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            
+            let calendar = Calendar.current
+            let today = Date()
+            
+            for i in 0..<88 {
+                if let date = calendar.date(byAdding: .day, value: -i, to: today) {
+                    let dateString = dateFormatter.string(from: date)
+                    dates.append(dateString)
+                }
+            }
+            
+            for date in dates {
+                // cross check if the date has a write on it from the user
+                if let didUserWrite = contributions[date] {
+                    if didUserWrite {
+                        self.contributions.append(Int(1))
+                        self.contributionCount += 1
+                    } else {
+                        self.contributions.append(Int(0))
+                    }
+                } else {
+                    self.contributions.append(Int(0))
+                }
+            }
+        } else {
+            print("no contributions?")
+        }
+    }
+    
     func limitTextLengthSuggestedPrompt(_ upper: Int) {
         if self.suggestedPromptText.count > upper {
             self.suggestedPromptText = String(self.suggestedPromptText.prefix(upper))
@@ -375,6 +481,7 @@ class ProfileController : ObservableObject {
         
         return "\(numShorts) / \(totalShortsNeeded) Shorts Written"
     }
+    
 }
 
 

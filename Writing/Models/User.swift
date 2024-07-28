@@ -27,10 +27,11 @@ struct User : Codable {
     // Title
     var title: Int?
     
-    // Streaks
+    // Streaks & Awards
     var lastShortWrittenDate: Timestamp?
     var currentStreak: Int?
     var bestStreak: Int?
+    var contributions: [String : Bool]?
     
     // Free Write Info
     var freeWriteCount: Int?
@@ -54,6 +55,7 @@ struct User : Codable {
         case lastShortWrittenDate
         case currentStreak
         case bestStreak
+        case contributions
         case freeWriteCount
         case freeWriteAverageWordCount
         case isAdmin

@@ -27,7 +27,7 @@ struct TodaysPrompt: View {
         if let img = image {
             Image(uiImage: img)
                 .resizable()
-                .frame(maxWidth: 400, maxHeight: 300)
+                .frame(maxWidth: 400, maxHeight: 370)
         } else {
             Image(imageText ?? "prompt-knight")
                 .resizable()
@@ -71,7 +71,7 @@ struct TodaysPrompt: View {
                             //                                    .resizable()
                             //                                    .frame(width: 15, height: 15)
                             // Like Count
-                            Text("\(likeCount)")
+                            Text("\(likeCount.formatted())")
                                 .font(.system(size: 13, design: .serif))
                         }
                         
@@ -86,7 +86,7 @@ struct TodaysPrompt: View {
                                         //                                    .resizable()
                                         //                                    .frame(width: 15, height: 15)
                                         // Like Count
-                                        Text("\(likeCount)")
+                                        Text("\(likeCount.formatted())")
                                             .font(.system(size: 13, design: .serif))
                                     }
                                     .foregroundStyle(Color.orange)
@@ -104,7 +104,7 @@ struct TodaysPrompt: View {
                             Image(systemName: "arrowshape.turn.up.right")
                                 .font(.caption)
                             // Response Count
-                            Text("\(responseCount)")
+                            Text("\(responseCount.formatted())")
                                 .font(.system(size: 13, design: .serif))
                         }
                     }

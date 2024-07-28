@@ -9,6 +9,8 @@ import PhotosUI
 import SwiftUI
 
 struct ProfileEditProfileView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @EnvironmentObject var profileController: ProfileController
     @EnvironmentObject var userController: UserController
     
@@ -70,8 +72,20 @@ struct ProfileEditProfileView: View {
                             .font(.system(size: 20))
                     }
                     .alert("Edit Name", isPresented: $profileController.isChangeNameAlertShowing) {
-                        TextField("First Name", text: $userController.newFirstName)
-                        TextField("Last Name", text: $userController.newLastName)
+                        
+                        if colorScheme == .light {
+                            TextField("First Name", text: $userController.newFirstName)
+                                .foregroundStyle(Color.black)
+                            TextField("Last Name", text: $userController.newLastName)
+                                .foregroundStyle(Color.black)
+                        } else if colorScheme == .dark {
+                            TextField("First Name", text: $userController.newFirstName)
+                                .foregroundStyle(Color.white)
+                            TextField("Last Name", text: $userController.newLastName)
+                                .foregroundStyle(Color.white)
+                        }
+                        
+                        
                         HStack {
                             Button("Cancel", role: .cancel) {
                                 profileController.isChangeNameAlertShowing = false

@@ -98,7 +98,7 @@ struct ProfileSidebarContentView: View {
                     .padding(.bottom, 10)
                     
                     // How we Analyze
-                    NavigationLink(destination: ProfileHowWeAnalyzeView()) {
+                    NavigationLink(destination: ProfileAdvertiseWithUsView()) {
                         Text("Advertise with Us")
                             .font(.system(size: 17, design: .serif))
                     }

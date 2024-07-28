@@ -125,54 +125,54 @@ struct ProfileMainView: View {
                                     HStack {
                                         if let user = userController.user {
                                             VStack {
-                                                Text("\(user.shortsCount!)")
-                                                    .font(.system(size: 18, design: .serif))
+                                                Text("\(user.shortsCount!.formatted())")
+                                                    .font(.system(size: 16, design: .serif))
                                                 
                                                 Text("Shorts")
-                                                    .font(.system(size: 12, design: .serif))
+                                                    .font(.system(size: 10, design: .serif))
                                             }
                                             .padding()
                                             
                                             VStack {
-                                                Text("\(user.numLikes!)")
-                                                    .font(.system(size: 18, design: .serif))
+                                                Text("\(user.numLikes!.formatted())")
+                                                    .font(.system(size: 16, design: .serif))
                                                 
                                                 Text("Likes")
-                                                    .font(.system(size: 12, design: .serif))
+                                                    .font(.system(size: 10, design: .serif))
                                             }
                                             .padding()
                                             
                                             VStack {
                                                 Text(String(format: "%.1f", user.avgWritingScore ?? 0.0))
-                                                    .font(.system(size: 18, design: .serif))
+                                                    .font(.system(size: 16, design: .serif))
                                                 
                                                 Text("Avg")
-                                                    .font(.system(size: 12, design: .serif))
+                                                    .font(.system(size: 10, design: .serif))
                                             }
                                             .padding()
                                         } else {
                                             VStack {
                                                 Text("0")
-                                                    .font(.system(size: 18, design: .serif))
+                                                    .font(.system(size: 16, design: .serif))
                                                 
                                                 Text("Shorts")
-                                                    .font(.system(size: 12, design: .serif))
+                                                    .font(.system(size: 10, design: .serif))
                                             }
                                             .padding()
                                             VStack {
                                                 Text("0")
-                                                    .font(.system(size: 18, design: .serif))
+                                                    .font(.system(size: 16, design: .serif))
                                                 
                                                 Text("Likes")
-                                                    .font(.system(size: 12, design: .serif))
+                                                    .font(.system(size: 10, design: .serif))
                                             }
                                             .padding()
                                             VStack {
                                                 Text("0")
-                                                    .font(.system(size: 18, design: .serif))
+                                                    .font(.system(size: 16, design: .serif))
                                                 
                                                 Text("Avg")
-                                                    .font(.system(size: 12, design: .serif))
+                                                    .font(.system(size: 10, design: .serif))
                                             }
                                             .padding()
                                         }
@@ -251,7 +251,6 @@ struct ProfileMainView: View {
                                             }
                                         } label: {
                                             HStack {
-                                                
                                                 if profileController.shortsSortingMethod == 0 {
                                                     Text("Recent")
                                                         .font(.system(size: 13, design: .serif))
@@ -265,7 +264,6 @@ struct ProfileMainView: View {
                                                 
                                                 Image(systemName: "chevron.down")
                                                     .font(.subheadline)
-                                                
                                             }
                                         }
                                         .buttonStyle(PlainButtonStyle())
@@ -278,6 +276,34 @@ struct ProfileMainView: View {
                             
                             
                             ProfileShortGrid()
+                            
+                            
+                            // Pagination control (for now it's just one button that loads older posts)
+                            
+                            if !profileController.areNoShortsLeftToLoad {
+                                Button(action: {
+                                    profileController.retrieveNextShorts()
+                                }) {
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .stroke(lineWidth: 1)
+                                        .frame(width: 110, height: 35)
+                                        .overlay {
+                                            HStack {
+                                                Text("Older")
+                                                    .font(.system(size: 14, design: .serif))
+                                                    .bold()
+                                                
+                                                Image(systemName: "arrow.down")
+                                                    .resizable()
+                                                    .frame(width: 10, height: 10)
+                                            }
+                                        }
+                                        .padding(.top, 10)
+                                        .padding(.bottom, 10)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            
                             
                             VStack {
                                 // Logo
@@ -362,3 +388,18 @@ struct ProfileMainView: View {
 //        }
 //    }
 //}
+
+extension Int {
+    func formatted() -> String {
+        if self >= 1000 && self < 10000 {
+            return String(format: "%.1fk", Double(self) / 1000.0)
+        } else if self >= 10000 && self < 100000 {
+            return String(format: "%.0fk", Double(self) / 1000.0)
+        } else if self >= 100000 && self < 1000000 {
+            return String(format: "%.0fk", Double(self) / 1000.0)
+        } else {
+            return String(self)
+        }
+        
+    }
+}

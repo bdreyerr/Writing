@@ -29,21 +29,40 @@ struct ListCommunityResponseView: View {
                     
                     // Sort By
                     HStack {
-                        Text("Sort By")
-                            .font(.system(size: 13, design: .serif))
                         Menu {
-                            Button("Best", action: {
-                                return
-                            })
-                            Button("Newest", action: {
-                                return
-                            })
+                            Button(action: {
+                                homeController.sortFocusedListShorts(isByDate: true, isByLikes: false)
+                            }) {
+                                HStack {
+                                    Text("Recent")
+                                        .font(.system(size: 13, design: .serif))
+                                    
+                                    Image(systemName: "clock")
+                                        .font(.subheadline)
+                                }
+                                
+                            }
+                            Button(action: {
+                                homeController.sortFocusedListShorts(isByDate: false, isByLikes: true)
+                            }) {
+                                HStack {
+                                    Text("Best")
+                                        .font(.system(size: 13, design: .serif))
+                                    
+                                    Image(systemName: "crown")
+                                        .font(.subheadline)
+                                }
+                            }
                         } label: {
                             HStack {
-                                Text("Best")
-                                    .font(.system(size: 13, design: .serif))
-                                
-                                Image(systemName: "crown")
+                                if homeController.listShortSortingMethod == 0 {
+                                    Text("Recent")
+                                        .font(.system(size: 13, design: .serif))
+                                } else if homeController.listShortSortingMethod == 1 {
+                                    Text("Best")
+                                        .font(.system(size: 13, design: .serif))
+                                }
+                                Image(systemName: "chevron.down")
                                     .font(.subheadline)
                             }
                         }
@@ -52,71 +71,87 @@ struct ListCommunityResponseView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 10)
                     
+                    
+//                    HStack {
+//                        Text("Sort By")
+//                            .font(.system(size: 13, design: .serif))
+//                        Menu {
+//                            Button("Best HEY", action: {
+//                                return
+//                            })
+//                            Button("Newest", action: {
+//                                return
+//                            })
+//                        } label: {
+//                            HStack {
+//                                Text("Best")
+//                                    .font(.system(size: 13, design: .serif))
+//                                
+//                                Image(systemName: "crown")
+//                                    .font(.subheadline)
+//                            }
+//                        }
+//                        .buttonStyle(PlainButtonStyle())
+//                    }
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.bottom, 10)
+                    
                     // Single Limited Responses
+                    
+                    
                     
                     // if there's no shorts yet
                     if (homeController.focusedFullCommunityShorts.isEmpty) {
-                        Text("No Community Shorts Yet")
-                            .font(.system(size: 14, design: .serif))
-                            .bold()
-                            .opacity(0.7)
+                        // if user isn't set
+//                        if userController.user == nil {
+//                            Text("Sign In to View Community Shorts")
+//                                .font(.system(size: 14, design: .serif))
+//                                .bold()
+//                                .opacity(0.7)
+//                        } else {
+//                            Text("No Community Shorts Yet")
+//                                .font(.system(size: 14, design: .serif))
+//                                .bold()
+//                                .opacity(0.7)
+//                        }
                     } else {
                         ForEach(homeController.focusedFullCommunityShorts) { short in
                             Button(action: {
 //                                self.isSingleCommunityResponsePopupShowing.toggle()
                                 // nothing for now
                             }) {
-//                                SingleLimitedCommunityResponse(image: homeController.communityProfilePictures[short.authorId!] ?? UIImage(named: "not-signed-in-profile")!, authorHandle: short.authorFirstName! + " " + short.authorLastName!, timePosted: short.rawTimestamp!.dateValue().formatted(date: .abbreviated, time: .shortened), response: short.shortRawText!, numLikes: short.likeCount!, numComments: short.commentCount!)
+
                                 SingleLimitedCommunityResponse(short: short, isOwnedShort: false)
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
+                        
+                        // older button
+                        if !homeController.areNoShortsLeftToLoad {
+                            Button(action: {
+                                if let user = userController.user {
+                                    homeController.retrieveNextFullCommunityShorts(blockedUsers: user.blockedUsers ?? [:])
+                                }
+                            }) {
+                                RoundedRectangle(cornerRadius: 25.0)
+                                    .stroke(lineWidth: 1)
+                                    .frame(width: 110, height: 35)
+                                    .overlay {
+                                        HStack {
+                                            Text("Older")
+                                                .font(.system(size: 14, design: .serif))
+                                                .bold()
+                                            
+                                            Image(systemName: "arrow.down")
+                                                .resizable()
+                                                .frame(width: 10, height: 10)
+                                        }
+                                    }
+                                    .padding(.bottom, 10)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
                     }
-//                    
-//                    // Load comments in 8s, use infinite scroll, not pagination.
-//                    Button(action: {
-//                        self.isSingleCommunityResponsePopupShowing.toggle()
-//                    }) {
-//                        SingleLimitedCommunityResponse(imageName: "wolf", authorHandle: "NedStarkDidntDie", timePosted: "4:38pm", responseLimited: "Sir Aldric knelt beside the injured dwarf, examining the wreckage. “We must help him,” urged young Liam, his squire. “But the bandits could return,” Aldric warned, eyes scanning the forest. The dwarf groaned...", numLikes: 13, numComments: 4)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
-//                    
-//                    Button(action: {
-//                        self.isSingleCommunityResponsePopupShowing.toggle()
-//                    }) {
-//                        SingleLimitedCommunityResponse(imageName: "space-guy", authorHandle: "Trisolarian21", timePosted: "6:21pm", responseLimited: "“About time someone showed up! Those bandits took everything, including my best ale!” Ben stifled a laugh. “We’ll get you to safety,” Roland assured.", numLikes: 11, numComments: 2)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
-//                    
-//                    
-//                    Button(action: {
-//                        self.isSingleCommunityResponsePopupShowing.toggle()
-//                    }) {
-//                        SingleLimitedCommunityResponse(imageName: "hoop-guy", authorHandle: "Jokic", timePosted: "1:13pm", responseLimited: "The knight and his squire stumbled upon a chaotic scene: a carriage overturned, its contents strewn about, and a dwarf groaning on the ground. “They took my treasures!“ the dwarf lamented... ", numLikes: 4, numComments: 1)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
-//                    
-//                    
-//                    Button(action: {
-//                        self.isSingleCommunityResponsePopupShowing.toggle()
-//                    }) {
-//                        SingleLimitedCommunityResponse(imageName: "wolf", authorHandle: "NedStarkDidntDie", timePosted: "4:38pm", responseLimited: "Sir Aldric knelt beside the injured dwarf, examining the wreckage. “We must help him,” urged young Liam, his squire. “But the bandits could return,” Aldric warned, eyes scanning the forest. The dwarf groaned...", numLikes: 13, numComments: 4)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
-//                    
-//                    Button(action: {
-//                        self.isSingleCommunityResponsePopupShowing.toggle()
-//                    }) {
-//                        SingleLimitedCommunityResponse(imageName: "space-guy", authorHandle: "Trisolarian21", timePosted: "6:21pm", responseLimited: "“About time someone showed up! Those bandits took everything, including my best ale!” Ben stifled a laugh. “We’ll get you to safety,” Roland assured.", numLikes: 11, numComments: 2)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
-//                    
-//                    Button(action: {
-//                        self.isSingleCommunityResponsePopupShowing.toggle()
-//                    }) {
-//                        SingleLimitedCommunityResponse(imageName: "hoop-guy", authorHandle: "Jokic", timePosted: "1:13pm", responseLimited: "The knight and his squire stumbled upon a chaotic scene: a carriage overturned, its contents strewn about, and a dwarf groaning on the ground. “They took my treasures!“ the dwarf lamented... ", numLikes: 4, numComments: 1)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
                 }
                 .padding(.leading, 20)
                 .padding(.trailing, 20)

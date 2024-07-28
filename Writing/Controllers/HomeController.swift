@@ -65,6 +65,12 @@ class HomeController : ObservableObject {
     // tracks the text when a user is creating a comment
     @Published var commentText: String = ""
     
+    // Pagination
+    @Published var lastDocListShorts: QueryDocumentSnapshot?
+    var cachedLastDocListShorts : [String : QueryDocumentSnapshot] = [:]
+    
+    @Published var lastDocComments: QueryDocumentSnapshot?
+    var cachedLastDocComments : [String : QueryDocumentSnapshot] = [:]
     
     // Vars for controlling views (sheets, popups etc..)
     
@@ -73,6 +79,9 @@ class HomeController : ObservableObject {
     @Published var isReportPromptAlertShowing: Bool = false
     @Published var isReportShortAlertShowing: Bool = false
     @Published var isReportCommentAlertShowing: Bool = false
+    @Published var areNoShortsLeftToLoad: Bool = false
+    @Published var areNoCommentsLeftToLoad: Bool = false
+    @Published var listShortSortingMethod: Int = 0
     
     // Firestore
     let db = Firestore.firestore()
@@ -301,15 +310,21 @@ class HomeController : ObservableObject {
         }
     }
     
-    // Fetches the full list of community shorts for the focused prompt (Uses infinite scroll, aka we load 8 at a time then fetch the next 8)
+    // Fetches the full list of community shorts for the focused prompt
     func retrieveFullCommunityShorts(blockedUsers: [String : Bool]) {
         self.focusedFullCommunityShorts = []
+        self.lastDocListShorts = nil
         
         // Make sure a prompt is focused
         if let prompt = self.focusedPrompt {
             // Check if this prompt's full short list has been cached already
             if let prompts = self.cachedFullCommunityShorts[prompt.date!] {
                 self.focusedFullCommunityShorts = prompts
+                // if the shorts are cached, the last Document Snapshot should also be cached
+                if let querySnapshotDoc = self.cachedLastDocListShorts[prompt.date!] {
+                    self.lastDocListShorts = querySnapshotDoc
+                }
+                
                 print("restoring cached shorts - full community shorts")
                 return
             } else {
@@ -317,10 +332,12 @@ class HomeController : ObservableObject {
                 print("no cache found - full community shorts")
                 Task {
                     do {
-                        let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: "rawTimestamp").limit(to: 8).getDocuments()
+                        let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: "rawTimestamp", descending: true).limit(to: 8).getDocuments()
+                        
                         DispatchQueue.main.async {
                             if querySnapshot.isEmpty {
                                 print("no matching resposnes were found")
+                                self.areNoShortsLeftToLoad = true
                                 return
                             }
                             
@@ -340,6 +357,17 @@ class HomeController : ObservableObject {
                                     print("cant case document to short")
                                 }
                             }
+                            
+                            // get the last document snapshot (for pagination)
+                            guard let lastSnapshot = querySnapshot.documents.last else {
+                                // The collection is empty.
+                                return
+                            }
+                            self.lastDocListShorts = lastSnapshot
+                            
+                            // then add last doc to the cache
+                            self.cachedLastDocListShorts[prompt.date!] = lastSnapshot
+                            
                             // Cache the shorts retrieved
                             self.cachedFullCommunityShorts[prompt.date!] = self.focusedFullCommunityShorts
                         }
@@ -354,6 +382,56 @@ class HomeController : ObservableObject {
         }
     }
     
+    func retrieveNextFullCommunityShorts(blockedUsers: [String : Bool]) {
+        // Make sure a prompt is focused
+        if let prompt = self.focusedPrompt {
+            Task {
+                do {
+                    let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: "rawTimestamp", descending: true).limit(to: 8).start(afterDocument: self.lastDocListShorts!).getDocuments()
+                    
+                    DispatchQueue.main.async {
+                        if querySnapshot.isEmpty {
+                            print("no matching resposnes were found")
+                            self.areNoShortsLeftToLoad = true
+                            return
+                        }
+                        
+                        // There will be at most 8 shorts, at least 1
+                        for document in querySnapshot.documents {
+                            if let short = try? document.data(as: Short.self) {
+                                // Check if the author is being blocked by the user
+                                if let isBlocked = blockedUsers[short.authorId!] {
+                                    if isBlocked { continue }
+                                }
+                                
+                                self.focusedFullCommunityShorts.append(short)
+                                
+                                // get the profile picture for the author of the short
+                                self.getCommunityAuthorsProfilePicutre(authorId: short.authorId!)
+                            } else {
+                                print("cant case document to short")
+                            }
+                        }
+                        
+                        // get the last document snapshot (for pagination)
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            return
+                        }
+                        self.lastDocListShorts = lastSnapshot
+                        // then add last doc to the cache
+                        self.cachedLastDocListShorts[prompt.date!] = lastSnapshot
+                        
+                        // Cache the shorts retrieved
+                        self.cachedFullCommunityShorts[prompt.date!] = self.focusedFullCommunityShorts
+                    }
+                } catch {
+                    print("error getting next shorts: ", error.localizedDescription)
+                }
+            }
+        }
+    }
+    
     // TODO : add infinite scroll to this lol fkk
     func retrieveShortComments(refresh: Bool) {
         self.focusedShortComments = []
@@ -365,6 +443,9 @@ class HomeController : ObservableObject {
                 // check cache
                 if let comments = self.cachedShortComments[short.id!] {
                     self.focusedShortComments = comments
+                    if let querySnapshotDoc = self.cachedLastDocComments[short.id!] {
+                        self.lastDocComments = querySnapshotDoc
+                    }
                     return
                 }
             }
@@ -372,12 +453,13 @@ class HomeController : ObservableObject {
             Task {
                 print("checking firestore for comments")
                 do {
-                    let querySnapshot = try await self.db.collection("shortComments").whereField("parentShortId", isEqualTo: short.id!).order(by: "rawTimestamp", descending: true).getDocuments()
+                    let querySnapshot = try await self.db.collection("shortComments").whereField("parentShortId", isEqualTo: short.id!).order(by: "rawTimestamp", descending: true).limit(to: 8).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
                             print("no matching comments found")
                             self.cachedShortComments[short.id!] = []
+                            self.areNoCommentsLeftToLoad = true
                             return
                         }
                         
@@ -389,11 +471,61 @@ class HomeController : ObservableObject {
                             }
                         }
                         
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            return
+                        }
+                        
+                        self.lastDocComments = lastSnapshot
+                        self.cachedLastDocComments[short.id!] = lastSnapshot
+                        
                         self.focusedShortComments = comments
                         self.cachedShortComments[short.id!] = comments
                     }
                 } catch let error {
                     print("error fetching comments: ", error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func retrieveNextShortComments() {
+        if let short = self.focusedSingleShort {
+            Task {
+                do {
+                    let querySnapshot = try await self.db.collection("shortComments").whereField("parentShortId", isEqualTo: short.id!).order(by: "rawTimestamp", descending: true).limit(to: 8).start(afterDocument: self.lastDocComments!).getDocuments()
+                    
+                    DispatchQueue.main.async {
+                        if querySnapshot.isEmpty {
+                            print("no matching comments found")
+                            self.areNoCommentsLeftToLoad = true
+                            return
+                        }
+                        
+                        var comments: [ShortComment] = []
+                        for document in querySnapshot.documents {
+                            if let comment = try? document.data(as: ShortComment.self) {
+                                comments.append(comment)
+                                self.getCommunityAuthorsProfilePicutre(authorId: comment.authorId!)
+                            }
+                        }
+                        
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            return
+                        }
+                        
+                        self.lastDocComments = lastSnapshot
+                        self.cachedLastDocComments[short.id!] = lastSnapshot
+                        
+                        for comment in comments {
+                            self.focusedShortComments.append(comment)
+                        }
+//                        self.focusedShortComments = comments
+                        self.cachedShortComments[short.id!] = self.focusedShortComments
+                    }
+                } catch let error {
+                    print("error fetching next comments: ", error.localizedDescription)
                 }
             }
         }
@@ -658,6 +790,18 @@ class HomeController : ObservableObject {
             }
         } else {
             print("no auth")
+        }
+    }
+    
+    func sortFocusedListShorts(isByDate: Bool, isByLikes: Bool) {
+        // make sure there are focused shorts
+        if isByDate{
+            self.focusedFullCommunityShorts = self.focusedFullCommunityShorts.sorted(by: {$0.rawTimestamp!.dateValue() > $1.rawTimestamp!.dateValue()} )
+            self.listShortSortingMethod = 0
+        }
+        if isByLikes {
+            self.focusedFullCommunityShorts = self.focusedFullCommunityShorts.sorted(by: {$0.likeCount! > $1.likeCount!} )
+            self.listShortSortingMethod = 1
         }
     }
     

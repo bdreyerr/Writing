@@ -84,7 +84,7 @@ struct FreeWriteMainView: View {
                             .padding(.bottom, 10)
                             
                             
-                            ForEach(freeWriteController.freeWrites) { freeWrite in
+                            ForEach(freeWriteController.freeWrites.prefix(6)) { freeWrite in
                                 FreeWriteEntryPreviewView(freeWrite: freeWrite)
                                     .onTapGesture {
                                         print("it happened, clicked")
@@ -92,7 +92,9 @@ struct FreeWriteMainView: View {
                                     }
                             }
                             
-                            NavigationLink(destination: FreeWriteCreateEntryView()) {
+                            Button(action: {
+                                freeWriteController.isCreateEntrySheetShowing = true
+                            }) {
                                 RoundedRectangle(cornerRadius: 25.0)
                                     .stroke(lineWidth: 1)
                                     .frame(width: 160, height: 40)
@@ -137,11 +139,15 @@ struct FreeWriteMainView: View {
                         .padding(.trailing, 20)
                     }
                 }
+                .sheet(isPresented: $freeWriteController.isCreateEntrySheetShowing) {
+                    FreeWriteCreateEntryView()
+                }
                 .sheet(isPresented: $freeWriteController.isSingleFreeWriteSheetShowing) {
                     FreeWriteSingleEntryView()
                         .presentationDetents([.medium, .large])
                         .presentationDragIndicator(.automatic)
                 }
+                
             }
             .padding(.bottom, 25)
         }

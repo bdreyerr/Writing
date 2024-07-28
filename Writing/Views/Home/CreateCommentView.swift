@@ -66,7 +66,7 @@ struct CreateCommentView: View {
                         .padding(.bottom, 10)
                     
                     // TODO(bendreyer): have a couple different openers here (once upon a time, in a land far far away, etc..) and pick one at random
-                    TextField("Once upon a time...",text: $homeController.commentText, axis: .vertical)
+                    TextField("Great job...",text: $homeController.commentText, axis: .vertical)
                     //                    .modifier(KeyboardAdaptive())
                         .font(.system(size: 16, design: .serif))
                     // Styling

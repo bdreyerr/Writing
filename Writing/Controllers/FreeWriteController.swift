@@ -23,9 +23,14 @@ class FreeWriteController : ObservableObject {
     @Published var contentText: String = ""
     @Published var wordCount: Int = 0
     
+    // Pagination
+    @Published var lastDoc: QueryDocumentSnapshot?
+    
     // Vars controlling view
+    @Published var isCreateEntrySheetShowing: Bool = false
     @Published var isSingleFreeWriteSheetShowing: Bool = false
     @Published var isConfirmDeleteAlertShowing: Bool = false
+    @Published var areNoShortsLeftToLoad: Bool = false
     
     // Icon collection (for choosing symbol on your entry)
     var iconOptions = ["message.fill", "phone.down.fill", "sun.max", "cloud.bolt.rain", "figure.walk.circle", "car", "paperplane.fill", "studentdesk", "display.2", "candybarphone", "photo.fill", "arrow.triangle.2.circlepath", "flag.checkered", "gamecontroller", "network.badge.shield.half.filled", "dot.radiowaves.left.and.right", "airplane.circle.fill", "bicycle", "snowflake.circle", "key.fill", "person.fill", "person.3", "house.fill", "party.popper.fill", "figure.archery", "sportscourt.fill", "globe.americas.fill", "sun.snow", "moon.fill", "wind.snow", "bolt.square.fill", "wand.and.stars.inverse", "bandage.fill", "textformat.abc", "play.rectangle.fill", "shuffle", "command.circle.fill", "keyboard.fill", "cart.fill", "giftcard.fill", "pesosign.circle", "chineseyuanrenminbisign.circle.fill", "hourglass.circle.fill", "heart.fill", "pill.fill", "eye", "brain.fill", "percent"]
@@ -51,6 +56,7 @@ class FreeWriteController : ObservableObject {
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
                             print("no shorts returned")
+                            self.areNoShortsLeftToLoad = true
                             return
                         }
                         
@@ -59,6 +65,15 @@ class FreeWriteController : ObservableObject {
                                 self.freeWrites.append(freeWrite)
                             }
                         }
+                        
+                        // get the last doc (for pagination)
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            print("error getting the last document snapshot")
+                            return
+                        }
+                        
+                        self.lastDoc = lastSnapshot
                     }
                 } catch let error {
                     print("error getting free writes from firestore: ", error.localizedDescription)
@@ -67,37 +82,42 @@ class FreeWriteController : ObservableObject {
         }
     }
     
-    // TODO: Implement infinite scroll
-    func retrieveAllFreeWrites() {
-        // TODO implement some sort of cache
-        self.allFreeWrites = []
-        
-        // Ensure the user is authd
+    func retrieveNextFreeWrites() {
+        // Ensure the user is authenticated
         if let user = Auth.auth().currentUser {
-            // Start async task to read free writes from firestore
             Task {
                 do {
-                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).getDocuments()
+                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).limit(to: 6).start(afterDocument: self.lastDoc!).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
                             print("no shorts returned")
+                            self.areNoShortsLeftToLoad = true
                             return
                         }
                         
                         for document in querySnapshot.documents {
                             if let freeWrite = try? document.data(as: FreeWrite.self) {
-                                self.allFreeWrites.append(freeWrite)
+                                self.freeWrites.append(freeWrite)
                             }
                         }
+                        
+                        // get the last doc (for pagination)
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            print("error getting the last document snapshot")
+                            return
+                        }
+                        
+                        self.lastDoc = lastSnapshot
                     }
-                    
                 } catch let error {
-                    print("error getting free writes from firestore: ", error.localizedDescription)
+                    print(error.localizedDescription)
                 }
             }
         }
     }
+    
     
     func focusFreeWrite(freeWrite: FreeWrite) {
         self.focusedFreeWrite = nil
@@ -107,6 +127,7 @@ class FreeWriteController : ObservableObject {
     func submitFreeWrite(freeWriteCount: Int, freeWriteAverageWordCount: Int) {
         // Ensure the user is authenticated
         if let user = Auth.auth().currentUser {
+            self.areNoShortsLeftToLoad = false
             
             // Ensure title text and content text are not empty
             if titleText.isEmpty || contentText.isEmpty { return }
@@ -141,6 +162,26 @@ class FreeWriteController : ObservableObject {
                         self.contentText  = ""
                         self.wordCount = 0
                     }
+                }
+            }
+            
+            Task {
+                // Update the user's stats
+                
+                // Get today's date in YYYYMMDD
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyyMMdd"
+                
+                let today = Date()
+                let formattedDate = dateFormatter.string(from: today)
+                
+                do {
+                    let userRef = db.collection("users").document(user.uid)
+                    try await userRef.updateData([
+                        "contributions.\(formattedDate)": true
+                    ])
+                } catch let error {
+                    print(error.localizedDescription)
                 }
             }
         }
@@ -264,3 +305,5 @@ class FreeWriteController : ObservableObject {
         self.wordCount = words.count
     }
 }
+
+

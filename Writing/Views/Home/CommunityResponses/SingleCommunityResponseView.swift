@@ -84,7 +84,7 @@ struct SingleCommunityResponseView: View {
                             // Num Shorts
                             VStack {
                                 if let author = homeController.focusedShortAuthor {
-                                    Text("\(author.shortsCount!)")
+                                    Text("\(author.shortsCount!.formatted())")
                                         .font(.system(size: 16, design: .serif))
                                         .foregroundStyle(Color.green)
                                 } else {
@@ -103,7 +103,7 @@ struct SingleCommunityResponseView: View {
                             // Num Likes
                             VStack {
                                 if let author = homeController.focusedShortAuthor {
-                                    Text("\(author.numLikes!)")
+                                    Text("\(author.numLikes!.formatted())")
                                         .font(.system(size: 16, design: .serif))
                                         .foregroundStyle(Color.blue)
                                 } else {
@@ -145,7 +145,7 @@ struct SingleCommunityResponseView: View {
                                             .resizable()
                                             .frame(width: 15, height: 15)
                                         // comment number
-                                        Text("\(short.likeCount!)")
+                                        Text("\(short.likeCount!.formatted())")
                                             .font(.system(size: 13, design: .serif))
                                     }
                                     
@@ -159,7 +159,7 @@ struct SingleCommunityResponseView: View {
                                                         .resizable()
                                                         .frame(width: 15, height: 15)
                                                     // comment number
-                                                    Text("\(short.likeCount!)")
+                                                    Text("\(short.likeCount!.formatted())")
                                                         .font(.system(size: 13, design: .serif))
                                                 }
                                                 .foregroundStyle(Color.orange)
@@ -176,7 +176,7 @@ struct SingleCommunityResponseView: View {
                                     .resizable()
                                     .frame(width: 15, height: 15)
                                 // comment number
-                                Text("\(short.commentCount!)")
+                                Text("\(short.commentCount!.formatted())")
                                     .font(.system(size: 13, design: .serif))
                             }
                             
@@ -279,6 +279,30 @@ struct SingleCommunityResponseView: View {
                         // comments for the short
                         ForEach(homeController.focusedShortComments) { comment in
                             CommunityResponseComment(comment: comment)
+                        }
+                        
+                        if !homeController.areNoCommentsLeftToLoad {
+                            Button(action: {
+                                if let user = userController.user {
+                                    homeController.retrieveNextShortComments()
+                                }
+                            }) {
+                                RoundedRectangle(cornerRadius: 25.0)
+                                    .stroke(lineWidth: 1)
+                                    .frame(width: 110, height: 35)
+                                    .overlay {
+                                        HStack {
+                                            Text("Older")
+                                                .font(.system(size: 14, design: .serif))
+                                            //                                            .bold()
+                                            
+                                            Image(systemName: "arrow.down")
+                                            
+                                        }
+                                    }
+                                    .padding(.bottom, 10)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                 }

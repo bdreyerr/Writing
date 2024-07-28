@@ -43,13 +43,38 @@ struct FreeWriteFullListView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack {
-                        ForEach(freeWriteController.allFreeWrites) { freeWrite in
+                        ForEach(freeWriteController.freeWrites) { freeWrite in
                             FreeWriteEntryPreviewView(freeWrite: freeWrite)
                                 .onTapGesture {
                                     print("it happened, clicked")
                                     freeWriteController.focusFreeWrite(freeWrite: freeWrite)
                                 }
                         }
+                        
+                        // Older button (allows user to load next batch of free writes)
+                        if !freeWriteController.areNoShortsLeftToLoad {
+                            Button(action: {
+                                freeWriteController.retrieveNextFreeWrites()
+                            }) {
+                                RoundedRectangle(cornerRadius: 25.0)
+                                    .stroke(lineWidth: 1)
+                                    .frame(width: 110, height: 35)
+                                    .overlay {
+                                        HStack {
+                                            Text("Older")
+                                                .font(.system(size: 14, design: .serif))
+                                                .bold()
+                                            
+                                            Image(systemName: "arrow.down")
+                                                .resizable()
+                                                .frame(width: 10, height: 10)
+                                        }
+                                    }
+                                    .padding(.bottom, 10)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        
                         VStack {
                             // Logo
                             if (colorScheme == .light) {
@@ -77,7 +102,7 @@ struct FreeWriteFullListView: View {
             }
         }
         .onAppear {
-            freeWriteController.retrieveAllFreeWrites()
+            freeWriteController.retrieveNextFreeWrites()
         }
     }
 }

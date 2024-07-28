@@ -9,8 +9,20 @@ import FirebaseFirestore
 import SwiftUI
 
 struct ProfileStreaksAndAwardsView: View {
+    
     @EnvironmentObject var profileController: ProfileController
     @EnvironmentObject var userController: UserController
+    
+    
+    
+    // Constants for contribution graph
+    let contributions: [Int] = Array(repeating: 1, count: 10) + Array(repeating: 0, count: 10) + Array(repeating: 1, count: 70)
+    
+    let columns = 22 // Number of columns (weeks in 90 days)
+    let rows = 4    // Number of rows (days in a week)
+    let squareSize: CGFloat = 12
+    let spacing: CGFloat = 5
+    
     
     var body: some View {
         VStack {
@@ -161,25 +173,42 @@ struct ProfileStreaksAndAwardsView: View {
                         .font(.system(size: 18, design: .serif))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    ZStack {
-                        VStack(alignment: .leading) {
-                            ForEach(0..<profileController.contributions.count, id: \.self) { row in
-                                HStack(spacing: 2.5) {
-                                    ForEach(0..<profileController.contributions[row].count, id: \.self) { column in
-                                        RoundedRectangle(cornerRadius: 1.5)
-                                            .foregroundStyle(profileController.contributions[row][column] == 1 ? Color.green : Color.gray)
-                                            .frame(width: 15, height: 15)
-                                    }
-                                }
+                    Text("\(profileController.contributionCount) contributions in the last 90 days")
+                        .font(.system(size: 12, design: .serif))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    let gridItems = Array(repeating: GridItem(.fixed(squareSize), spacing: spacing), count: columns)
+                    
+                    ScrollView(.horizontal) {
+                        LazyVGrid(columns: gridItems, spacing: spacing) {
+                            ForEach(0..<Array(profileController.contributions).count, id: \.self) { index in
+                                Rectangle()
+                                    .fill(Array(profileController.contributions)[index] == 1 ? Color.green : Color.gray)
+                                    .frame(width: squareSize, height: squareSize)
                             }
                         }
-                        //                                            .padding(10)
-                        .overlay {
-                            //                                                RoundedRectangle(cornerRadius: 10)
-                            //                                                    .stroke(Color.black, lineWidth: 1)
-                        }
+                        .padding()
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+//                    ZStack {
+//                        VStack(alignment: .leading) {
+//                            ForEach(0..<profileController.contributions.count, id: \.self) { row in
+//                                HStack(spacing: 2.5) {
+//                                    ForEach(0..<profileController.contributions[row].count, id: \.self) { column in
+//                                        RoundedRectangle(cornerRadius: 1.5)
+//                                            .foregroundStyle(profileController.contributions[row][column] == 1 ? Color.green : Color.gray)
+//                                            .frame(width: 15, height: 15)
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        //                                            .padding(10)
+//                        .overlay {
+//                            //                                                RoundedRectangle(cornerRadius: 10)
+//                            //                                                    .stroke(Color.black, lineWidth: 1)
+//                        }
+//                    }
+//                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             .padding(.bottom, 10)
@@ -187,6 +216,11 @@ struct ProfileStreaksAndAwardsView: View {
             Spacer()
         }
         .padding(.horizontal, 20)
+        .onAppear {
+            if let user = userController.user {
+                profileController.generateContributions(user: user)
+            }
+        }
     }
     
     func isYesterdayOrToday(date: Date) -> Bool {

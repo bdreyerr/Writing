@@ -25,51 +25,53 @@ struct ProfileSettingsView: View {
                     Link("Privacy Policy", destination: URL(string: "https://sites.google.com/view/dreamboard-privacy-policy/home")!)
                 }
                 
-                Section(header: Text("Account")) {
-                    Button(action: {
-                        // Sign out of account - auth
-                        authController.logOut()
-                        // Set the user back to nil
-                        userController.logOut()
-                        // reset the shorts on home screen
-                        homeController.clearShortOnSignOut()
-                        // reset the shorts on profile screen
-                        profileController.clearShorts()
-                        // dismiss the settings sheet
-                        profileController.isSettingsShowing = false
-                    }) {
-                        Text("Sign Out")
-                    }
-                    
-                    Button(action: {
-                        self.isConfirmDeleteAccountAlertShowing = true
-                        
-                        
-                    }) {
-                        Text("Delete Account")
-                            .foregroundColor(.red)
-                    }
-                    .alert("Are you sure?", isPresented: $isConfirmDeleteAccountAlertShowing) {
-                        Button("Confirm") {
-                            Task {
-                                // delete local user
-                                userController.deleteUser()
-                                // delete auth
-                                authController.deleteAuthUser()
-//                                // Log out - auth
-//                                authController.logOut()
-//                                // log out - local
-//                                userController.logOut()
-                                // reset the shorts on home screen
-                                DispatchQueue.main.async {
-                                    homeController.clearShortOnSignOut()
-                                    // dismiss the settings sheet
-                                    profileController.isSettingsShowing = false
-                                }
-                            }
+                if let user = userController.user {
+                    Section(header: Text("Account")) {
+                        Button(action: {
+                            // Sign out of account - auth
+                            authController.logOut()
+                            // Set the user back to nil
+                            userController.logOut()
+                            // reset the shorts on home screen
+                            homeController.clearShortOnSignOut()
+                            // reset the shorts on profile screen
+                            profileController.clearShorts()
+                            // dismiss the settings sheet
+                            profileController.isSettingsShowing = false
+                        }) {
+                            Text("Sign Out")
                         }
                         
-                        Button("Cancel", role: .cancel) { }
+                        Button(action: {
+                            self.isConfirmDeleteAccountAlertShowing = true
+                            
+                            
+                        }) {
+                            Text("Delete Account")
+                                .foregroundColor(.red)
+                        }
+                        .alert("Are you sure?", isPresented: $isConfirmDeleteAccountAlertShowing) {
+                            Button("Confirm") {
+                                Task {
+                                    // delete local user
+                                    userController.deleteUser()
+                                    // delete auth
+                                    authController.deleteAuthUser()
+                                    //                                // Log out - auth
+                                    //                                authController.logOut()
+                                    //                                // log out - local
+                                    //                                userController.logOut()
+                                    // reset the shorts on home screen
+                                    DispatchQueue.main.async {
+                                        homeController.clearShortOnSignOut()
+                                        // dismiss the settings sheet
+                                        profileController.isSettingsShowing = false
+                                    }
+                                }
+                            }
+                            
+                            Button("Cancel", role: .cancel) { }
+                        }
                     }
                 }
             }
