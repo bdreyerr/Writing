@@ -601,6 +601,7 @@ class HomeController : ObservableObject {
     func likeShort(usersShortsLikes: [String : Bool]) {
         // ensure a short is focused
         if let short = self.focusedSingleShort {
+            // update short like count in firestore and the local like cache for the shorts like count
             Task {
                 do {
                     // determine like or unlike
@@ -679,6 +680,24 @@ class HomeController : ObservableObject {
                 } catch let error {
                     print(error.localizedDescription)
                 }
+            }
+            
+            // send a like to the author's profile (don't send dislikes)
+            Task {
+                var isLike = true
+                if let like = usersShortsLikes[short.id!] {
+                    if like == true {isLike = false} else {isLike = true}
+                }
+                
+                if !isLike { return }
+                
+                guard let author = self.focusedShortAuthor else { return }
+                
+                let authorRef = db.collection("users").document(author.id!)
+                authorRef.updateData([
+                    "numLikes": FieldValue.increment(Int64(1))
+                ])
+                
             }
         }
     }

@@ -16,53 +16,54 @@ struct FreeWriteEntryPreviewView: View {
     let calendar = Calendar.current
     
     var body: some View {
-        
-        Button(action: {
-            freeWriteController.focusFreeWrite(freeWrite: self.freeWrite)
-            freeWriteController.isSingleFreeWriteSheetShowing = true
-        }) {
-            VStack {
-                HStack {
-                    VStack {
-                        Text("\(calendar.component(.day, from: freeWrite.rawTimestamp!.dateValue()))")
-                            .font(.system(size: 18, design: .serif))
-                        
-                        Text(self.getMonthString(from: freeWrite.rawTimestamp!.dateValue()))
-                            .font(.system(size: 12, design: .serif))
-                    }
-                    
-                    
-                    Text("|")
-                        .font(.system(size: 25, design: .serif))
-                    
-                    VStack {
-                        Text(freeWrite.title!)
-                            .font(.system(size: 18, design: .serif))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        HStack {
-                            Text("Last Updated \(freeWrite.rawTimestamp!.dateValue().formatted(date: .omitted, time: .shortened))")
-                                .font(.system(size: 12, design: .serif))
+        VStack {
+            Button(action: {
+                freeWriteController.focusFreeWrite(freeWrite: self.freeWrite)
+                freeWriteController.isSingleFreeWriteSheetShowing = true
+            }) {
+                VStack {
+                    HStack {
+                        VStack {
+                            Text("\(calendar.component(.day, from: freeWrite.rawTimestamp!.dateValue()))")
+                                .font(.system(size: 18, design: .serif))
                             
-                            Text("●")
+                            Text(self.getMonthString(from: freeWrite.rawTimestamp!.dateValue()))
                                 .font(.system(size: 12, design: .serif))
-                            
-                            Text("\(freeWrite.wordCount!) words")
-                                .font(.system(size: 12, design: .serif))
-                            
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        Text("|")
+                            .font(.system(size: 25, design: .serif))
+                        
+                        VStack {
+                            Text(freeWrite.title!)
+                                .font(.system(size: 18, design: .serif))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            HStack {
+                                Text("Last Updated \(freeWrite.rawTimestamp!.dateValue().formatted(date: .omitted, time: .shortened))")
+                                    .font(.system(size: 12, design: .serif))
+                                
+                                Text("●")
+                                    .font(.system(size: 12, design: .serif))
+                                
+                                Text("\(freeWrite.wordCount!) words")
+                                    .font(.system(size: 12, design: .serif))
+                                
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        Image(systemName: freeWrite.symbol!)
+                            .font(.headline)
+                        
                     }
-                    
-                    Image(systemName: freeWrite.symbol!)
-                        .font(.headline)
-                    
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 5)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.bottom, 5)
+            .buttonStyle(PlainButtonStyle())
         }
-        .buttonStyle(PlainButtonStyle())
     }
     
     func getMonthString(from date: Date) -> String {

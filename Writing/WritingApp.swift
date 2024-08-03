@@ -31,6 +31,10 @@ struct WritingApp: App {
     @AppStorage("isSignedIn") private var isSignedIn = false
     // App Storage: isTabBarShowing tracks if the tab bar should be visible or not
     @AppStorage("isTabBarShowing") private var isTabBarShowing = true
+    // App Storage: Var for deciding whether notification cadence is daily or weekly
+    @AppStorage("isNotificationDaily") private var notificationCadence = true
+    // App Storage: Time of day for the notification to fire (converted into string from Date Object)
+    @AppStorage("notificationTimeOfDay") private var notificationTimeOfDay = ""
     
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate

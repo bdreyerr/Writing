@@ -143,9 +143,6 @@ struct ProfileMainViewNotSignedIn: View {
                         .padding(.trailing, 20)
                         
                         VStack(spacing: 0.5) {
-                            Text("Please sign up to view your shorts")
-                                .font(.system(size: 14, design: .serif))
-                                .padding(.bottom, 10)
                             
                             Button(action: {
                                 profileController.isSignUpViewShowing = true
@@ -155,13 +152,18 @@ struct ProfileMainViewNotSignedIn: View {
                                     .frame(width: 220, height: 40)
                                     .overlay {
                                         HStack {
-                                            Text("Create an account / Log In")
+                                            // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
+                                            Text("Create Account / Sign In")
                                                 .font(.system(size: 14, design: .serif))
                                                 .bold()
+                                            
+                                            Image(systemName: "person.badge.plus")
+                                            
                                         }
                                     }
                                     .padding(.bottom, 10)
                             }
+                            .buttonStyle(PlainButtonStyle())
                         }
                         
                         VStack {

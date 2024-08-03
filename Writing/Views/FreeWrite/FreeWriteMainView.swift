@@ -84,10 +84,9 @@ struct FreeWriteMainView: View {
                             .padding(.bottom, 10)
                             
                             
-                            ForEach(freeWriteController.freeWrites.prefix(6)) { freeWrite in
+                            ForEach(freeWriteController.freeWrites.prefix(6), id: \.id) { freeWrite in
                                 FreeWriteEntryPreviewView(freeWrite: freeWrite)
                                     .onTapGesture {
-                                        print("it happened, clicked")
                                         freeWriteController.focusFreeWrite(freeWrite: freeWrite)
                                     }
                             }

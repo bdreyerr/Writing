@@ -139,15 +139,14 @@ struct CreateShortOrYourExistingShort: View {
                     }) {
                         RoundedRectangle(cornerRadius: 25.0)
                             .stroke(lineWidth: 1)
-                            .frame(width: 160, height: 40)
+                            .frame(width: 220, height: 40)
                             .overlay {
                                 HStack {
-                                    // TODO(bendreyer): have a couple different openers here (start your creation, dive right in, etc..) and pick one at random
-                                    Text("Create Short")
+                                    Text("Create Account / Sign In")
                                         .font(.system(size: 14, design: .serif))
                                         .bold()
                                     
-                                    Image(systemName: "pencil.and.scribble")
+                                    Image(systemName: "person.badge.plus")
                                     
                                 }
                             }

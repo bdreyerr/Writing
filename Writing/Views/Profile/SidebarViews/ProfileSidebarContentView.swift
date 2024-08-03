@@ -55,6 +55,15 @@ struct ProfileSidebarContentView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 10)
                     
+                    // Notifications
+                    NavigationLink(destination: ProfileNotificationsView()) {
+                        Image(systemName: "bell.badge")
+                            .font(.title3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
                     
                     // Settings
                     Button(action: {
@@ -100,6 +109,15 @@ struct ProfileSidebarContentView: View {
                     // How we Analyze
                     NavigationLink(destination: ProfileAdvertiseWithUsView()) {
                         Text("Advertise with Us")
+                            .font(.system(size: 17, design: .serif))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    // Notifications
+                    NavigationLink(destination: ProfileNotificationsView()) {
+                        Text("Notifications")
                             .font(.system(size: 17, design: .serif))
                     }
                     .buttonStyle(PlainButtonStyle())

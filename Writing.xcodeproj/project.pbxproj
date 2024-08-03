@@ -16,6 +16,9 @@
 		1A3C05FB2C31E62E00BDB3F2 /* FreeWriteFullListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05FA2C31E62E00BDB3F2 /* FreeWriteFullListView.swift */; };
 		1A3C05FD2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3C05FC2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift */; };
 		1A4B25F62C55B22F004A0A6E /* ProfileAdvertiseWithUsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4B25F52C55B22F004A0A6E /* ProfileAdvertiseWithUsView.swift */; };
+		1A4B25F82C56ED52004A0A6E /* LocalNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4B25F72C56ED52004A0A6E /* LocalNotificationController.swift */; };
+		1A4B25FA2C56EE41004A0A6E /* ProfileNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4B25F92C56EE41004A0A6E /* ProfileNotificationsView.swift */; };
+		1A4B25FC2C56F6BC004A0A6E /* LocalNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4B25FB2C56F6BC004A0A6E /* LocalNotification.swift */; };
 		1A6B04E12C45B1B1003CD787 /* ShortAnalysisLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6B04E02C45B1B1003CD787 /* ShortAnalysisLoadingView.swift */; };
 		1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */; };
 		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
@@ -85,6 +88,9 @@
 		1A3C05FA2C31E62E00BDB3F2 /* FreeWriteFullListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteFullListView.swift; sourceTree = "<group>"; };
 		1A3C05FC2C31EA7600BDB3F2 /* FreeWriteEditEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteEditEntryView.swift; sourceTree = "<group>"; };
 		1A4B25F52C55B22F004A0A6E /* ProfileAdvertiseWithUsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAdvertiseWithUsView.swift; sourceTree = "<group>"; };
+		1A4B25F72C56ED52004A0A6E /* LocalNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationController.swift; sourceTree = "<group>"; };
+		1A4B25F92C56EE41004A0A6E /* ProfileNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotificationsView.swift; sourceTree = "<group>"; };
+		1A4B25FB2C56F6BC004A0A6E /* LocalNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotification.swift; sourceTree = "<group>"; };
 		1A6B04E02C45B1B1003CD787 /* ShortAnalysisLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortAnalysisLoadingView.swift; sourceTree = "<group>"; };
 		1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSignedOutView.swift; sourceTree = "<group>"; };
 		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
@@ -176,6 +182,7 @@
 				1ABF08F02C16B4F400F2E6AF /* ProfileEditProfileView.swift */,
 				1A3C05F02C2E76F200BDB3F2 /* ProfileChangePhotoView.swift */,
 				1A4B25F52C55B22F004A0A6E /* ProfileAdvertiseWithUsView.swift */,
+				1A4B25F92C56EE41004A0A6E /* ProfileNotificationsView.swift */,
 			);
 			path = SidebarViews;
 			sourceTree = "<group>";
@@ -336,6 +343,7 @@
 				1A3C05F22C2F6E4B00BDB3F2 /* PromptSuggestion.swift */,
 				1A3C05F42C308A5A00BDB3F2 /* FreeWrite.swift */,
 				1A71B2872C436BCC00C7E274 /* ShortAnalysis.swift */,
+				1A4B25FB2C56F6BC004A0A6E /* LocalNotification.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -358,6 +366,7 @@
 				1A6FDDB72C221CE500C8F5FD /* UserController.swift */,
 				1A3C05F62C308C7A00BDB3F2 /* FreeWriteController.swift */,
 				1A71B2852C436AE000C7E274 /* ShortAnalysisController.swift */,
+				1A4B25F72C56ED52004A0A6E /* LocalNotificationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -451,12 +460,15 @@
 				1A71B27F2C3CA5D200C7E274 /* ProfileStreaksAndAwardsView.swift in Sources */,
 				1AA1A5002C0BD15D009D9233 /* ContentView.swift in Sources */,
 				1ABF08FC2C1A58BF00F2E6AF /* Prompt.swift in Sources */,
+				1A4B25F82C56ED52004A0A6E /* LocalNotificationController.swift in Sources */,
 				1A4B25F62C55B22F004A0A6E /* ProfileAdvertiseWithUsView.swift in Sources */,
 				1A7944EB2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift in Sources */,
 				1A8172CD2C1FA3C5004217AA /* FreeWriteMainView.swift in Sources */,
 				1A71B2862C436AE000C7E274 /* ShortAnalysisController.swift in Sources */,
 				1A723BAD2C28EB6D00B0244A /* ProfileFocusedShortView.swift in Sources */,
 				1A3C05F92C309F1800BDB3F2 /* FreeWriteEntryPreviewView.swift in Sources */,
+				1A4B25FA2C56EE41004A0A6E /* ProfileNotificationsView.swift in Sources */,
+				1A4B25FC2C56F6BC004A0A6E /* LocalNotification.swift in Sources */,
 				1A7944E52C0E75C000757A7E /* CreateResponseView.swift in Sources */,
 				1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */,
 				1ABF08FE2C1A59E700F2E6AF /* Short.swift in Sources */,

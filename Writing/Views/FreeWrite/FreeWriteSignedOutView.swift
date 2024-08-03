@@ -80,10 +80,6 @@ struct FreeWriteSignedOutView: View {
                         
                         // Auth button
                         VStack(spacing: 0.5) {
-                            Text("Please sign up / in to free write")
-                                .font(.system(size: 14, design: .serif))
-                                .padding(.bottom, 10)
-                            
                             Button(action: {
                                 self.isSignUpViewShowing = true
                             }) {
@@ -92,13 +88,17 @@ struct FreeWriteSignedOutView: View {
                                     .frame(width: 220, height: 40)
                                     .overlay {
                                         HStack {
-                                            Text("Create an account / Log In")
+                                            Text("Create Account / Sign In")
                                                 .font(.system(size: 14, design: .serif))
                                                 .bold()
+                                            
+                                            Image(systemName: "person.badge.plus")
+                                            
                                         }
                                     }
                                     .padding(.bottom, 10)
                             }
+                            .buttonStyle(PlainButtonStyle())
                         }
                         
                         VStack {

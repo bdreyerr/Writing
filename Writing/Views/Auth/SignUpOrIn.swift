@@ -55,14 +55,6 @@ struct SignUpOrIn: View {
                     onCompletion: { result in
                         Task {
                             authController.appleSignInButtonOnCompletion(result: result)
-                            
-                            // check if auth is ready by then lol
-                            if let user = Auth.auth().currentUser {
-                                userController.retrieveUserFromFirestore(userId: user.uid)
-                            } else {
-                                print("no auth user yet lol nice try")
-                            }
-                            
                         }
                     }
                 )
