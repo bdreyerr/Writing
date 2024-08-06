@@ -11,11 +11,18 @@ import Foundation
 
 class FreeWriteController : ObservableObject {
     
-    // Only the 6 most recent free write entries
+    
+    // Free Writes (sorted by date descending)
     @Published var freeWrites: [FreeWrite] = []
-    // All free write entries
-    @Published var allFreeWrites: [FreeWrite] = []
+    
+    // Free writes (sorted by date ascending)
+    @Published var freeWritesOldest: [FreeWrite] = []
+    
+    // The focused freeWrite (user tapped on it)
     @Published var focusedFreeWrite: FreeWrite?
+    
+    // sorting method (0 = newest, 1 = oldest)
+    @Published var selectedSortingMethod: Int = 0
     
     // Vars for creating a new free write
     @Published var titleText: String = ""
@@ -25,6 +32,9 @@ class FreeWriteController : ObservableObject {
     
     // Pagination
     @Published var lastDoc: QueryDocumentSnapshot?
+    
+    // Pagination - sort by oldest
+    @Published var lastDocOldest: QueryDocumentSnapshot?
     
     // Vars controlling view
     @Published var isCreateEntrySheetShowing: Bool = false
@@ -42,16 +52,36 @@ class FreeWriteController : ObservableObject {
         self.retrieveFreeWrites()
     }
     
+    func switchSortingMethod() {
+        self.areNoShortsLeftToLoad = false
+        
+        // if no shorts are in the respective list, retrieve the initial one
+        if selectedSortingMethod == 0 {
+            if freeWrites.isEmpty {
+                retrieveFreeWrites()
+            }
+        } else {
+            if freeWritesOldest.isEmpty {
+                retrieveFreeWrites()
+            }
+        }
+    }
+    
     
     func retrieveFreeWrites() {
-        self.freeWrites = []
+        if selectedSortingMethod == 0 {
+            self.freeWrites = []
+        } else {
+            self.freeWritesOldest = []
+        }
+        
         
         // Ensure the user is authenticated
         if let user = Auth.auth().currentUser {
             // Start async task to read FreeWrites for user from firestore
             Task {
                 do {
-                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).limit(to: 6).getDocuments()
+                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: selectedSortingMethod == 0 ? true : false).limit(to: 6).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
@@ -62,7 +92,11 @@ class FreeWriteController : ObservableObject {
                         
                         for document in querySnapshot.documents {
                             if let freeWrite = try? document.data(as: FreeWrite.self) {
-                                self.freeWrites.append(freeWrite)
+                                if self.selectedSortingMethod == 0 {
+                                    self.freeWrites.append(freeWrite)
+                                } else {
+                                    self.freeWritesOldest.append(freeWrite)
+                                }
                             }
                         }
                         
@@ -73,7 +107,11 @@ class FreeWriteController : ObservableObject {
                             return
                         }
                         
-                        self.lastDoc = lastSnapshot
+                        if self.selectedSortingMethod == 0 {
+                            self.lastDoc = lastSnapshot
+                        } else {
+                            self.lastDocOldest = lastSnapshot
+                        }
                     }
                 } catch let error {
                     print("error getting free writes from firestore: ", error.localizedDescription)
@@ -87,7 +125,8 @@ class FreeWriteController : ObservableObject {
         if let user = Auth.auth().currentUser {
             Task {
                 do {
-                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).limit(to: 6).start(afterDocument: self.lastDoc!).getDocuments()
+                    
+                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: selectedSortingMethod == 0 ? true : false).limit(to: 6).start(afterDocument: selectedSortingMethod == 0 ? self.lastDoc! : self.lastDocOldest!).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
@@ -98,7 +137,11 @@ class FreeWriteController : ObservableObject {
                         
                         for document in querySnapshot.documents {
                             if let freeWrite = try? document.data(as: FreeWrite.self) {
-                                self.freeWrites.append(freeWrite)
+                                if self.selectedSortingMethod == 0 {
+                                    self.freeWrites.append(freeWrite)
+                                } else {
+                                    self.freeWritesOldest.append(freeWrite)
+                                }
                             }
                         }
                         
@@ -109,7 +152,12 @@ class FreeWriteController : ObservableObject {
                             return
                         }
                         
-                        self.lastDoc = lastSnapshot
+                        
+                        if self.selectedSortingMethod == 0 {
+                            self.lastDoc = lastSnapshot
+                        } else {
+                            self.lastDocOldest = lastSnapshot
+                        }
                     }
                 } catch let error {
                     print(error.localizedDescription)

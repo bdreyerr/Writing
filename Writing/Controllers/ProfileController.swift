@@ -14,7 +14,18 @@ import SwiftUI
 
 class ProfileController : ObservableObject {
     
+    // Sorted by date written (default)
     @Published var shorts: [Short] = []
+    
+    // Sorted by Like Count
+    @Published var shortsByLikeCount: [Short] = []
+    
+    // Sorted by Prompt Date
+    @Published var shortsByPromptDate: [Short] = []
+    
+    // Sorting method (0 = byDateWritten, 1 = byLikeCount, 2 = byPromptDate)
+    @Published var shortsSortingMethod: Int = 0
+    
     // Used to display in rows of three in the view (grid)
     var chunksOfShorts: [ArrayOfShort] = []
     @Published var promptImages: [String : UIImage] = [:]
@@ -33,23 +44,25 @@ class ProfileController : ObservableObject {
     
     // TODO(ordering) : figure out how to retrieve prompts based on what ordering is going on
     
-    // Pagination
+    // Pagination - Sorted by date written
     @Published var lastDoc: QueryDocumentSnapshot?
+    
+    // Pagination - Sorted by like count
+    @Published var lastDocByLikeCount: QueryDocumentSnapshot?
+    
+    // Pagination - Sorted by prompt date
+    @Published var lastDocByPromptDate: QueryDocumentSnapshot?
     
     // vars that control the view
     @Published var isSignUpViewShowing: Bool = false
     @Published var isSettingsShowing: Bool = false
     @Published var showSidebar: Bool = false
     @Published var isConfirmShortDelteAlertShowing: Bool = false
-    // Sorting method (0 = byDateWritten, 1 = byLikeCount, 2 = byPromptDate)
-    @Published var shortsSortingMethod: Int = 0
+    
     @Published var isFocusedShortSheetShowing: Bool = false
     @Published var isChangeNameAlertShowing: Bool = false
     @Published var isChangePhotoSheetShowing: Bool = false
     @Published var areNoShortsLeftToLoad: Bool = false
-    
-    // Temp 2d array to fill in the contribution grid
-//    var contributions = [[1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1], [1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1], [0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1], [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1]]
     
     @Published var contributions: [Int] = []
     @Published var contributionCount: Int = 0
@@ -72,7 +85,18 @@ class ProfileController : ObservableObject {
             // Lookup firestore shorts collection that match userId
             Task {
                 do {
-                    let querySnapshot = try await db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).limit(to: 9).getDocuments()
+                    
+                    let query: Query
+                    
+                    if shortsSortingMethod == 0 {
+                        query = db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true)
+                    } else if shortsSortingMethod == 1 {
+                        query = db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "likeCount", descending: true)
+                    } else {
+                        query = db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "date", descending: true)
+                    }
+                    
+                    let querySnapshot = try await query.limit(to: 9).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
@@ -87,7 +111,14 @@ class ProfileController : ObservableObject {
                                 self.retrievePromptImage(date: short.date!)
                                 print("profile - appended short to list")
                                 
-                                self.shorts.append(short)
+                                if self.shortsSortingMethod == 0 {
+                                    self.shorts.append(short)
+                                } else if self.shortsSortingMethod == 1 {
+                                    self.shortsByLikeCount.append(short)
+                                } else {
+                                    self.shortsByPromptDate.append(short)
+                                }
+                                
                             }
                         }
                         
@@ -98,14 +129,16 @@ class ProfileController : ObservableObject {
                             return
                         }
                         
-                        self.lastDoc = lastSnapshot
-                        
-                        // split the short array into chunks
-                        let chunks = self.shorts.chunked(into: 3)
-                        for chunk in chunks {
-                            let arrayofShort = ArrayOfShort(shorts: chunk)
-                            self.chunksOfShorts.append(arrayofShort)
+                        if self.shortsSortingMethod == 0 {
+                            self.lastDoc = lastSnapshot
+                        } else if self.shortsSortingMethod == 1 {
+                            self.lastDocByLikeCount = lastSnapshot
+                        } else {
+                            self.lastDocByPromptDate = lastSnapshot
                         }
+                        
+                        
+                        self.resetChunks()
                     }
                 } catch let error {
                     print("error retrieving the user's shorts: ", error.localizedDescription)
@@ -121,7 +154,23 @@ class ProfileController : ObservableObject {
         if let user = Auth.auth().currentUser {
             Task {
                 do {
-                    let querySnapshot = try await db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true).limit(to: 9).start(afterDocument: self.lastDoc!).getDocuments()
+                    
+                    let query: Query
+                    let lastDoc: QueryDocumentSnapshot
+                    
+                    if shortsSortingMethod == 0 {
+                        query = db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: true)
+                        lastDoc = self.lastDoc!
+                    } else if shortsSortingMethod == 1 {
+                        query = db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "likeCount", descending: true)
+                        lastDoc = self.lastDocByLikeCount!
+                    } else {
+                        query = db.collection("shorts").whereField("authorId", isEqualTo: user.uid).order(by: "date", descending: true)
+                        lastDoc = self.lastDocByPromptDate!
+                    }
+                    
+                    
+                    let querySnapshot = try await query.limit(to: 9).start(afterDocument: lastDoc).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
@@ -135,7 +184,13 @@ class ProfileController : ObservableObject {
                                 self.retrievePromptImage(date: short.date!)
                                 print("profile - appended short to list")
                                 
-                                self.shorts.append(short)
+                                if self.shortsSortingMethod == 0 {
+                                    self.shorts.append(short)
+                                } else if self.shortsSortingMethod == 1 {
+                                    self.shortsByLikeCount.append(short)
+                                } else {
+                                    self.shortsByPromptDate.append(short)
+                                }
                             }
                         }
                         
@@ -146,23 +201,68 @@ class ProfileController : ObservableObject {
                             return
                         }
                         
-                        self.lastDoc = lastSnapshot
-                        
-                        
-                        // clear the chunks
-                        self.chunksOfShorts = []
-                        
-                        // split the short array into chunks
-                        let chunks = self.shorts.chunked(into: 3)
-                        for chunk in chunks {
-                            let arrayofShort = ArrayOfShort(shorts: chunk)
-                            self.chunksOfShorts.append(arrayofShort)
+                        if self.shortsSortingMethod == 0 {
+                            self.lastDoc = lastSnapshot
+                        } else if self.shortsSortingMethod == 1 {
+                            self.lastDocByLikeCount = lastSnapshot
+                        } else {
+                            self.lastDocByPromptDate = lastSnapshot
                         }
+                        
+                        
+                        self.resetChunks()
                     }
                 } catch let error {
                     print("error retrieving the user's shorts: ", error.localizedDescription)
                 }
             }
+        }
+    }
+    
+    func switchSortingMethod() {
+        self.areNoShortsLeftToLoad = false
+        
+        // the var should already be set.
+        print("switching sorting method")
+        
+        if shortsSortingMethod == 0 {
+            if shorts.isEmpty {
+                retrieveShorts()
+            } else {
+                resetChunks()
+            }
+        } else if shortsSortingMethod == 1 {
+            if shortsByLikeCount.isEmpty {
+                retrieveShorts()
+            } else {
+                resetChunks()
+            }
+        } else if shortsSortingMethod == 2 {
+            if shortsByPromptDate.isEmpty {
+                retrieveShorts()
+            } else {
+                resetChunks()
+            }
+        }
+    }
+    
+    func resetChunks() {
+        // clear the chunks
+        self.chunksOfShorts = []
+        
+        var chunks: [[Short]] = []
+        if self.shortsSortingMethod == 0 {
+            chunks = self.shorts.chunked(into: 3)
+        } else if self.shortsSortingMethod == 1 {
+            chunks = self.shortsByLikeCount.chunked(into: 3)
+        } else {
+            chunks = self.shortsByPromptDate.chunked(into: 3)
+        }
+        
+//                        let chunks = self.shorts.chunked(into: 3)
+        for chunk in chunks {
+            let arrayofShort = ArrayOfShort(shorts: chunk)
+            self.chunksOfShorts.append(arrayofShort)
         }
     }
     
@@ -290,38 +390,38 @@ class ProfileController : ObservableObject {
     }
     
     // Either sort the shorts by date or by likeCount
-    func sortShorts(byDateWritten: Bool, byNumLikes: Bool, byPromptDate: Bool) {
-        
-        // set the bool (controls view dropdown text)
-        
-        // clear the chunks
-        self.chunksOfShorts = []
-        // sort by date
-        if byDateWritten {
-            self.shortsSortingMethod = 0
-            // Sort by timestamp (converted to date)
-            self.shorts = self.shorts.sorted(by: {$0.rawTimestamp!.dateValue() > $1.rawTimestamp!.dateValue()} )
-        }
-        
-        // sort by like count
-        if byNumLikes {
-            self.shortsSortingMethod = 1
-            self.shorts = self.shorts.sorted(by: {$0.likeCount! > $1.likeCount! })
-        }
-        
-        // sort by prompt date
-        if byPromptDate {
-            self.shortsSortingMethod = 2
-            self.shorts = self.shorts.sorted(by: {$0.date! > $1.date! })
-        }
-        
-        // rebuild the chunks
-        let chunks = self.shorts.chunked(into: 3)
-        for chunk in chunks {
-            let arrayofShort = ArrayOfShort(shorts: chunk)
-            self.chunksOfShorts.append(arrayofShort)
-        }
-    }
+//    func sortShorts(byDateWritten: Bool, byNumLikes: Bool, byPromptDate: Bool) {
+//        
+//        // set the bool (controls view dropdown text)
+//        
+//        // clear the chunks
+//        self.chunksOfShorts = []
+//        // sort by date
+//        if byDateWritten {
+//            self.shortsSortingMethod = 0
+//            // Sort by timestamp (converted to date)
+//            self.shorts = self.shorts.sorted(by: {$0.rawTimestamp!.dateValue() > $1.rawTimestamp!.dateValue()} )
+//        }
+//        
+//        // sort by like count
+//        if byNumLikes {
+//            self.shortsSortingMethod = 1
+//            self.shorts = self.shorts.sorted(by: {$0.likeCount! > $1.likeCount! })
+//        }
+//        
+//        // sort by prompt date
+//        if byPromptDate {
+//            self.shortsSortingMethod = 2
+//            self.shorts = self.shorts.sorted(by: {$0.date! > $1.date! })
+//        }
+//        
+//        // rebuild the chunks
+//        let chunks = self.shorts.chunked(into: 3)
+//        for chunk in chunks {
+//            let arrayofShort = ArrayOfShort(shorts: chunk)
+//            self.chunksOfShorts.append(arrayofShort)
+//        }
+//    }
     
     func submitPromptSuggestion(user: User) {
         if self.suggestedPromptText.isEmpty { return }

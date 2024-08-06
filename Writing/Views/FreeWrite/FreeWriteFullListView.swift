@@ -41,14 +41,73 @@ struct FreeWriteFullListView: View {
                 .padding(.leading, 20)
                 .padding(.trailing, 20)
                 
+                
+                // Sort By
+                HStack {
+                    Menu {
+                        Button(action: {
+                            freeWriteController.selectedSortingMethod = 0
+                            freeWriteController.switchSortingMethod()
+                        }) {
+                            HStack {
+                                Text("Recent")
+                                    .font(.system(size: 13, design: .serif))
+                                
+//                                Image(systemName: "clock")
+//                                    .font(.subheadline)
+                            }
+                            
+                        }
+                        Button(action: {
+                            freeWriteController.selectedSortingMethod = 1
+                            freeWriteController.switchSortingMethod()
+                        }) {
+                            HStack {
+                                Text("Oldest")
+                                    .font(.system(size: 13, design: .serif))
+                                
+//                                Image(systemName: "crown")
+//                                    .font(.subheadline)
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            if freeWriteController.selectedSortingMethod == 0 {
+                                Text("Recent")
+                                    .font(.system(size: 13, design: .serif))
+                            } else if freeWriteController.selectedSortingMethod == 1 {
+                                Text("Oldest")
+                                    .font(.system(size: 13, design: .serif))
+                            }
+                            Image(systemName: "chevron.down")
+                                .font(.subheadline)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 10)
+                .padding(.horizontal, 20)
+                
                 ScrollView(showsIndicators: false) {
                     VStack {
-                        ForEach(freeWriteController.freeWrites) { freeWrite in
-                            FreeWriteEntryPreviewView(freeWrite: freeWrite)
-                                .onTapGesture {
-                                    print("it happened, clicked")
-                                    freeWriteController.focusFreeWrite(freeWrite: freeWrite)
-                                }
+                        
+                        if freeWriteController.selectedSortingMethod == 0 {
+                            ForEach(freeWriteController.freeWrites) { freeWrite in
+                                FreeWriteEntryPreviewView(freeWrite: freeWrite)
+                                    .onTapGesture {
+                                        print("it happened, clicked")
+                                        freeWriteController.focusFreeWrite(freeWrite: freeWrite)
+                                    }
+                            }
+                        } else if freeWriteController.selectedSortingMethod == 1 {
+                            ForEach(freeWriteController.freeWritesOldest) { freeWrite in
+                                FreeWriteEntryPreviewView(freeWrite: freeWrite)
+                                    .onTapGesture {
+                                        print("it happened, clicked")
+                                        freeWriteController.focusFreeWrite(freeWrite: freeWrite)
+                                    }
+                            }
                         }
                         
                         // Older button (allows user to load next batch of free writes)
@@ -61,7 +120,7 @@ struct FreeWriteFullListView: View {
                                     .frame(width: 110, height: 35)
                                     .overlay {
                                         HStack {
-                                            Text("Older")
+                                            Text("More")
                                                 .font(.system(size: 14, design: .serif))
                                                 .bold()
                                             

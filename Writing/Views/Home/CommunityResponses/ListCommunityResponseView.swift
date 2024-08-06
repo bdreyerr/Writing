@@ -31,7 +31,11 @@ struct ListCommunityResponseView: View {
                     HStack {
                         Menu {
                             Button(action: {
-                                homeController.sortFocusedListShorts(isByDate: true, isByLikes: false)
+                                homeController.selectedSortingMethod = 0
+                                if let user = userController.user {
+                                    homeController.switchShortSortingMethod(blockedUsers: user.blockedUsers ?? [:])
+                                }
+                                
                             }) {
                                 HStack {
                                     Text("Recent")
@@ -43,7 +47,10 @@ struct ListCommunityResponseView: View {
                                 
                             }
                             Button(action: {
-                                homeController.sortFocusedListShorts(isByDate: false, isByLikes: true)
+                                homeController.selectedSortingMethod = 1
+                                if let user = userController.user {
+                                    homeController.switchShortSortingMethod(blockedUsers: user.blockedUsers ?? [:])
+                                }
                             }) {
                                 HStack {
                                     Text("Best")
@@ -55,10 +62,10 @@ struct ListCommunityResponseView: View {
                             }
                         } label: {
                             HStack {
-                                if homeController.listShortSortingMethod == 0 {
+                                if homeController.selectedSortingMethod == 0 {
                                     Text("Recent")
                                         .font(.system(size: 13, design: .serif))
-                                } else if homeController.listShortSortingMethod == 1 {
+                                } else if homeController.selectedSortingMethod == 1 {
                                     Text("Best")
                                         .font(.system(size: 13, design: .serif))
                                 }
@@ -72,58 +79,27 @@ struct ListCommunityResponseView: View {
                     .padding(.bottom, 10)
                     
                     
-//                    HStack {
-//                        Text("Sort By")
-//                            .font(.system(size: 13, design: .serif))
-//                        Menu {
-//                            Button("Best HEY", action: {
-//                                return
-//                            })
-//                            Button("Newest", action: {
-//                                return
-//                            })
-//                        } label: {
-//                            HStack {
-//                                Text("Best")
-//                                    .font(.system(size: 13, design: .serif))
-//                                
-//                                Image(systemName: "crown")
-//                                    .font(.subheadline)
-//                            }
-//                        }
-//                        .buttonStyle(PlainButtonStyle())
-//                    }
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-//                    .padding(.bottom, 10)
-                    
-                    // Single Limited Responses
-                    
-                    
                     
                     // if there's no shorts yet
                     if (homeController.focusedFullCommunityShorts.isEmpty) {
-                        // if user isn't set
-//                        if userController.user == nil {
-//                            Text("Sign In to View Community Shorts")
-//                                .font(.system(size: 14, design: .serif))
-//                                .bold()
-//                                .opacity(0.7)
-//                        } else {
-//                            Text("No Community Shorts Yet")
-//                                .font(.system(size: 14, design: .serif))
-//                                .bold()
-//                                .opacity(0.7)
-//                        }
-                    } else {
-                        ForEach(homeController.focusedFullCommunityShorts) { short in
-                            Button(action: {
-//                                self.isSingleCommunityResponsePopupShowing.toggle()
-                                // nothing for now
-                            }) {
 
-                                SingleLimitedCommunityResponse(short: short, isOwnedShort: false)
+                    } else {
+                        if homeController.selectedSortingMethod == 0 {
+                            ForEach(homeController.focusedFullCommunityShorts) { short in
+                                Button(action: {
+                                }) {
+                                    SingleLimitedCommunityResponse(short: short, isOwnedShort: false)
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
-                            .buttonStyle(PlainButtonStyle())
+                        } else {
+                            ForEach(homeController.focusedFullCommunityShortsByLikeCount) { short in
+                                Button(action: {
+                                }) {
+                                    SingleLimitedCommunityResponse(short: short, isOwnedShort: false)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
                         }
                         
                         // older button
@@ -138,7 +114,7 @@ struct ListCommunityResponseView: View {
                                     .frame(width: 110, height: 35)
                                     .overlay {
                                         HStack {
-                                            Text("Older")
+                                            Text("More")
                                                 .font(.system(size: 14, design: .serif))
                                                 .bold()
                                             
@@ -160,6 +136,9 @@ struct ListCommunityResponseView: View {
         .padding(.bottom, 25)
         .onAppear {
             if let user = userController.user {
+                homeController.focusedFullCommunityShorts = []
+                homeController.focusedFullCommunityShortsByLikeCount = []
+                homeController.selectedSortingMethod = 0
                 homeController.retrieveFullCommunityShorts(blockedUsers: user.blockedUsers ?? [:])
             }
             

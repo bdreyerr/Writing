@@ -18,7 +18,7 @@ struct CreateShortOrYourExistingShort: View {
     @EnvironmentObject var profileController: ProfileController
     @StateObject var createShortController = CreateShortController()
     
-    @State var isKeyboardPresented = false
+//    @State var isKeyboardPresented = false
     
     var body: some View {
         VStack {
@@ -64,23 +64,31 @@ struct CreateShortOrYourExistingShort: View {
                         }
                     }
                     
-                    // Text Field
-                    TextField("Once upon a time...",text: $createShortController.shortContent, axis: .vertical)
-                        .font(.system(size: 16, design: .serif))
-                        .padding(.vertical, 8)
-                        .background(
-                            VStack {
-                                Spacer()
-                                Color(UIColor.systemGray4)
-                                    .frame(height: 2)
-                            }
-                        )
-                        .onReceive(Just(createShortController.shortContent)) { _ in createShortController.limitTextLength(createShortController.characterLimit) }
-                        .onReceive(keyboardPublisher) { value in
-                            print("Is keyboard visible? ", value)
-                            isKeyboardPresented = value
-                            isTabBarShowing = !isKeyboardPresented
-                        }
+                    Button(action: {
+                        createShortController.isCreateShortSheetShowing = true
+                    }) {
+                        // Text Field
+                        TextField("Once upon a time...",text: $createShortController.shortContent, axis: .vertical)
+                            .font(.system(size: 16, design: .serif))
+                            .padding(.vertical, 8)
+                            .background(
+                                VStack {
+                                    Spacer()
+                                    Color(UIColor.systemGray4)
+                                        .frame(height: 2)
+                                }
+                            )
+//                            .onReceive(Just(createShortController.shortContent)) { _ in createShortController.limitTextLength(createShortController.characterLimit) }
+////                            .onReceive(keyboardPublisher) { value in
+////                                print("Is keyboard visible? ", value)
+////                                isKeyboardPresented = value
+////                                isTabBarShowing = !isKeyboardPresented
+////                            }
+                            .disabled(!createShortController.isCreateShortSheetShowing)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
                     
                     HStack {
                         // Character Count
@@ -114,8 +122,7 @@ struct CreateShortOrYourExistingShort: View {
                                             // refresh user stats
                                             userController.retrieveUserFromFirestore(userId: user.id!)
                                             
-                                            // show tab bar again
-                                            self.isTabBarShowing = true
+                                            createShortController.isCreateShortSheetShowing = false
                                         }
                                     } else {
                                         print("prompt not available")
@@ -157,6 +164,11 @@ struct CreateShortOrYourExistingShort: View {
                 
                 
             }
+        }
+        .sheet(isPresented: $createShortController.isCreateShortSheetShowing) {
+            CreateResponseView()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.automatic)
         }
         .onAppear {
             createShortController.shortContent = ""

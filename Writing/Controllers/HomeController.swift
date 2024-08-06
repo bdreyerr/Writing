@@ -31,10 +31,17 @@ class HomeController : ObservableObject {
     // Cached Communnity shorts --
     var cachedTopCommunityShorts: [String : [Short]] = [:]
     
-    // FocusedFullCommunityShorts - The full list of shorts for the selected prompt
+    
+    // sorting method (0 = recent, 1 = like count)
+    @Published var selectedSortingMethod: Int = 0
+    
+    // FocusedFullCommunityShorts - The full list of shorts for the selected prompt (sorted by date)
     @Published var focusedFullCommunityShorts: [Short] = []
-    // Cached full community shorts
+    // Cached full community shorts (sorted by date)
     var cachedFullCommunityShorts: [String : [Short]] = [:]
+    
+    @Published var focusedFullCommunityShortsByLikeCount: [Short] = []
+    var cachedFullCommunityShortsByLikeCount: [String : [Short]] = [:]
     
     // If a single short preview is clicked on to view fully, this is that short
     @Published var focusedSingleShort: Short?
@@ -66,8 +73,13 @@ class HomeController : ObservableObject {
     @Published var commentText: String = ""
     
     // Pagination
+    // - sort by recent
     @Published var lastDocListShorts: QueryDocumentSnapshot?
     var cachedLastDocListShorts : [String : QueryDocumentSnapshot] = [:]
+    // - sort by likeCount
+    @Published var lastDocListShortsByLikeCount: QueryDocumentSnapshot?
+    var cachedLastDocListShortsByLikeCount: [String : QueryDocumentSnapshot] = [:]
+    
     
     @Published var lastDocComments: QueryDocumentSnapshot?
     var cachedLastDocComments : [String : QueryDocumentSnapshot] = [:]
@@ -81,7 +93,6 @@ class HomeController : ObservableObject {
     @Published var isReportCommentAlertShowing: Bool = false
     @Published var areNoShortsLeftToLoad: Bool = false
     @Published var areNoCommentsLeftToLoad: Bool = false
-    @Published var listShortSortingMethod: Int = 0
     
     // Firestore
     let db = Firestore.firestore()
@@ -312,82 +323,44 @@ class HomeController : ObservableObject {
     
     // Fetches the full list of community shorts for the focused prompt
     func retrieveFullCommunityShorts(blockedUsers: [String : Bool]) {
-        self.focusedFullCommunityShorts = []
-        self.lastDocListShorts = nil
+        if selectedSortingMethod == 0 {
+            self.focusedFullCommunityShorts = []
+            self.lastDocListShorts = nil
+        } else {
+            self.focusedFullCommunityShortsByLikeCount = []
+            self.lastDocListShortsByLikeCount = nil
+        }
         
         // Make sure a prompt is focused
         if let prompt = self.focusedPrompt {
+            
             // Check if this prompt's full short list has been cached already
-            if let prompts = self.cachedFullCommunityShorts[prompt.date!] {
-                self.focusedFullCommunityShorts = prompts
-                // if the shorts are cached, the last Document Snapshot should also be cached
-                if let querySnapshotDoc = self.cachedLastDocListShorts[prompt.date!] {
-                    self.lastDocListShorts = querySnapshotDoc
-                }
-                
-                print("restoring cached shorts - full community shorts")
-                return
-            } else {
-                // not cached, fetch the list from firestore
-                print("no cache found - full community shorts")
-                Task {
-                    do {
-                        let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: "rawTimestamp", descending: true).limit(to: 8).getDocuments()
-                        
-                        DispatchQueue.main.async {
-                            if querySnapshot.isEmpty {
-                                print("no matching resposnes were found")
-                                self.areNoShortsLeftToLoad = true
-                                return
-                            }
-                            
-                            // There will be at most 8 shorts, at least 1
-                            for document in querySnapshot.documents {
-                                if let short = try? document.data(as: Short.self) {
-                                    // Check if the author is being blocked by the user
-                                    if let isBlocked = blockedUsers[short.authorId!] {
-                                        if isBlocked { continue }
-                                    }
-                                    
-                                    self.focusedFullCommunityShorts.append(short)
-                                    
-                                    // get the profile picture for the author of the short
-                                    self.getCommunityAuthorsProfilePicutre(authorId: short.authorId!)
-                                } else {
-                                    print("cant case document to short")
-                                }
-                            }
-                            
-                            // get the last document snapshot (for pagination)
-                            guard let lastSnapshot = querySnapshot.documents.last else {
-                                // The collection is empty.
-                                return
-                            }
-                            self.lastDocListShorts = lastSnapshot
-                            
-                            // then add last doc to the cache
-                            self.cachedLastDocListShorts[prompt.date!] = lastSnapshot
-                            
-                            // Cache the shorts retrieved
-                            self.cachedFullCommunityShorts[prompt.date!] = self.focusedFullCommunityShorts
-                        }
-                        
-                    } catch let error {
-                        print("error fetching shorts from firestore: ", error.localizedDescription)
+            if selectedSortingMethod == 0 {
+                if let prompts = self.cachedFullCommunityShorts[prompt.date!] {
+                    self.focusedFullCommunityShorts = prompts
+                    // if the shorts are cached, the last Document Snapshot should also be cached
+                    if let querySnapshotDoc = self.cachedLastDocListShorts[prompt.date!] {
+                        self.lastDocListShorts = querySnapshotDoc
                     }
+                    
+                    return
+                }
+            } else {
+                if let prompts = self.cachedFullCommunityShortsByLikeCount[prompt.date!] {
+                    self.focusedFullCommunityShortsByLikeCount = prompts
+                    // if the shorts are cached, the last Document Snapshot should also be cached
+                    if let querySnapshotDoc = self.cachedLastDocListShortsByLikeCount[prompt.date!] {
+                        self.lastDocListShortsByLikeCount = querySnapshotDoc
+                    }
+                    return
                 }
             }
-        } else {
-            print("no focused prompt")
-        }
-    }
-    
-    func retrieveNextFullCommunityShorts(blockedUsers: [String : Bool]) {
-        // Make sure a prompt is focused
-        if let prompt = self.focusedPrompt {
+            
+            
+            print("no cache found - full community shorts")
             Task {
                 do {
-                    let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: "rawTimestamp", descending: true).limit(to: 8).start(afterDocument: self.lastDocListShorts!).getDocuments()
+                    let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: self.selectedSortingMethod == 0 ? "rawTimestamp" : "likeCount", descending: true).limit(to: 8).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
@@ -404,7 +377,11 @@ class HomeController : ObservableObject {
                                     if isBlocked { continue }
                                 }
                                 
-                                self.focusedFullCommunityShorts.append(short)
+                                if self.selectedSortingMethod == 0 {
+                                    self.focusedFullCommunityShorts.append(short)
+                                } else {
+                                    self.focusedFullCommunityShortsByLikeCount.append(short)
+                                }
                                 
                                 // get the profile picture for the author of the short
                                 self.getCommunityAuthorsProfilePicutre(authorId: short.authorId!)
@@ -418,16 +395,111 @@ class HomeController : ObservableObject {
                             // The collection is empty.
                             return
                         }
-                        self.lastDocListShorts = lastSnapshot
-                        // then add last doc to the cache
-                        self.cachedLastDocListShorts[prompt.date!] = lastSnapshot
                         
-                        // Cache the shorts retrieved
-                        self.cachedFullCommunityShorts[prompt.date!] = self.focusedFullCommunityShorts
+                        if self.selectedSortingMethod == 0 {
+                            self.lastDocListShorts = lastSnapshot
+                            
+                            // then add last doc to the cache
+                            self.cachedLastDocListShorts[prompt.date!] = lastSnapshot
+                            
+                            // Cache the shorts retrieved
+                            self.cachedFullCommunityShorts[prompt.date!] = self.focusedFullCommunityShorts
+                        } else {
+                            self.lastDocListShortsByLikeCount = lastSnapshot
+                            
+                            // then add last doc to the cache
+                            self.cachedLastDocListShortsByLikeCount[prompt.date!] = lastSnapshot
+                            
+                            // Cache the shorts retrieved
+                            self.cachedFullCommunityShortsByLikeCount[prompt.date!] = self.focusedFullCommunityShorts
+                        }
+                    }
+                    
+                } catch let error {
+                    print("error fetching shorts from firestore: ", error.localizedDescription)
+                }
+            }
+        } else {
+            print("no focused prompt")
+        }
+    }
+    
+    func retrieveNextFullCommunityShorts(blockedUsers: [String : Bool]) {
+        // Make sure a prompt is focused
+        if let prompt = self.focusedPrompt {
+            Task {
+                do {
+                    let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: selectedSortingMethod == 0 ? "rawTimestamp" : "likeCount", descending: true).limit(to: 8).start(afterDocument: selectedSortingMethod == 0 ? self.lastDocListShorts! : self.lastDocListShortsByLikeCount!).getDocuments()
+                    
+                    DispatchQueue.main.async {
+                        if querySnapshot.isEmpty {
+                            print("no matching resposnes were found")
+                            self.areNoShortsLeftToLoad = true
+                            return
+                        }
+                        
+                        // There will be at most 8 shorts, at least 1
+                        for document in querySnapshot.documents {
+                            if let short = try? document.data(as: Short.self) {
+                                // Check if the author is being blocked by the user
+                                if let isBlocked = blockedUsers[short.authorId!] {
+                                    if isBlocked { continue }
+                                }
+                                
+                                
+                                if self.selectedSortingMethod == 0{
+                                    self.focusedFullCommunityShorts.append(short)
+                                } else {
+                                    self.focusedFullCommunityShortsByLikeCount.append(short)
+                                }
+                                
+                                // get the profile picture for the author of the short
+                                self.getCommunityAuthorsProfilePicutre(authorId: short.authorId!)
+                            } else {
+                                print("cant case document to short")
+                            }
+                        }
+                        
+                        // get the last document snapshot (for pagination)
+                        guard let lastSnapshot = querySnapshot.documents.last else {
+                            // The collection is empty.
+                            return
+                        }
+                        
+                        if self.selectedSortingMethod == 0 {
+                            self.lastDocListShorts = lastSnapshot
+                            // then add last doc to the cache
+                            self.cachedLastDocListShorts[prompt.date!] = lastSnapshot
+                            
+                            // Cache the shorts retrieved
+                            self.cachedFullCommunityShorts[prompt.date!] = self.focusedFullCommunityShorts
+                        } else {
+                            self.lastDocListShortsByLikeCount = lastSnapshot
+                            // then add last doc to the cache
+                            self.cachedLastDocListShortsByLikeCount[prompt.date!] = lastSnapshot
+                            
+                            // Cache the shorts retrieved
+                            self.cachedFullCommunityShortsByLikeCount[prompt.date!] = self.focusedFullCommunityShorts
+                        }
                     }
                 } catch {
                     print("error getting next shorts: ", error.localizedDescription)
                 }
+            }
+        }
+    }
+    
+    func switchShortSortingMethod(blockedUsers: [String : Bool]) {
+        self.areNoShortsLeftToLoad = false
+        
+        // if no shorts are in the respective list, retrieve the initial one
+        if selectedSortingMethod == 0 {
+            if focusedFullCommunityShorts.isEmpty {
+                retrieveFullCommunityShorts(blockedUsers: blockedUsers)
+            }
+        } else {
+            if focusedFullCommunityShortsByLikeCount.isEmpty {
+                retrieveFullCommunityShorts(blockedUsers: blockedUsers)
             }
         }
     }
@@ -844,17 +916,6 @@ class HomeController : ObservableObject {
         }
     }
     
-    func sortFocusedListShorts(isByDate: Bool, isByLikes: Bool) {
-        // make sure there are focused shorts
-        if isByDate{
-            self.focusedFullCommunityShorts = self.focusedFullCommunityShorts.sorted(by: {$0.rawTimestamp!.dateValue() > $1.rawTimestamp!.dateValue()} )
-            self.listShortSortingMethod = 0
-        }
-        if isByLikes {
-            self.focusedFullCommunityShorts = self.focusedFullCommunityShorts.sorted(by: {$0.likeCount! > $1.likeCount!} )
-            self.listShortSortingMethod = 1
-        }
-    }
     
     func convertTitleIntToString(int : Int) -> String {
         switch int {

@@ -13,6 +13,9 @@ import SwiftUI
 class CreateShortController : ObservableObject {
     @AppStorage("isSignedIn") private var isSignedIn = false
     
+    // if the create short sheet is showing
+    @Published var isCreateShortSheetShowing = false
+    
     // State
     @Published var shortContent: String = ""
     let characterLimit = 2500

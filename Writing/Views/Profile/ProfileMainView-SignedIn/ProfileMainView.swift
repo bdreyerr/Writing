@@ -216,10 +216,11 @@ struct ProfileMainView: View {
                                     HStack {
                                         Menu {
                                             Button(action: {
-                                                profileController.sortShorts(byDateWritten: true, byNumLikes: false, byPromptDate: false)
+                                                profileController.shortsSortingMethod = 0
+                                                profileController.switchSortingMethod()
                                             }) {
                                                 HStack {
-                                                    Text("Recent")
+                                                    Text("Date Written")
                                                         .font(.system(size: 13, design: .serif))
                                                     
                                                     Image(systemName: "clock")
@@ -228,10 +229,11 @@ struct ProfileMainView: View {
                                                 
                                             }
                                             Button(action: {
-                                                profileController.sortShorts(byDateWritten: false, byNumLikes: true, byPromptDate: false)
+                                                profileController.shortsSortingMethod = 1
+                                                profileController.switchSortingMethod()
                                             }) {
                                                 HStack {
-                                                    Text("Best")
+                                                    Text("Like Count")
                                                         .font(.system(size: 13, design: .serif))
                                                     
                                                     Image(systemName: "crown")
@@ -239,7 +241,8 @@ struct ProfileMainView: View {
                                                 }
                                             }
                                             Button(action: {
-                                                profileController.sortShorts(byDateWritten: false, byNumLikes: false, byPromptDate: true)
+                                                profileController.shortsSortingMethod = 2
+                                                profileController.switchSortingMethod()
                                             }) {
                                                 HStack {
                                                     Text("Prompt Date")
@@ -252,10 +255,10 @@ struct ProfileMainView: View {
                                         } label: {
                                             HStack {
                                                 if profileController.shortsSortingMethod == 0 {
-                                                    Text("Recent")
+                                                    Text("Date Written")
                                                         .font(.system(size: 13, design: .serif))
                                                 } else if profileController.shortsSortingMethod == 1 {
-                                                    Text("Best")
+                                                    Text("Like Count")
                                                         .font(.system(size: 13, design: .serif))
                                                 } else if profileController.shortsSortingMethod == 2 {
                                                     Text("Prompt date")
@@ -289,7 +292,7 @@ struct ProfileMainView: View {
                                         .frame(width: 110, height: 35)
                                         .overlay {
                                             HStack {
-                                                Text("Older")
+                                                Text("More")
                                                     .font(.system(size: 14, design: .serif))
                                                     .bold()
                                                 

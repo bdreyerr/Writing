@@ -11,7 +11,7 @@ import Combine
 struct CreateResponseView: View {
     @AppStorage("isTabBarShowing") private var isTabBarShowing = true
     
-    @StateObject var createShortController = CreateShortController()
+    @EnvironmentObject var createShortController : CreateShortController
     @EnvironmentObject var userController: UserController
     @EnvironmentObject var homeController: HomeController
     @EnvironmentObject var profileController: ProfileController
@@ -22,11 +22,11 @@ struct CreateResponseView: View {
             ScrollView(showsIndicators: false) {
                 // Show focused prompt or a fallback if it's not loaded
                 if let focusedPrompt = homeController.focusedPrompt {
-                    if let focusedImage = homeController.focusedPromptImage {
-                        TodaysPrompt(image: focusedImage, prompt: focusedPrompt.promptRawText!, tags: focusedPrompt.tags!, likeCount: focusedPrompt.likeCount!, responseCount: focusedPrompt.shortCount!, includeResponseCount: true)
+                    if homeController.focusedPromptImage != nil {
+                        TodaysPrompt(image: nil, prompt: focusedPrompt.promptRawText!, tags: focusedPrompt.tags!, likeCount: focusedPrompt.likeCount!, responseCount: focusedPrompt.shortCount!, includeResponseCount: true)
                     }
                 } else {
-                    TodaysPrompt(imageText: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike"], likeCount: 173, responseCount: 47, includeResponseCount: true)
+                    TodaysPrompt(imageText: "missingPrompt", prompt: "We couldn't load the prompt for the date you selected, sorry about that, please try a different date!", tags: ["Awkward"], likeCount: 0, responseCount: 0, includeResponseCount: true)
                 }
                 
                 // TODO(bendreyer): have a couple different openers here (once upon a time, in a land far far away, etc..) and pick one at random
@@ -69,6 +69,8 @@ struct CreateResponseView: View {
                                         
                                         // refresh user stats
                                         userController.retrieveUserFromFirestore(userId: user.id!)
+                                        
+                                        createShortController.isCreateShortSheetShowing = false
                                     }
                                 } else {
                                     print("prompt not available")
@@ -88,16 +90,15 @@ struct CreateResponseView: View {
                 Spacer()
             }
         }
+        .padding(.top, 20)
         .padding(.leading, 20)
         .padding(.trailing, 20)
-        .onAppear {
-            self.isTabBarShowing = false
-        }
-        .onDisappear {
-            self.isTabBarShowing = true
-        }
-        .environmentObject(createShortController)
-        
+//        .onAppear {
+//            self.isTabBarShowing = false
+//        }
+//        .onDisappear {
+//            self.isTabBarShowing = true
+//        }
     }
 }
 
