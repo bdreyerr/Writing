@@ -54,10 +54,14 @@ struct ProfileChangePhotoView: View {
             })
             Section {
                 Button("Confirm") {
-                    // Function to post data to Firebase Storage
-                    // we can assume data is not nill because the button is disabled if it is.
-                    userController.uploadProfilePicture(data: self.data!)
-                    profileController.isChangePhotoSheetShowing = false
+                    if let rateLimit = userController.processFirestoreWrite() {
+                        print(rateLimit)
+                    } else {
+                        // Function to post data to Firebase Storage
+                        // we can assume data is not nill because the button is disabled if it is.
+                        userController.uploadProfilePicture(data: self.data!)
+                        profileController.isChangePhotoSheetShowing = false
+                    }
                 }.disabled(self.data == nil)
             }
         }

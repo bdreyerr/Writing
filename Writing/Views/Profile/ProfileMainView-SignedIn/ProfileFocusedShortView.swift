@@ -44,12 +44,12 @@ struct ProfileFocusedShortView: View {
                             if let image = userController.usersProfilePicture {
                                 Image(uiImage: image)
                                     .resizable()
-                                    .clipShape(Circle())
+                                    .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                     .frame(width: 40, height: 40)
                             } else {
                                 Image("not-signed-in-profile")
                                     .resizable()
-                                    .clipShape(Circle())
+                                    .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                     .frame(width: 40, height: 40)
                             }
                             
@@ -153,24 +153,27 @@ struct ProfileFocusedShortView: View {
                                 .alert("Are you sure?", isPresented: $profileController.isConfirmShortDelteAlertShowing) {
                                     
                                     Button("Confirm") {
-                                        if let user = userController.user {
-                                            Task {
-                                                profileController.deleteShort()
-                                                
-                                                // repull the shorts for the user in profile
-                                                profileController.retrieveShorts()
-                                                
-                                                // re-pull the user in user controller
-                                                print("right before calling refresh user")
-                                                userController.retrieveUserFromFirestore(userId: user.id!)
-                                                
-                                                // clear the deleted short from the cache in home controller
-                                                if let short = profileController.focusedShort {
-                                                    homeController.clearEditedOrRemovedShortFromCache(shortDate: short.date!)
+                                        if let rateLimit = userController.processFirestoreWrite() {
+                                            print(rateLimit)
+                                        } else {
+                                            if let user = userController.user {
+                                                Task {
+                                                    profileController.deleteShort()
+                                                    
+                                                    // repull the shorts for the user in profile
+                                                    profileController.retrieveShorts()
+                                                    
+                                                    // re-pull the user in user controller
+                                                    userController.retrieveUserFromFirestore(userId: user.id!)
+                                                    
+                                                    // clear the deleted short from the cache in home controller
+                                                    if let short = profileController.focusedShort {
+                                                        homeController.clearEditedOrRemovedShortFromCache(shortDate: short.date!)
+                                                    }
                                                 }
                                             }
-                                        }
                                     }
+                                }
                                     
                                     Button("Cancel", role: .cancel) { }
                                 }

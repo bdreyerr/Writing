@@ -96,7 +96,6 @@ struct FreeWriteFullListView: View {
                             ForEach(freeWriteController.freeWrites) { freeWrite in
                                 FreeWriteEntryPreviewView(freeWrite: freeWrite)
                                     .onTapGesture {
-                                        print("it happened, clicked")
                                         freeWriteController.focusFreeWrite(freeWrite: freeWrite)
                                     }
                             }
@@ -104,7 +103,6 @@ struct FreeWriteFullListView: View {
                             ForEach(freeWriteController.freeWritesOldest) { freeWrite in
                                 FreeWriteEntryPreviewView(freeWrite: freeWrite)
                                     .onTapGesture {
-                                        print("it happened, clicked")
                                         freeWriteController.focusFreeWrite(freeWrite: freeWrite)
                                     }
                             }
@@ -150,7 +148,7 @@ struct FreeWriteFullListView: View {
                                 .font(.system(size: 15, design: .serif))
                                 .frame(maxWidth: .infinity, alignment: .bottom)
                                 .opacity(0.8)
-                            Text("version 1.1 june 2024")
+                            Text("version 1.1")
                                 .font(.system(size: 11, design: .serif))
                                 .frame(maxWidth: .infinity, alignment: .bottom)
                                 .opacity(0.8)

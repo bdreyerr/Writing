@@ -19,10 +19,10 @@ struct ProfileSettingsView: View {
     var body: some View {
         VStack {
             List {
-                Section(header: Text("Dreamrs")) {
+                Section(header: Text("The Daily Short")) {
                     Link("Terms of Use (EULA)", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
                     
-                    Link("Privacy Policy", destination: URL(string: "https://sites.google.com/view/dreamboard-privacy-policy/home")!)
+                    Link("Privacy Policy", destination: URL(string: "https://sites.google.com/view/the-daily-short-privacy-policy/home")!)
                 }
                 
                 if let user = userController.user {

@@ -20,7 +20,7 @@ struct FreeWriteSingleEntryView: View {
                         if let image = userController.usersProfilePicture {
                             Image(uiImage: image)
                                 .resizable()
-                                .clipShape(Circle())
+                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                 .frame(width: 40, height: 40)
                         } else {
                             Image("not-signed-in-profile")
@@ -51,7 +51,7 @@ struct FreeWriteSingleEntryView: View {
                     
                     // Title
                     Text(freeWrite.title!)
-                        .font(.system(size: 20, design: .serif))
+                        .font(.system(size: 16, design: .serif))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .bold()
                     
@@ -59,7 +59,7 @@ struct FreeWriteSingleEntryView: View {
                     ScrollView(showsIndicators: false) {
                         
                         Text(freeWrite.content!)
-                            .font(.system(size: 16, design: .serif))
+                            .font(.system(size: 12, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         
@@ -102,20 +102,22 @@ struct FreeWriteSingleEntryView: View {
                             //                            .frame(maxWidth: .infinity, alignment: .leading)
                             .alert("Are you sure?", isPresented: $freeWriteController.isConfirmDeleteAlertShowing) {
                                 Button("Confirm") {
-                                    // Remove free write entry
-                                    if let user = userController.user {
-                                        Task {
-                                            freeWriteController.deleteFreeWrite(freeWriteCount: user.freeWriteCount!, averageWordCountBeforeDeletion: user.freeWriteAverageWordCount!)
-                                            
-                                            // re-pull the freewrites for the user
-                                            freeWriteController.retrieveFreeWrites()
-                                            
-                                            // re-pull the user in user controller
-                                            print("right before calling refresh user")
-                                            userController.retrieveUserFromFirestore(userId: user.id!)
-                                        }
+                                    if let rateLimit = userController.processFirestoreWrite() {
+                                        print(rateLimit)
+                                    } else {
                                         
-                                        print("right after the task in the view for delete")
+                                        // Remove free write entry
+                                        if let user = userController.user {
+                                            Task {
+                                                freeWriteController.deleteFreeWrite(freeWriteCount: user.freeWriteCount!, averageWordCountBeforeDeletion: user.freeWriteAverageWordCount!)
+                                                
+                                                // re-pull the freewrites for the user
+                                                freeWriteController.retrieveFreeWrites()
+                                                
+                                                // re-pull the user in user controller
+                                                userController.retrieveUserFromFirestore(userId: user.id!)
+                                            }
+                                        }
                                     }
                                 }
                                 

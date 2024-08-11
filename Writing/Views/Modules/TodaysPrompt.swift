@@ -29,7 +29,7 @@ struct TodaysPrompt: View {
                 .resizable()
                 .frame(maxWidth: 400, maxHeight: 370)
         } else {
-            Image(imageText ?? "prompt-knight")
+            Image(imageText ?? "")
                 .resizable()
                 .frame(maxWidth: 400, maxHeight: 300)
         }
@@ -72,7 +72,6 @@ struct TodaysPrompt: View {
                         if let prompt = homeController.focusedPrompt {
                             userController.likePrompt(promptDate: prompt.date!)
                         }
-                        
                     }
                 }) {
                     ZStack {
@@ -195,7 +194,7 @@ struct TodaysPrompt: View {
 }
 
 #Preview {
-    TodaysPrompt(imageText: "prompt-knight", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike", "Buboy"], likeCount: 173, responseCount: 47, includeResponseCount: true)
+    TodaysPrompt(imageText: "", prompt: "A seasoned knight and his loyal squire discover the scene of a crime. They find a ransacked carriage and dwarf who cannot walk. They discuss what action to take next.", tags: ["Fantasy", "ThronesLike", "Buboy"], likeCount: 173, responseCount: 47, includeResponseCount: true)
         .environmentObject(HomeController())
         .environmentObject(UserController())
 }

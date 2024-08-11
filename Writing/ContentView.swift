@@ -53,6 +53,7 @@ struct ContentView: View {
                     userController.retrieveUserFromFirestore(userId: user.uid)
                     userController.retrieveUsersProfilePicture(userId: user.uid)
                     profileController.retrieveShorts()
+                    homeController.retrieveSignedInUsersShort()
                 } else {
                     print("no auth user yet lol nice try")
                 }

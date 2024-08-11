@@ -54,8 +54,14 @@ struct HomeMainView: View {
                         )
                         .labelsHidden()
                         .onChange(of: homeController.promptSelectedDate) {
-                            homeController.retrievePrompt()
-                            homeController.retrieveSignedInUsersShort()
+                            if let rateLimit = userController.processFirestoreWrite() {
+                                print(rateLimit)
+                            } else {
+                                homeController.retrievePrompt()
+                                homeController.retrieveSignedInUsersShort()
+                                homeController.focusedTopCommunityShorts = []
+//                                homeController.t
+                            }
                         }
                         
                     }
@@ -95,7 +101,7 @@ struct HomeMainView: View {
                             .font(.system(size: 15, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .bottom)
                             .opacity(0.8)
-                        Text("version 1.1 june 2024")
+                        Text("version 1.1")
                             .font(.system(size: 11, design: .serif))
                             .frame(maxWidth: .infinity, alignment: .bottom)
                             .opacity(0.8)
@@ -122,8 +128,6 @@ struct HomeMainView: View {
             SingleCommunityResponseView()
         }
         .onAppear {
-            print("testing, getting called right now in on Appear")
-            
             // We aren't worried about calling these functions on each view appear, because they retrieve cached data. We're not making a firestore read everytime the view re-appears, just making sure the data on screen is the most up to date.
             
             // Retrieve the prompt for the selected day
@@ -147,17 +151,17 @@ struct CommunityResponses : View {
     @EnvironmentObject var homeController: HomeController
     @EnvironmentObject var userController: UserController
     
-    @State private var areTopCommentsShowing: Bool = false
+//    @State public var areTopCommentsShowing: Bool = false
     
     var body : some View {
         VStack {
             Button(action: {
-                if (!areTopCommentsShowing) {
+                if (!homeController.areTopCommentsShowing) {
                     if let user = userController.user {
                         homeController.retrieveTopCommunityShorts(blockedUsers: user.blockedUsers ?? [:])
                     }
                 }
-                areTopCommentsShowing.toggle()
+                homeController.areTopCommentsShowing.toggle()
             }) {
                 if let _ = userController.user {
                     HStack {
@@ -165,7 +169,7 @@ struct CommunityResponses : View {
                             .font(.system(size: 14, design: .serif))
                             .bold()
                         
-                        if (areTopCommentsShowing) {
+                        if (homeController.areTopCommentsShowing) {
                             Image(systemName: "chevron.up")
                                 .resizable()
                                 .frame(width: 18, height: 10)
@@ -185,7 +189,7 @@ struct CommunityResponses : View {
             .buttonStyle(PlainButtonStyle())
             .frame(maxWidth: .infinity, alignment: .center)
             
-            if (areTopCommentsShowing) {
+            if (homeController.areTopCommentsShowing) {
                 VStack {
                     // if there's no shorts yet
                     if (homeController.focusedTopCommunityShorts.isEmpty) {

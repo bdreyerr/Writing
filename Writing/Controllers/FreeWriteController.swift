@@ -81,7 +81,7 @@ class FreeWriteController : ObservableObject {
             // Start async task to read FreeWrites for user from firestore
             Task {
                 do {
-                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: selectedSortingMethod == 0 ? true : false).limit(to: 6).getDocuments()
+                    let querySnapshot = try await db.collection("freeWrites").whereField("authorId", isEqualTo: user.uid).order(by: "rawTimestamp", descending: selectedSortingMethod == 0 ? true : false).limit(to: 8).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
@@ -103,7 +103,7 @@ class FreeWriteController : ObservableObject {
                         // get the last doc (for pagination)
                         guard let lastSnapshot = querySnapshot.documents.last else {
                             // The collection is empty.
-                            print("error getting the last document snapshot")
+//                            print("error getting the last document snapshot")
                             return
                         }
                         
@@ -148,7 +148,7 @@ class FreeWriteController : ObservableObject {
                         // get the last doc (for pagination)
                         guard let lastSnapshot = querySnapshot.documents.last else {
                             // The collection is empty.
-                            print("error getting the last document snapshot")
+//                            print("error getting the last document snapshot")
                             return
                         }
                         
@@ -185,7 +185,7 @@ class FreeWriteController : ObservableObject {
                 // Write the Free Write to Firestore
                 do {
                     try db.collection("freeWrites").addDocument(from: freeWrite)
-                    print("free write written to firestore")
+//                    print("free write written to firestore")
                 } catch let error {
                     print("error writing new free write to firestore: ", error.localizedDescription)
                 }
@@ -201,7 +201,7 @@ class FreeWriteController : ObservableObject {
                         "freeWriteCount": FieldValue.increment(Int64(1)),
                         "freeWriteAverageWordCount": newWordCountAverage
                     ])
-                    print("updated stats for user")
+//                    print("updated stats for user")
                     
                     // Reset view vars
                     DispatchQueue.main.async {
@@ -254,7 +254,7 @@ class FreeWriteController : ObservableObject {
                         "content": self.contentText,
                         "wordCount": self.wordCount
                     ])
-                    print("free write updated in firestore")
+//                    print("free write updated in firestore")
                     
                     // Edit the user's average word count
                     
@@ -270,14 +270,14 @@ class FreeWriteController : ObservableObject {
                     // New Average word count = W - (Wold / n) + (Wnew / n)
                     let newAverageWordCount = freeWriteOldAverageWordCount - (wordCountBeforeEditing / freeWriteCount) + (wordCountAfterEditing / freeWriteCount)
                     
-                    print("word count for the old one: ", wordCountBeforeEditing)
-                    print("word count for the new one: ", wordCountAfterEditing)
+//                    print("word count for the old one: ", wordCountBeforeEditing)
+//                    print("word count for the new one: ", wordCountAfterEditing)
                     do {
                         let docRef = db.collection("users").document(user.uid)
                         docRef.updateData([
                             "freeWriteAverageWordCount": newAverageWordCount
                         ])
-                        print("updated stats for user")
+//                        print("updated stats for user")
                         
                         DispatchQueue.main.async {
                             self.titleText = ""
@@ -301,7 +301,7 @@ class FreeWriteController : ObservableObject {
                 Task {
                     do {
                         try await db.collection("freeWrites").document(freeWrite.id!).delete()
-                        print("free write successfully removed!")
+//                        print("free write successfully removed!")
                     } catch let error {
                         print("error deleting from firestore: ", error.localizedDescription)
                     }
@@ -330,7 +330,7 @@ class FreeWriteController : ObservableObject {
                             "freeWriteCount": FieldValue.increment(Int64(-1)),
                             "freeWriteAverageWordCount": Wnew
                         ])
-                        print("updated stats for user")
+//                        print("updated stats for user")
                         
                         DispatchQueue.main.async {
                             // Clear the controller vars

@@ -102,7 +102,6 @@ struct CreateShortOrYourExistingShort: View {
                             } else {
                                 
                                 if createShortController.shortContent == "" {
-                                    print("content empty")
                                     return
                                 }
                                 

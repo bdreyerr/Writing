@@ -52,9 +52,6 @@ struct ProfileMainView: View {
                             
                             
                             HStack {
-                                // Share Profile
-                                Image(systemName: "square.and.arrow.up")
-                                    .font(.title3)
                                 
                                 // Settings buttons
                                 Button(action: {
@@ -324,7 +321,7 @@ struct ProfileMainView: View {
                                     .font(.system(size: 15, design: .serif))
                                     .frame(maxWidth: .infinity, alignment: .bottom)
                                     .opacity(0.8)
-                                Text("version 1.1 june 2024")
+                                Text("version 1.1")
                                     .font(.system(size: 11, design: .serif))
                                     .frame(maxWidth: .infinity, alignment: .bottom)
                                     .opacity(0.8)

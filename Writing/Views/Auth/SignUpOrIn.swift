@@ -53,8 +53,12 @@ struct SignUpOrIn: View {
                         request.nonce = authController.sha256(nonce)
                     },
                     onCompletion: { result in
-                        Task {
-                            authController.appleSignInButtonOnCompletion(result: result)
+                        if let rateLimit = userController.processFirestoreWrite() {
+                            print(rateLimit)
+                        } else {
+                            Task {
+                                authController.appleSignInButtonOnCompletion(result: result)
+                            }
                         }
                     }
                 )
@@ -64,7 +68,11 @@ struct SignUpOrIn: View {
                 
                 // Sign in with Google Button
                 Button(action: {
-                    authController.signInWithGoogle()
+                    if let rateLimit = userController.processFirestoreWrite() {
+                        print(rateLimit)
+                    } else {
+                        authController.signInWithGoogle()
+                    }
                 }) {
                     HStack {
                         Image("google_logo")

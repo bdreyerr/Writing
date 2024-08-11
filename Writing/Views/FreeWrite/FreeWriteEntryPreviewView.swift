@@ -25,7 +25,7 @@ struct FreeWriteEntryPreviewView: View {
                     HStack {
                         VStack {
                             Text("\(calendar.component(.day, from: freeWrite.rawTimestamp!.dateValue()))")
-                                .font(.system(size: 18, design: .serif))
+                                .font(.system(size: 14, design: .serif))
                             
                             Text(self.getMonthString(from: freeWrite.rawTimestamp!.dateValue()))
                                 .font(.system(size: 12, design: .serif))
@@ -37,7 +37,7 @@ struct FreeWriteEntryPreviewView: View {
                         
                         VStack {
                             Text(freeWrite.title!)
-                                .font(.system(size: 18, design: .serif))
+                                .font(.system(size: 16, design: .serif))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             HStack {

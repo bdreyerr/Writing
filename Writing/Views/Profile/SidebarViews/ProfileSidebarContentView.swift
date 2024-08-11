@@ -64,6 +64,15 @@ struct ProfileSidebarContentView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 10)
                     
+                    // About the App
+                    NavigationLink(destination: ProfileAboutTheAppView()) {
+                        Image(systemName: "info.circle")
+                            .font(.title3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
                     
                     // Settings
                     Button(action: {
@@ -118,6 +127,15 @@ struct ProfileSidebarContentView: View {
                     // Notifications
                     NavigationLink(destination: ProfileNotificationsView()) {
                         Text("Notifications")
+                            .font(.system(size: 17, design: .serif))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+                    
+                    // Notifications
+                    NavigationLink(destination: ProfileAboutTheAppView()) {
+                        Text("About the App")
                             .font(.system(size: 17, design: .serif))
                     }
                     .buttonStyle(PlainButtonStyle())

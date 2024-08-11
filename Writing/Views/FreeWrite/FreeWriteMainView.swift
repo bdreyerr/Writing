@@ -50,7 +50,7 @@ struct FreeWriteMainView: View {
                             HStack {
                                 VStack {
                                     Text("\(userController.user?.freeWriteCount ?? 0)")
-                                        .font(.system(size: 20, design: .serif))
+                                        .font(.system(size: 16, design: .serif))
                                     
                                     Text("Entries")
                                         .font(.system(size: 12, design: .serif))
@@ -59,7 +59,7 @@ struct FreeWriteMainView: View {
                                 
                                 VStack {
                                     Text("\(userController.user?.freeWriteAverageWordCount ?? 0)")
-                                        .font(.system(size: 20, design: .serif))
+                                        .font(.system(size: 16, design: .serif))
                                     
                                     Text("Avg Word Count")
                                         .font(.system(size: 12, design: .serif))
@@ -84,7 +84,7 @@ struct FreeWriteMainView: View {
                             .padding(.bottom, 10)
                             
                             
-                            ForEach(freeWriteController.freeWrites.prefix(6), id: \.id) { freeWrite in
+                            ForEach(freeWriteController.freeWrites.prefix(8), id: \.id) { freeWrite in
                                 FreeWriteEntryPreviewView(freeWrite: freeWrite)
                                     .onTapGesture {
                                         freeWriteController.focusFreeWrite(freeWrite: freeWrite)
@@ -128,7 +128,7 @@ struct FreeWriteMainView: View {
                                     .font(.system(size: 15, design: .serif))
                                     .frame(maxWidth: .infinity, alignment: .bottom)
                                     .opacity(0.8)
-                                Text("version 1.1 june 2024")
+                                Text("version 1.1")
                                     .font(.system(size: 11, design: .serif))
                                     .frame(maxWidth: .infinity, alignment: .bottom)
                                     .opacity(0.8)

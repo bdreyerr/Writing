@@ -67,9 +67,9 @@ class AuthController : UIViewController, ObservableObject {
                 }
                 
                 guard let user = result?.user else { return }
-                print("user was signed in: ", user)
-                print(user.displayName ?? "display name")
-                print(user.email ?? "email")
+//                print("user was signed in: ", user)
+//                print(user.displayName ?? "display name")
+//                print(user.email ?? "email")
                 
                 // Split the display name into a first and last name, there's a space inbetween, usually
                 let names = user.displayName?.components(separatedBy: " ")
@@ -81,7 +81,7 @@ class AuthController : UIViewController, ObservableObject {
                         self.firstName = firstName
                         self.lastName = lastName
                     } else {
-                        print("The string does not contain a space")
+//                        print("The string does not contain a space")
                         self.firstName = user.displayName ?? ""
                         self.lastName = ""
                     }
@@ -148,7 +148,7 @@ class AuthController : UIViewController, ObservableObject {
                     fatalError("Invalid state: A login callback was received, but no login request was sent.")
                 }
                 
-                print("full name: ", appleIDCredential.fullName ?? "no name")
+//                print("full name: ", appleIDCredential.fullName ?? "no name")
                 
                 if let fullName = appleIDCredential.fullName {
                     if let firstName = fullName.givenName {
@@ -169,7 +169,7 @@ class AuthController : UIViewController, ObservableObject {
                 }
                 
                 guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                    print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+//                    print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                     return
                 }
                 
@@ -197,15 +197,8 @@ class AuthController : UIViewController, ObservableObject {
                         self.email = email
                     }
                     
-                    
-                    if let name = user.displayName {
-                        print("display name is: ", name)
-                    } else {
-                        print("no display name")
-                    }
-                    
-                    print("signed in with apple")
-                    print("\(String(describing: user.uid))")
+//                    print("signed in with apple")
+//                    print("\(String(describing: user.uid))")
                     
                     // Figure out if the user already has an account and is signing in
                     // or if this is their first time signing up. (check on email)
@@ -235,7 +228,7 @@ class AuthController : UIViewController, ObservableObject {
                             } else {
                                 // An existing user is signing back in
                                 if let user = Auth.auth().currentUser {
-                                    print("current user signed in ", user.uid)
+//                                    print("current user signed in ", user.uid)
                                 }
                                 self.isSignedIn = true
                                 // Set user defaults
@@ -273,7 +266,7 @@ class AuthController : UIViewController, ObservableObject {
               print("error deleting auth account: ", error)
           } else {
             // Account deleted.
-              print("auth accound deleted successfully")
+//              print("auth accound deleted successfully")
               self.logOut()
           }
         }

@@ -49,7 +49,7 @@ class ShortAnalysisController : ObservableObject {
                 
                 DispatchQueue.main.async {
                     if querySnapshot.isEmpty {
-                        print("no shorts returned, setting loading to false")
+//                        print("no shorts returned, setting loading to false")
                         self.isLoadingAnalysis = false
                         return
                     }
@@ -80,7 +80,7 @@ class ShortAnalysisController : ObservableObject {
             do {
                 let writingScores = try await getWritingScores(short: short)
                 
-                print("writing score is: ", writingScores)
+//                print("writing score is: ", writingScores)
                 let proseScore = writingScores[0]
                 let imageryScore = writingScores[1]
                 let flowScore = writingScores[2]
@@ -97,7 +97,7 @@ class ShortAnalysisController : ObservableObject {
                     // Write the Free Write to Firestore
                     do {
                         try db.collection("shortAnalysis").addDocument(from: shortAnalysis)
-                        print("short analysis written to firestore")
+//                        print("short analysis written to firestore")
                         
                         
                         // Get the new writing average for the user
@@ -155,10 +155,10 @@ class ShortAnalysisController : ObservableObject {
             
             // Split the string by comma, then convert to double
             
-            print("the string we get from openAI: ", content!)
+//            print("the string we get from openAI: ", content!)
             let splitArray = content!.components(separatedBy: " ")
             let doubleArray = splitArray.compactMap { Double($0) }
-            print("the array we made:", doubleArray)
+//            print("the array we made:", doubleArray)
             
             if doubleArray.count != 3 {
                 print("error getting three values for writing score")

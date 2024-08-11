@@ -23,7 +23,6 @@ struct ProfileMainViewNotSignedIn: View {
                     HStack {
                         HStack {
                             Button(action: {
-                                print("HELLO?")
                                 profileController.showSidebar = true
                             }) {
                                 Image(systemName: "text.justify")

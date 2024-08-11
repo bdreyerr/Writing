@@ -19,6 +19,7 @@
 		1A4B25F82C56ED52004A0A6E /* LocalNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4B25F72C56ED52004A0A6E /* LocalNotificationController.swift */; };
 		1A4B25FA2C56EE41004A0A6E /* ProfileNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4B25F92C56EE41004A0A6E /* ProfileNotificationsView.swift */; };
 		1A4B25FC2C56F6BC004A0A6E /* LocalNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4B25FB2C56F6BC004A0A6E /* LocalNotification.swift */; };
+		1A61D0F72C69409600331361 /* ProfileAboutTheAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A61D0F62C69409600331361 /* ProfileAboutTheAppView.swift */; };
 		1A6B04E12C45B1B1003CD787 /* ShortAnalysisLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6B04E02C45B1B1003CD787 /* ShortAnalysisLoadingView.swift */; };
 		1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */; };
 		1A6FDDB62C22197B00C8F5FD /* CreateShortController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */; };
@@ -42,7 +43,6 @@
 		1A7944E82C0E75E500757A7E /* ProfileMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944E72C0E75E500757A7E /* ProfileMainView.swift */; };
 		1A7944EB2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944EA2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift */; };
 		1A7944ED2C0E78FC00757A7E /* TodaysPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944EC2C0E78FC00757A7E /* TodaysPrompt.swift */; };
-		1A7944EF2C0E7E4300757A7E /* HistorySingleResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7944EE2C0E7E4300757A7E /* HistorySingleResponseView.swift */; };
 		1A8172BE2C1E20D6004217AA /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8172BD2C1E20D6004217AA /* HomeController.swift */; };
 		1A8172C02C1E20E2004217AA /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8172BF2C1E20E2004217AA /* ProfileController.swift */; };
 		1A8172C32C1F7DF4004217AA /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1A8172C22C1F7DF4004217AA /* GoogleSignIn */; };
@@ -91,6 +91,7 @@
 		1A4B25F72C56ED52004A0A6E /* LocalNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationController.swift; sourceTree = "<group>"; };
 		1A4B25F92C56EE41004A0A6E /* ProfileNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotificationsView.swift; sourceTree = "<group>"; };
 		1A4B25FB2C56F6BC004A0A6E /* LocalNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotification.swift; sourceTree = "<group>"; };
+		1A61D0F62C69409600331361 /* ProfileAboutTheAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAboutTheAppView.swift; sourceTree = "<group>"; };
 		1A6B04E02C45B1B1003CD787 /* ShortAnalysisLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortAnalysisLoadingView.swift; sourceTree = "<group>"; };
 		1A6FDDB32C20D6B800C8F5FD /* FreeWriteSignedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeWriteSignedOutView.swift; sourceTree = "<group>"; };
 		1A6FDDB52C22197B00C8F5FD /* CreateShortController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortController.swift; sourceTree = "<group>"; };
@@ -113,7 +114,6 @@
 		1A7944E72C0E75E500757A7E /* ProfileMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMainView.swift; sourceTree = "<group>"; };
 		1A7944EA2C0E77AE00757A7E /* SingleLimitedCommunityResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleLimitedCommunityResponse.swift; sourceTree = "<group>"; };
 		1A7944EC2C0E78FC00757A7E /* TodaysPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysPrompt.swift; sourceTree = "<group>"; };
-		1A7944EE2C0E7E4300757A7E /* HistorySingleResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySingleResponseView.swift; sourceTree = "<group>"; };
 		1A8172BD2C1E20D6004217AA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		1A8172BF2C1E20E2004217AA /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		1A8172C62C1F7EB4004217AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../DailyShort/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -183,6 +183,7 @@
 				1A3C05F02C2E76F200BDB3F2 /* ProfileChangePhotoView.swift */,
 				1A4B25F52C55B22F004A0A6E /* ProfileAdvertiseWithUsView.swift */,
 				1A4B25F92C56EE41004A0A6E /* ProfileNotificationsView.swift */,
+				1A61D0F62C69409600331361 /* ProfileAboutTheAppView.swift */,
 			);
 			path = SidebarViews;
 			sourceTree = "<group>";
@@ -199,14 +200,6 @@
 				1A71B27E2C3CA5D200C7E274 /* ProfileStreaksAndAwardsView.swift */,
 			);
 			path = "ProfileMainView-SignedIn";
-			sourceTree = "<group>";
-		};
-		1A7944D42C0C254B00757A7E /* History */ = {
-			isa = PBXGroup;
-			children = (
-				1A7944EE2C0E7E4300757A7E /* HistorySingleResponseView.swift */,
-			);
-			path = History;
 			sourceTree = "<group>";
 		};
 		1A7944D52C0C255A00757A7E /* Home */ = {
@@ -328,7 +321,6 @@
 				1A7944E92C0E779500757A7E /* Modules */,
 				1A7944E62C0E75D600757A7E /* Profile */,
 				1A7944D52C0C255A00757A7E /* Home */,
-				1A7944D42C0C254B00757A7E /* History */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -486,7 +478,6 @@
 				1A3C05F52C308A5A00BDB3F2 /* FreeWrite.swift in Sources */,
 				1A7944E12C0E759F00757A7E /* SingleCommunityResponseView.swift in Sources */,
 				1A3C05FB2C31E62E00BDB3F2 /* FreeWriteFullListView.swift in Sources */,
-				1A7944EF2C0E7E4300757A7E /* HistorySingleResponseView.swift in Sources */,
 				1A3C05F32C2F6E4B00BDB3F2 /* PromptSuggestion.swift in Sources */,
 				1AA1A4FE2C0BD15D009D9233 /* WritingApp.swift in Sources */,
 				1A6FDDB42C20D6B800C8F5FD /* FreeWriteSignedOutView.swift in Sources */,
@@ -508,6 +499,7 @@
 				1A71B2822C436A3D00C7E274 /* ShortAnalysisMainView.swift in Sources */,
 				1ABF09032C1CD5B200F2E6AF /* SignUpOrIn.swift in Sources */,
 				1ABF08F12C16B4F400F2E6AF /* ProfileEditProfileView.swift in Sources */,
+				1A61D0F72C69409600331361 /* ProfileAboutTheAppView.swift in Sources */,
 				1A7944E82C0E75E500757A7E /* ProfileMainView.swift in Sources */,
 				1A6FDDBE2C27799700C8F5FD /* ProfileSidebarContentView.swift in Sources */,
 				1ABF08ED2C165D9E00F2E6AF /* SideBarStack.swift in Sources */,

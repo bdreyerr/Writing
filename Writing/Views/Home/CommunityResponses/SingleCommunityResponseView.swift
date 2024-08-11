@@ -129,7 +129,7 @@ struct SingleCommunityResponseView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         HStack {
-                            
+                            // Like short button
                             Button(action: {
                                 // Rate Limiting check
                                 if let rateLimit = userController.processFirestoreWrite() {

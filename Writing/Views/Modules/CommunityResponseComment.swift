@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CommunityResponseComment: View {
     @EnvironmentObject var homeController: HomeController
+    @EnvironmentObject var userController: UserController
     
     var comment: ShortComment
     
@@ -56,19 +57,35 @@ struct CommunityResponseComment: View {
                         .buttonStyle(PlainButtonStyle())
                         .alert("Report Comment", isPresented: $homeController.isReportCommentAlertShowing) {
                             Button("Offensive") {
-                                homeController.reportComment(reportReason: "Offensive", commentId: self.comment.id!)
+                                if let rateLimit = userController.processFirestoreWrite() {
+                                    print(rateLimit)
+                                } else {
+                                    homeController.reportComment(reportReason: "Offensive", commentId: self.comment.id!)
+                                }
                             }
                             
                             Button("Harmful or Abusive") {
-                                homeController.reportComment(reportReason: "Harmful or Abusive", commentId: self.comment.id!)
+                                if let rateLimit = userController.processFirestoreWrite() {
+                                    print(rateLimit)
+                                } else {
+                                    homeController.reportComment(reportReason: "Harmful or Abusive", commentId: self.comment.id!)
+                                }
                             }
                             
                             Button("Graphic content") {
-                                homeController.reportComment(reportReason: "Graphic content", commentId: self.comment.id!)
+                                if let rateLimit = userController.processFirestoreWrite() {
+                                    print(rateLimit)
+                                } else {
+                                    homeController.reportComment(reportReason: "Graphic content", commentId: self.comment.id!)
+                                }
                             }
                             
                             Button("Poor Quality / Image does not match text") {
-                                homeController.reportComment(reportReason: "Poor Quality / Image does not match text", commentId: self.comment.id!)
+                                if let rateLimit = userController.processFirestoreWrite() {
+                                    print(rateLimit)
+                                } else {
+                                    homeController.reportComment(reportReason: "Poor Quality / Image does not match text", commentId: self.comment.id!)
+                                }
                             }
                             
                             Button("Cancel", role: .cancel) { }

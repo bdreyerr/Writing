@@ -153,13 +153,17 @@ struct ShortAnalysisMainView: View {
                             .alert("Are you sure?", isPresented: $shortAnalysisController.isConfirmCreateAnalysisAlertShowing) {
                                 
                                 Button("Confirm") {
-                                    Task {
-                                        if let user = userController.user {
-                                            if let short = profileController.focusedShort {
-                                                shortAnalysisController.createAnalysis(user: user, short: short)
-                                                
-                                                // Update the user vars (avg writing score got updated)
-//                                                userController.retrieveUserFromFirestore(userId: user.id!)
+                                    if let rateLimit = userController.processFirestoreWrite() {
+                                        print(rateLimit)
+                                    } else {
+                                        Task {
+                                            if let user = userController.user {
+                                                if let short = profileController.focusedShort {
+                                                    shortAnalysisController.createAnalysis(user: user, short: short)
+                                                    
+                                                    // Update the user vars (avg writing score got updated)
+                                                    //                                                userController.retrieveUserFromFirestore(userId: user.id!)
+                                                }
                                             }
                                         }
                                     }

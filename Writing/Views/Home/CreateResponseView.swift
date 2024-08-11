@@ -26,7 +26,7 @@ struct CreateResponseView: View {
                         TodaysPrompt(image: nil, prompt: focusedPrompt.promptRawText!, tags: focusedPrompt.tags!, likeCount: focusedPrompt.likeCount!, responseCount: focusedPrompt.shortCount!, includeResponseCount: true)
                     }
                 } else {
-                    TodaysPrompt(imageText: "missingPrompt", prompt: "We couldn't load the prompt for the date you selected, sorry about that, please try a different date!", tags: ["Awkward"], likeCount: 0, responseCount: 0, includeResponseCount: true)
+                    TodaysPrompt(image: nil, prompt: "We couldn't load the prompt for the date you selected, sorry about that, please try a different date!", tags: ["Awkward"], likeCount: 0, responseCount: 0, includeResponseCount: true)
                 }
                 
                 // TODO(bendreyer): have a couple different openers here (once upon a time, in a land far far away, etc..) and pick one at random
@@ -54,35 +54,39 @@ struct CreateResponseView: View {
                         if let rateLimit = userController.processFirestoreWrite() {
                             print(rateLimit)
                         } else {
-                            // Ensure user is available
-                            if let user = userController.user {
-                                // Ensure a prompt is focused
-                                if let prompt = homeController.focusedPrompt {
-                                    Task {
-                                        createShortController.submitShort(user: user, prompt: prompt)
-                                        
-                                        // refresh, so the just submitted short will show up back on home view
-                                        homeController.retrieveSignedInUsersShort()
-                                        
-                                        // refresh the profile view, so the new short shows up on the profile
-                                        profileController.retrieveShorts()
-                                        
-                                        // refresh user stats
-                                        userController.retrieveUserFromFirestore(userId: user.id!)
-                                        
-                                        createShortController.isCreateShortSheetShowing = false
+                            if createShortController.shortContent.isEmpty {
+                                return
+                            } else {
+                                // Ensure user is available
+                                if let user = userController.user {
+                                    // Ensure a prompt is focused
+                                    if let prompt = homeController.focusedPrompt {
+                                        Task {
+                                            createShortController.submitShort(user: user, prompt: prompt)
+                                            
+                                            // refresh, so the just submitted short will show up back on home view
+                                            homeController.retrieveSignedInUsersShort()
+                                            
+                                            // refresh the profile view, so the new short shows up on the profile
+                                            profileController.retrieveShorts()
+                                            
+                                            // refresh user stats
+                                            userController.retrieveUserFromFirestore(userId: user.id!)
+                                            
+                                            createShortController.isCreateShortSheetShowing = false
+                                        }
+                                    } else {
+                                        print("prompt not available")
                                     }
                                 } else {
-                                    print("prompt not available")
+                                    print("user not available")
                                 }
-                            } else {
-                                print("user not available")
                             }
                         }
                     }) {
                         Image(systemName: "arrowshape.right.circle")
                             .font(.callout)
-                            .foregroundStyle(Color.green)
+                            .foregroundStyle(createShortController.shortContent.count == 0 ? Color.gray : Color.green)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)

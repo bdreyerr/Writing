@@ -55,7 +55,7 @@ class LocalNotificationController : NSObject, ObservableObject, UNUserNotificati
             
             if pendingRequests.isEmpty {
                 // If this is the first time the app is loading the controller, and no notification has been scheduled yet. Then we should schedule one based on the default settings (Daily, 12 noon)
-                print("no pending notification requests, we are going to schedule one based on the selected settings")
+//                print("no pending notification requests, we are going to schedule one based on the selected settings")
                 
                 // build the date component based on the settings
                 var dateComponents = DateComponents()
@@ -76,7 +76,7 @@ class LocalNotificationController : NSObject, ObservableObject, UNUserNotificati
                                                           repeats: true)
                 await self.schedule(localNotification: localNotification)
             } else {
-                print("a notification is already scheduled")
+//                print("a notification is already scheduled")
             }
         }
     }
@@ -85,12 +85,12 @@ class LocalNotificationController : NSObject, ObservableObject, UNUserNotificati
     // called in the view when any of the following variables change:
     // - selectedCadence, timeOfDay, dayOfWeek
     func updateNotificationSettings() {
-        print("notif settings got updated")
+//        print("notif settings got updated")
         disableNotifications()
         
         // update the AppStorage String Date
         let dateString = dateFormatter.string(from: timeOfDay)
-        print("new timeOfDay: ", dateString)
+//        print("new timeOfDay: ", dateString)
         notificationTimeOfDay = dateString
         self.timeOfDay = dateFormatter.date(from: notificationTimeOfDay) ?? Date()
         
@@ -155,14 +155,14 @@ class LocalNotificationController : NSObject, ObservableObject, UNUserNotificati
     
     func getPendingRequests() async {
         pendingRequests = await notificationCenter.pendingNotificationRequests()
-        print("Pending: \(pendingRequests.count)")
+//        print("Pending: \(pendingRequests.count)")
     }
     
     func removeRequest(withIdentifier identifier: String) {
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
         if let index = pendingRequests.firstIndex(where: {$0.identifier == identifier}) {
             pendingRequests.remove(at: index)
-            print("Pending: \(pendingRequests.count)")
+//            print("Pending: \(pendingRequests.count)")
         }
     }
 }

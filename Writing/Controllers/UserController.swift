@@ -82,7 +82,7 @@ class UserController : ObservableObject {
     func logOut() {
         self.user = nil
         self.usersProfilePicture = nil
-        print("log out - local user")
+//        print("log out - local user")
     }
     
     func deleteUser() {
@@ -91,7 +91,7 @@ class UserController : ObservableObject {
             if let user = self.user {
                 do {
                     try await db.collection("users").document(user.id!).delete()
-                    print("Document successfully removed!")
+//                    print("Document successfully removed!")
                     DispatchQueue.main.async {
                         self.logOut()
                     }
@@ -100,13 +100,13 @@ class UserController : ObservableObject {
                     print("Error removing document: \(error)")
                 }
             } else {
-                print("no user and we can't delete it")
+//                print("no user and we can't delete it")
             }
         }
     }
     
     func changeName() {
-        print("starting name change")
+//        print("starting name change")
         // Rate limit
         
         if self.newFirstName != "" && self.newLastName != "" {
@@ -153,10 +153,10 @@ class UserController : ObservableObject {
             metadata.contentType = "image/jpeg"
             
             
-            print("the size of the data in bytes is: ", data.count)
+//            print("the size of the data in bytes is: ", data.count)
             // compress image
             if let newData = compressImageData(imageData: data, maxSizeInBytes: (1 * 1024 * 1024)) {
-                print("after compression function the size in bytes is: ", newData.count)
+//                print("after compression function the size in bytes is: ", newData.count)
                 
                 
                 imageRef.putData(newData, metadata: metadata) { (metadata, error) in
@@ -170,14 +170,14 @@ class UserController : ObservableObject {
                     self.retrieveUsersProfilePicture(userId: user.id!)
                 }
             } else {
-                print("new data was nuil")
+//                print("new data was nuil")
             }
         }
     }
     
     func compressImageData(imageData: Data, maxSizeInBytes: Int) -> Data? {
         
-        print("image data size: ", imageData.count)
+//        print("image data size: ", imageData.count)
         var compressionScaler = 1.0
         switch imageData.count {
         case 0..<500_000:
@@ -200,7 +200,7 @@ class UserController : ObservableObject {
         guard let image = UIImage(data: imageData) else { return nil }
         let newImageData = image.jpegData(compressionQuality: compressionScaler)
         
-        print("after compression, size is: ", newImageData!.count)
+//        print("after compression, size is: ", newImageData!.count)
         return newImageData
     }
     

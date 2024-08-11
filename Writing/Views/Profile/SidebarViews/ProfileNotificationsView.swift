@@ -21,11 +21,11 @@ struct ProfileNotificationsView: View {
                 .onChange(of: localNotificationController.areNotificationsEnabled) {
                     if localNotificationController.areNotificationsEnabled {
                         // enable
-                        print("enable notifs")
+//                        print("enable notifs")
                         localNotificationController.enableNotifications()
                     } else {
                         // disable
-                        print("disable notifs")
+//                        print("disable notifs")
                         localNotificationController.disableNotifications()
                     }
                 }

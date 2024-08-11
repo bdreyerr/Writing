@@ -9,6 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
+import OpenAI
 
 class HomeController : ObservableObject {
     // The day in focus, determines which prompt should be shown.
@@ -40,6 +41,7 @@ class HomeController : ObservableObject {
     // Cached full community shorts (sorted by date)
     var cachedFullCommunityShorts: [String : [Short]] = [:]
     
+    // same as above but sorted by like count
     @Published var focusedFullCommunityShortsByLikeCount: [Short] = []
     var cachedFullCommunityShortsByLikeCount: [String : [Short]] = [:]
     
@@ -62,12 +64,12 @@ class HomeController : ObservableObject {
     // Profile Picutres for community shorts (cached on device, they're small tho)
     @Published var communityProfilePictures: [String : UIImage] = [:]
     
-    // Tracks the likes a user assigns to prompts throughout their app session. Will reset when the app is closed and re-opened.
-    @Published var likedPrompts: [String : Bool] = [:]
+    // Tracks the likes a user assigns to prompts throughout their app session.
+    //    @Published var likedPrompts: [String : Bool] = [:]
     
-    // Tracks the likes a user assigns to shorts throughout their app session. Will reset when the app is closed and re-opened. (TODO): can think about storing the likes in fb for better quality of life.
+    // Tracks the likes a user assigns to shorts throughout their app session.
     // [Id : Bool] - if the id = true in the map, that short has been liked.
-    @Published var likedShorts: [String : Bool] = [:]
+    //    @Published var likedShorts: [String : Bool] = [:]
     
     // tracks the text when a user is creating a comment
     @Published var commentText: String = ""
@@ -93,6 +95,10 @@ class HomeController : ObservableObject {
     @Published var isReportCommentAlertShowing: Bool = false
     @Published var areNoShortsLeftToLoad: Bool = false
     @Published var areNoCommentsLeftToLoad: Bool = false
+    @Published var areTopCommentsShowing: Bool = false
+    
+    // OpenAI Config
+    let openAI = OpenAI(configuration: OpenAI.Configuration(token: Secrets().openAIKey, timeoutInterval: 60.0))
     
     // Firestore
     let db = Firestore.firestore()
@@ -113,6 +119,7 @@ class HomeController : ObservableObject {
         
         self.focusedPrompt = nil
         self.focusedPromptImage = nil
+        self.areTopCommentsShowing = false
         
         
         // Get the date in YYYYMMDD format.
@@ -203,7 +210,7 @@ class HomeController : ObservableObject {
         if let short = self.cachedUserShorts[dateIntString] {
             DispatchQueue.main.async {
                 self.usersFocusedShort = short
-                print("assigned previously cached user short - skipping firebase read")
+//                print("assigned previously cached user short - skipping firebase read")
             }
             return
         }
@@ -240,7 +247,7 @@ class HomeController : ObservableObject {
     func getCommunityAuthorsProfilePicutre(authorId: String) {
         // check if the author's PP is already cached
         if let _ = self.communityProfilePictures[authorId] {
-            print("profile picture already cached")
+//            print("profile picture already cached")
             return
         }
         
@@ -251,7 +258,7 @@ class HomeController : ObservableObject {
         
         Task {
             // download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-            print("calling firestore for profile picture maaan")
+//            print("calling firestore for profile picture maaan")
             imageRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
                 if let error = error {
                     print("error downloading profile picture from storage: ", error.localizedDescription)
@@ -284,7 +291,7 @@ class HomeController : ObservableObject {
                         let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: "likeCount", descending: true).limit(to: 3).getDocuments()
                         DispatchQueue.main.async {
                             if querySnapshot.isEmpty {
-                                print("no matching resposnes were found")
+//                                print("no matching resposnes were found")
                                 return
                             }
                             
@@ -297,12 +304,12 @@ class HomeController : ObservableObject {
                                     }
                                     
                                     self.focusedTopCommunityShorts.append(short)
-                                    print("checking if the short has an id: ", short.id ?? "nil id lol")
+//                                    print("checking if the short has an id: ", short.id ?? "nil id lol")
                                     
                                     // get the profile picture for the author of the short
                                     self.getCommunityAuthorsProfilePicutre(authorId: short.authorId!)
                                 } else {
-                                    print("cant case document to short")
+//                                    print("cant cast document to short")
                                 }
                             }
                             
@@ -316,7 +323,7 @@ class HomeController : ObservableObject {
                 }
             }
         } else {
-            print("no focused prompt yet")
+//            print("no focused prompt yet")
             return
         }
     }
@@ -357,7 +364,7 @@ class HomeController : ObservableObject {
             }
             
             
-            print("no cache found - full community shorts")
+//            print("no cache found - full community shorts")
             Task {
                 do {
                     let querySnapshot = try await self.db.collection("shorts").whereField("date", isEqualTo: prompt.date!).order(by: self.selectedSortingMethod == 0 ? "rawTimestamp" : "likeCount", descending: true).limit(to: 8).getDocuments()
@@ -386,7 +393,7 @@ class HomeController : ObservableObject {
                                 // get the profile picture for the author of the short
                                 self.getCommunityAuthorsProfilePicutre(authorId: short.authorId!)
                             } else {
-                                print("cant case document to short")
+//                                print("cant cast document to short")
                             }
                         }
                         
@@ -420,7 +427,7 @@ class HomeController : ObservableObject {
                 }
             }
         } else {
-            print("no focused prompt")
+//            print("no focused prompt")
         }
     }
     
@@ -433,7 +440,7 @@ class HomeController : ObservableObject {
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
-                            print("no matching resposnes were found")
+//                            print("no matching resposnes were found")
                             self.areNoShortsLeftToLoad = true
                             return
                         }
@@ -456,7 +463,7 @@ class HomeController : ObservableObject {
                                 // get the profile picture for the author of the short
                                 self.getCommunityAuthorsProfilePicutre(authorId: short.authorId!)
                             } else {
-                                print("cant case document to short")
+//                                print("cant cast document to short")
                             }
                         }
                         
@@ -523,13 +530,13 @@ class HomeController : ObservableObject {
             }
             
             Task {
-                print("checking firestore for comments")
+//                print("checking firestore for comments")
                 do {
                     let querySnapshot = try await self.db.collection("shortComments").whereField("parentShortId", isEqualTo: short.id!).order(by: "rawTimestamp", descending: true).limit(to: 8).getDocuments()
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
-                            print("no matching comments found")
+//                            print("no matching comments found")
                             self.cachedShortComments[short.id!] = []
                             self.areNoCommentsLeftToLoad = true
                             return
@@ -569,7 +576,7 @@ class HomeController : ObservableObject {
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
-                            print("no matching comments found")
+//                            print("no matching comments found")
                             self.areNoCommentsLeftToLoad = true
                             return
                         }
@@ -593,7 +600,7 @@ class HomeController : ObservableObject {
                         for comment in comments {
                             self.focusedShortComments.append(comment)
                         }
-//                        self.focusedShortComments = comments
+                        //                        self.focusedShortComments = comments
                         self.cachedShortComments[short.id!] = self.focusedShortComments
                     }
                 } catch let error {
@@ -605,7 +612,7 @@ class HomeController : ObservableObject {
     
     // called when a user clicks on a short preview, opening the full short view
     func focusSingleShort(short: Short, isOwned: Bool) {
-        print("focusing a single short")
+//        print("focusing a single short")
         self.focusedSingleShort = nil
         self.focusedSingleShort = short
         self.isFocusedShortOwned = isOwned
@@ -711,7 +718,7 @@ class HomeController : ObservableObject {
                         }
                         
                         // update users cached shorts
-                        if let usersCachedShort = self.cachedUserShorts[short.date!] {
+                        if let _ = self.cachedUserShorts[short.date!] {
                             self.cachedUserShorts[short.date!]!.likeCount! += isLikeConcurrent ? 1 : -1
                         }
                         
@@ -785,7 +792,7 @@ class HomeController : ObservableObject {
                 // write the short comment to firestore
                 do {
                     try db.collection("shortComments").addDocument(from: shortComment)
-                    print("short Comment written to firestore")
+//                    print("short Comment written to firestore")
                 } catch let error {
                     print("error writing comment to firestore: ", error.localizedDescription)
                 }
@@ -875,13 +882,13 @@ class HomeController : ObservableObject {
                         "reportingUserId": reportingUserId,
                         "date": date
                     ])
-                    print("short report successfuly filed into firestore: ", ref.documentID)
+//                    print("short report successfuly filed into firestore: ", ref.documentID)
                 } catch {
                     print(error.localizedDescription)
                 }
             }
         } else {
-            print("no auth")
+//            print("no auth")
         }
     }
     
@@ -912,7 +919,7 @@ class HomeController : ObservableObject {
                 }
             }
         } else {
-            print("no auth")
+//            print("no auth")
         }
     }
     
@@ -945,7 +952,7 @@ class HomeController : ObservableObject {
         if let removedValue = self.cachedUserShorts.removeValue(forKey: shortDate) {
             print("Removed value: \(removedValue)")
         } else {
-            print("Key not found")
+//            print("Key not found")
         }
     }
     
@@ -963,18 +970,21 @@ class HomeController : ObservableObject {
     func addCommunityShorts() {
         // Ensure a prompt is focused
         if let prompt = self.focusedPrompt {
-            // Build a couple of short objects
-            
-            let short1 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "NfoTqlNKlqsZmObbP90z", authorFirstName: "George", authorLastName: "Kittle", authorProfilePictureUrl: "asdasd", authorNumShorts: 12, authorNumLikes: 72, promptRawText: prompt.promptRawText!, shortRawText: "This is a test and isn't actually for popular purposes yok jnow.", likeCount: 1, commentCount: 14)
-            
-            let short2 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "S0mE0rS3RfSY2O21Yyk9", authorFirstName: "Josh", authorLastName: "Green", authorProfilePictureUrl: "asdasd", authorNumShorts: 32, authorNumLikes: 12, promptRawText: prompt.promptRawText!, shortRawText: "A second test for testing purposes is like the ultimate thing isnt it.", likeCount: 14, commentCount: 1)
-            
-            let short3 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "pWXYaNd6cAsAM9GxpsN8", authorFirstName: "Kelly", authorLastName: "Ball", authorProfilePictureUrl: "asdasd", authorNumShorts: 82, authorNumLikes: 72, promptRawText: prompt.promptRawText!, shortRawText: "This short is from Kelly Ball and I really like the prompt. I don't know how to write anything though lol.", likeCount: 54, commentCount: 31)
-            
-            let shorts = [short1, short2, short3]
-            // Write all three shorts to firestore
-            for short in shorts {
-                Task {
+            // Generate 3 responses (2500 characters) based off the prompt
+            Task {
+                let responses = try await getShortText(promptText: prompt.promptRawText!)
+                
+                // Build a couple of short objects
+                let short1 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "NfoTqlNKlqsZmObbP90z", authorFirstName: "Writing Inspiration", authorLastName: "Bot - Georgie", authorProfilePictureUrl: "asdasd", authorNumShorts: 1, authorNumLikes: 1, promptRawText: prompt.promptRawText!, shortRawText: responses[0], likeCount: 1, commentCount: 0)
+                
+                let short2 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "S0mE0rS3RfSY2O21Yyk9", authorFirstName: "Writing Inspiration", authorLastName: "Bot - Marco", authorProfilePictureUrl: "asdasd", authorNumShorts: 32, authorNumLikes: 12, promptRawText: prompt.promptRawText!, shortRawText: responses[1], likeCount: 1, commentCount: 0)
+                
+                let short3 = Short(date: prompt.date!, rawTimestamp: Timestamp(date: Date() - Double.random(in: 1...1000)), authorId: "pWXYaNd6cAsAM9GxpsN8", authorFirstName: "Writing Inspiration", authorLastName: "Bot - Slo", authorProfilePictureUrl: "asdasd", authorNumShorts: 1, authorNumLikes: 1, promptRawText: prompt.promptRawText!, shortRawText: responses[2], likeCount: 1, commentCount: 0)
+                
+                let shorts = [short1, short2, short3]
+                
+                // Write all three shorts to firestore
+                for short in shorts {
                     // Write the short to firebase
                     do {
                         try db.collection("shorts").addDocument(from: short)
@@ -996,7 +1006,49 @@ class HomeController : ObservableObject {
                 }
             }
         } else {
-            print("no focused prompt")
+//            print("no focused prompt")
         }
+    }
+    
+    func getShortText(promptText: String) async throws -> [String] {
+        let dialogueResponsePrompt = "Write a 2500 character response to the following creative writing prompt, focusing on character dialogue: \(promptText)"
+        let imageryResponse = "Write a 2500 character response to the following creative writing prompt, focusing on imagery: \(promptText)"
+        let plotResponse = "Write a 2500 character response to the following creative writing prompt, focusing on creating an intriciate and complex plot: \(promptText)"
+        
+        
+        let query1 = ChatQuery(messages: [.init(role: .user, content: dialogueResponsePrompt)!], model: .gpt4_o_mini, maxTokens: 650)
+        let query2 = ChatQuery(messages: [.init(role: .user, content: imageryResponse)!], model: .gpt4_o_mini, maxTokens: 650)
+        let query3 = ChatQuery(messages: [.init(role: .user, content: plotResponse)!], model: .gpt4_o_mini, maxTokens: 650)
+        
+        var responses: [String] = []
+        // query 1
+        do {
+            let result = try await openAI.chats(query: query1)
+            let content = result.choices.first?.message.content?.string
+            
+            // Split the string by comma, then convert to double
+            
+            responses.append(content!)
+        }
+        // query 2
+        do {
+            let result = try await openAI.chats(query: query2)
+            let content = result.choices.first?.message.content?.string
+            
+            // Split the string by comma, then convert to double
+            
+            responses.append(content!)
+        }
+        
+        // query 3
+        do {
+            let result = try await openAI.chats(query: query3)
+            let content = result.choices.first?.message.content?.string
+            
+            // Split the string by comma, then convert to double
+            
+            responses.append(content!)
+        }
+        return responses
     }
 }

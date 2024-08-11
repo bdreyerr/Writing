@@ -72,7 +72,7 @@ class ProfileController : ObservableObject {
     let storage = Storage.storage()
     
     init() {
-        print("init profile controller")
+//        print("init profile controller")
         retrieveShorts()
     }
     
@@ -100,7 +100,7 @@ class ProfileController : ObservableObject {
                     
                     DispatchQueue.main.async {
                         if querySnapshot.isEmpty {
-                            print("no shorts returned")
+//                            print("no shorts returned")
                             self.areNoShortsLeftToLoad = true
                             return
                         }
@@ -109,7 +109,7 @@ class ProfileController : ObservableObject {
                             if let short = try? document.data(as: Short.self) {
                                 // add the short to the local array, and fetch it's prompt and picture
                                 self.retrievePromptImage(date: short.date!)
-                                print("profile - appended short to list")
+//                                print("profile - appended short to list")
                                 
                                 if self.shortsSortingMethod == 0 {
                                     self.shorts.append(short)
@@ -125,7 +125,7 @@ class ProfileController : ObservableObject {
                         // get the last doc (for pagination)
                         guard let lastSnapshot = querySnapshot.documents.last else {
                             // The collection is empty.
-                            print("error getting the last document snapshot")
+//                            print("error getting the last document snapshot")
                             return
                         }
                         
@@ -145,7 +145,7 @@ class ProfileController : ObservableObject {
                 }
             }
         } else {
-            print("no auth user yet.")
+//            print("no auth user yet.")
         }
     }
     
@@ -182,7 +182,7 @@ class ProfileController : ObservableObject {
                             if let short = try? document.data(as: Short.self) {
                                 // add the short to the local array, and fetch it's prompt and picture
                                 self.retrievePromptImage(date: short.date!)
-                                print("profile - appended short to list")
+//                                print("profile - appended short to list")
                                 
                                 if self.shortsSortingMethod == 0 {
                                     self.shorts.append(short)
@@ -197,7 +197,7 @@ class ProfileController : ObservableObject {
                         // get the last doc (for pagination)
                         guard let lastSnapshot = querySnapshot.documents.last else {
                             // The collection is empty.
-                            print("error getting the last document snapshot")
+//                            print("error getting the last document snapshot")
                             return
                         }
                         
@@ -223,7 +223,7 @@ class ProfileController : ObservableObject {
         self.areNoShortsLeftToLoad = false
         
         // the var should already be set.
-        print("switching sorting method")
+//        print("switching sorting method")
         
         if shortsSortingMethod == 0 {
             if shorts.isEmpty {
@@ -269,7 +269,7 @@ class ProfileController : ObservableObject {
     func retrievePromptImage(date: String) {
         // check if the image is already in the cache / map
         if let _ = self.promptImages[date] {
-            print("image already cached")
+//            print("image already cached")
             return
         }
         
@@ -309,13 +309,13 @@ class ProfileController : ObservableObject {
         if let short = self.focusedShort {
             // Make sure the text has changed
             if self.newShortText == short.shortRawText! {
-                print("the text didn't change at all")
+//                print("the text didn't change at all")
                 return
             }
             
             // Check text length
             if self.newShortText.count == 0 {
-                print("new short text is empty")
+//                print("new short text is empty")
                 return
             }
             
@@ -327,7 +327,7 @@ class ProfileController : ObservableObject {
                     try await docRef.updateData([
                         "shortRawText": self.newShortText
                     ])
-                    print("changed text")
+//                    print("changed text")
                 } catch let error {
                     print("error updating short: ", error.localizedDescription)
                 }
@@ -431,7 +431,7 @@ class ProfileController : ObservableObject {
             
             do {
                 try db.collection("promptSuggestions").addDocument(from: promptSuggestion)
-                print("prompt suggestion written")
+//                print("prompt suggestion written")
                 
                 DispatchQueue.main.async {
                     self.suggestedPromptText = ""
@@ -456,7 +456,7 @@ class ProfileController : ObservableObject {
                 Task {
                     do {
                         try await db.collection("shorts").document(short.id!).delete()
-                        print("short successfully removed!")
+//                        print("short successfully removed!")
                     } catch let error {
                         print("error deleting from firestore: ", error.localizedDescription)
                     }
@@ -470,7 +470,7 @@ class ProfileController : ObservableObject {
                             "shortsCount": FieldValue.increment(Int64(-1)),
                             "numLikes": FieldValue.increment(Int64(0 - (short.likeCount ?? 0)))
                         ])
-                        print("updated stats for user")
+//                        print("updated stats for user")
                         
                         DispatchQueue.main.async {
                             // Clear the controller vars
@@ -516,7 +516,7 @@ class ProfileController : ObservableObject {
                 }
             }
         } else {
-            print("no contributions?")
+//            print("no contributions?")
         }
     }
     
