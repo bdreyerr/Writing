@@ -45,6 +45,26 @@ struct CreateResponseView: View {
                 // character limit
                     .onReceive(Just(createShortController.shortContent)) { _ in createShortController.limitTextLength(createShortController.characterLimit) }
                 HStack {
+                    Button(action: {
+                        // Toggle the check state
+                        createShortController.isNSFW.toggle()
+                    }) {
+                        HStack {
+                            if createShortController.isNSFW {
+                                Text("NSFW?")
+                                    .font(.system(size: 10, design: .serif))
+                                    .foregroundColor(.red)
+                            } else {
+                                Text("NSFW?")
+                                    .font(.system(size: 10, design: .serif))
+                            }
+                            Image(systemName: createShortController.isNSFW ? "checkmark.square.fill" : "square")
+                                .foregroundColor(createShortController.isNSFW ? .blue : .gray)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.trailing, 2)
+                    
                     // Character Count
                     Text("\(createShortController.shortContent.count) / 2500 Characters")
                         .font(.system(size: 12, design: .serif))

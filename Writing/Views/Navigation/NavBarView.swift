@@ -41,6 +41,7 @@ struct NavBarView: View {
                 .padding(6)
             }
             // Border
+//            .frame(maxWidth: 100)
             .frame(height: 70)
             .background(colorScheme == .light ? .white.opacity(0.6) : .black.opacity(0.6))
             .cornerRadius(35)
@@ -127,7 +128,7 @@ extension NavBarView{
             }
             Spacer()
         }
-        .frame(maxWidth: isActive ? .infinity : 60, maxHeight: 60)
+        .frame(maxWidth: isActive ? 100 : 60, maxHeight: 60)
 //        .background(isActive ? .white.opacity(0.4) : .clear)
         .background(colorScheme == .light ? isActive ? .black.opacity(0.9) : .clear : isActive ? .white.opacity(0.9) : .clear)
         .cornerRadius(30)

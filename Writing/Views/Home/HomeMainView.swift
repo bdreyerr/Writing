@@ -17,8 +17,9 @@ struct HomeMainView: View {
     // Date Range for the prompt picker
     let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
-        let startComponents = DateComponents(year: 2024, month: 7, day: 1)
-        let endComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        let startComponents = DateComponents(year: 2024, month: 8, day: 17)
+        let endComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date()) // THIS IS WHAT'S USED IN PROD (WE DON'T WANT USERS TO GO PAST CURRENT DATE)
+//        let endComponents = DateComponents(year: 2024, month: 8, day: 23) // USE THIS IN DEV TO TEST FUTURE PROMPTS
         return calendar.date(from:startComponents)!
         ...
         calendar.date(from:endComponents)!
@@ -76,7 +77,10 @@ struct HomeMainView: View {
                                 TodaysPrompt(image: focusedImage, prompt: focusedPrompt.promptRawText!, tags: focusedPrompt.tags!, likeCount: focusedPrompt.likeCount!, responseCount: focusedPrompt.shortCount!, includeResponseCount: true)
                             }
                         } else {
-                            TodaysPrompt(imageText: "missingPrompt", prompt: "We couldn't load the prompt for the date you selected, sorry about that, please try a different date!", tags: ["Awkward"], likeCount: 0, responseCount: 0, includeResponseCount: true)
+                            // only show the missing prompt if we are NOT currently loading the prompt
+                            if !homeController.isPromptLoading {
+                                TodaysPrompt(imageText: "missingPrompt", prompt: "We couldn't load the prompt for the date you selected, sorry about that, please try a different date!", tags: ["Awkward"], likeCount: 0, responseCount: 0, includeResponseCount: true)
+                            }
                         }
                         
                         
@@ -124,6 +128,8 @@ struct HomeMainView: View {
             }
             .padding(.bottom, 25)
         }
+        // Needed for iPad compliance
+        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $homeController.isFullCommunityResposneSheetShowing) {
             SingleCommunityResponseView()
         }

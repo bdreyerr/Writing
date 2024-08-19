@@ -91,6 +91,15 @@ struct CreateShortOrYourExistingShort: View {
                     
                     
                     HStack {
+                        // Is NSFW?
+                        
+                        if createShortController.isNSFW {
+                            Text("NSFW")
+                                .font(.system(size: 10, design: .serif))
+                                .foregroundColor(Color.red)
+                        }
+                        
+                        
                         // Character Count
                         Text("\(createShortController.shortContent.count) / 2500 Characters")
                             .font(.system(size: 12, design: .serif))
@@ -171,6 +180,7 @@ struct CreateShortOrYourExistingShort: View {
         }
         .onAppear {
             createShortController.shortContent = ""
+            createShortController.isNSFW = false
         }
         .environmentObject(createShortController)
         

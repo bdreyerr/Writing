@@ -16,6 +16,10 @@ struct ProfileFocusedShortView: View {
     
     @State var isEditShortViewActive: Bool = false
     
+    var isIPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -24,13 +28,21 @@ struct ProfileFocusedShortView: View {
                     if let short = profileController.focusedShort {
                         // check image
                         if let image = profileController.promptImages[short.date!] {
-                            Image(uiImage: image)
-                                .resizable()
-                                .frame(maxWidth: 400, maxHeight: 300)
+                            if isIPad {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame(maxWidth: 1000, maxHeight: 740)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                            } else {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame(maxWidth: 400, maxHeight: 370)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                            }
                         } else {
-                            Image("wolf")
-                                .resizable()
-                                .frame(maxWidth: 400, maxHeight: 300)
+//                            Image("wolf")
+//                                .resizable()
+//                                .frame(maxWidth: 400, maxHeight: 300)
                         }
                         
                         Text(short.promptRawText!)
@@ -185,6 +197,8 @@ struct ProfileFocusedShortView: View {
             }
             .padding(20)
         }
+        // Needed for iPad compliance
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

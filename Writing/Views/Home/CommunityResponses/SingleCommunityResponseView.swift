@@ -258,6 +258,15 @@ struct SingleCommunityResponseView: View {
                                 
                                 Button("Cancel", role: .cancel) { }
                             }
+                            
+                            if let isNSFW = short.isNSFW {
+                                if isNSFW {
+                                    Text("NSFW")
+                                        .font(.system(size: 10, design: .serif))
+                                        .foregroundStyle(Color.red)
+                                        .opacity(0.6)
+                                }
+                            }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         

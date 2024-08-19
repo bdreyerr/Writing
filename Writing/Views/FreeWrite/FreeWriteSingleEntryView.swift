@@ -131,6 +131,8 @@ struct FreeWriteSingleEntryView: View {
                 .padding(.leading, 20)
                 .padding(.trailing, 20)
             }
+            // Needed for iPad compliance
+            .navigationViewStyle(StackNavigationViewStyle())
         } else {
             Text("we had trouble loading your entry, sawwwyy :((")
                 .italic()

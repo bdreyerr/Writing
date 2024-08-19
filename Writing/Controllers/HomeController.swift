@@ -10,8 +10,11 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import OpenAI
+import SwiftUI
 
 class HomeController : ObservableObject {
+    @AppStorage("filterNSFWShorts") private var filterNSFWShorts = false
+    
     // The day in focus, determines which prompt should be shown.
     @Published public var promptSelectedDate: Date = Date()
     
@@ -96,6 +99,7 @@ class HomeController : ObservableObject {
     @Published var areNoShortsLeftToLoad: Bool = false
     @Published var areNoCommentsLeftToLoad: Bool = false
     @Published var areTopCommentsShowing: Bool = false
+    @Published var isPromptLoading: Bool = false
     
     // OpenAI Config
     let openAI = OpenAI(configuration: OpenAI.Configuration(token: Secrets().openAIKey, timeoutInterval: 60.0))
@@ -121,6 +125,9 @@ class HomeController : ObservableObject {
         self.focusedPromptImage = nil
         self.areTopCommentsShowing = false
         
+        // initiate loading
+        self.isPromptLoading = true
+        
         
         // Get the date in YYYYMMDD format.
         let formatter = DateFormatter()
@@ -141,6 +148,7 @@ class HomeController : ObservableObject {
                 self.focusedPrompt = nil
                 self.focusedPromptImage = nil
             }
+            self.isPromptLoading = false
             return
         }
         
@@ -169,6 +177,7 @@ class HomeController : ObservableObject {
                             // There was an issue with the image or the image doesn't exist, either way set both prompt and promptImage back to nil
                             self.focusedPrompt = nil
                             self.focusedPromptImage = nil
+                            self.isPromptLoading = false
                             return
                         } else {
                             // Data for image is returned
@@ -182,6 +191,9 @@ class HomeController : ObservableObject {
                                     self.cachedPromptImages[date]  = image
                                 }
                             }
+                            
+                            // stop loading
+                            self.isPromptLoading = false
                         }
                     }
                 }
@@ -191,6 +203,7 @@ class HomeController : ObservableObject {
                     // Set focusedPrompt back to nil so that the view can update appropriately
                     self.focusedPrompt = nil
                     self.focusedPromptImage = nil
+                    self.isPromptLoading = false
                     return
                 }
             }
@@ -303,7 +316,9 @@ class HomeController : ObservableObject {
                                         if isBlocked { continue }
                                     }
                                     
-                                    self.focusedTopCommunityShorts.append(short)
+                                    if !self.filterNSFWShorts || (self.filterNSFWShorts && !(short.isNSFW ?? false)) {
+                                        self.focusedTopCommunityShorts.append(short)
+                                    }
 //                                    print("checking if the short has an id: ", short.id ?? "nil id lol")
                                     
                                     // get the profile picture for the author of the short
@@ -385,9 +400,15 @@ class HomeController : ObservableObject {
                                 }
                                 
                                 if self.selectedSortingMethod == 0 {
-                                    self.focusedFullCommunityShorts.append(short)
+                                    // check if user is filtering NSFW shorts
+                                    
+                                    if !self.filterNSFWShorts || (self.filterNSFWShorts && !(short.isNSFW ?? false)) {
+                                        self.focusedFullCommunityShorts.append(short)
+                                    }
                                 } else {
-                                    self.focusedFullCommunityShortsByLikeCount.append(short)
+                                    if !self.filterNSFWShorts || (self.filterNSFWShorts && !(short.isNSFW ?? false)) {
+                                        self.focusedFullCommunityShortsByLikeCount.append(short)
+                                    }
                                 }
                                 
                                 // get the profile picture for the author of the short
@@ -455,9 +476,13 @@ class HomeController : ObservableObject {
                                 
                                 
                                 if self.selectedSortingMethod == 0{
-                                    self.focusedFullCommunityShorts.append(short)
+                                    if !self.filterNSFWShorts || (self.filterNSFWShorts && !(short.isNSFW ?? false)) {
+                                        self.focusedFullCommunityShorts.append(short)
+                                    }
                                 } else {
-                                    self.focusedFullCommunityShortsByLikeCount.append(short)
+                                    if !self.filterNSFWShorts || (self.filterNSFWShorts && !(short.isNSFW ?? false)) {
+                                        self.focusedFullCommunityShortsByLikeCount.append(short)
+                                    }
                                 }
                                 
                                 // get the profile picture for the author of the short

@@ -35,6 +35,8 @@ struct WritingApp: App {
     @AppStorage("isNotificationDaily") private var notificationCadence = true
     // App Storage: Time of day for the notification to fire (converted into string from Date Object)
     @AppStorage("notificationTimeOfDay") private var notificationTimeOfDay = ""
+    // App Storage: If the user is filtering NSFW shorts in the home view.
+    @AppStorage("filterNSFWShorts") private var filterNSFWShorts = false
     
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate

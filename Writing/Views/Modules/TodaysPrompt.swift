@@ -22,16 +22,36 @@ struct TodaysPrompt: View {
     // Max Three Tags
     var tagColorOrder = [Color.red, Color.blue, Color.green]
     
+    var isIPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
     var body: some View {
         // Image
         if let img = image {
-            Image(uiImage: img)
-                .resizable()
-                .frame(maxWidth: 400, maxHeight: 370)
+            if isIPad {
+                Image(uiImage: img)
+                    .resizable()
+                    .frame(maxWidth: 1000, maxHeight: 740)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            } else {
+                Image(uiImage: img)
+                    .resizable()
+                    .frame(maxWidth: 400, maxHeight: 370)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            }
         } else {
-            Image(imageText ?? "")
-                .resizable()
-                .frame(maxWidth: 400, maxHeight: 300)
+            if isIPad {
+                Image(imageText ?? "")
+                    .resizable()
+                    .frame(maxWidth: 1000, maxHeight: 740)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            } else {
+                Image(imageText ?? "")
+                    .resizable()
+                    .frame(maxWidth: 400, maxHeight: 300)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+            }
         }
         
         

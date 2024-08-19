@@ -29,6 +29,7 @@ struct Short : Codable, Identifiable {
     // Content
     var promptRawText: String?
     var shortRawText: String?
+    var isNSFW: Bool?
     
     // Stats
     var likeCount: Int?
@@ -47,6 +48,7 @@ struct Short : Codable, Identifiable {
         case authorTitle
         case promptRawText
         case shortRawText
+        case isNSFW
         case likeCount
         case commentCount
     }

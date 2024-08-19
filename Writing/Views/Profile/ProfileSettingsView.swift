@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileSettingsView: View {
+    @AppStorage("filterNSFWShorts") private var filterNSFWShorts = false
     
     @EnvironmentObject var authController: AuthController
     @EnvironmentObject var userController: UserController
@@ -23,7 +24,12 @@ struct ProfileSettingsView: View {
                     Link("Terms of Use (EULA)", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
                     
                     Link("Privacy Policy", destination: URL(string: "https://sites.google.com/view/the-daily-short-privacy-policy/home")!)
+                    
+                    Toggle(isOn: $filterNSFWShorts) {
+                        Text("Filter NSFW Content")
+                    }
                 }
+                
                 
                 if let user = userController.user {
                     Section(header: Text("Account")) {

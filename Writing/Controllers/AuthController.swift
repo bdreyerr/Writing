@@ -103,7 +103,7 @@ class AuthController : UIViewController, ObservableObject {
                             // User doesn't exist in the database yet, create a new user object
                             
                             // The only field not populated is profilePicture. User needs to add that themselves.
-                            let userObject = User(firstName: self.firstName, lastName: self.lastName, email: self.email, shortsCount: 0, numLikes: 0, avgWritingScore: 0, numAnalysisGenerated: 0, title: 0, lastShortWrittenDate: Timestamp(), isAdmin: false, blockedUsers: [:], likedPrompts: [:], likedShorts: [:])
+                            let userObject = User(firstName: self.firstName, lastName: self.lastName, email: self.email, shortsCount: 0, numLikes: 0, avgWritingScore: 0, numAnalysisGenerated: 0, title: 0, lastShortWrittenDate: Timestamp(), currentStreak: 0, bestStreak: 0, contributions: [:], freeWriteCount: 0, freeWriteAverageWordCount: 0, isAdmin: false, blockedUsers: [:], likedPrompts: [:], likedShorts: [:])
                             
                             // Add the user to firestore user collection
                             let collectionRef = self.db.collection("users")
@@ -211,7 +211,7 @@ class AuthController : UIViewController, ObservableObject {
                                 // User doesn't exist in the database yet, create a new user object
                                 
                                 // The only field not populated is profilePicture. User needs to add that themselves.
-                                let userObject = User(firstName: self.firstName, lastName: self.lastName, email: self.email, shortsCount: 0, numLikes: 0, avgWritingScore: 0, numAnalysisGenerated: 0, title: 0, lastShortWrittenDate: Timestamp(), isAdmin: false, blockedUsers: [:], likedPrompts: [:], likedShorts: [:])
+                                let userObject = User(firstName: self.firstName, lastName: self.lastName, email: self.email, shortsCount: 0, numLikes: 0, avgWritingScore: 0, numAnalysisGenerated: 0, title: 0, lastShortWrittenDate: Timestamp(), currentStreak: 0, bestStreak: 0, contributions: [:], freeWriteCount: 0, freeWriteAverageWordCount: 0, isAdmin: false, blockedUsers: [:], likedPrompts: [:], likedShorts: [:])
                                 
                                 // Add the user to firestore user collection
                                 let collectionRef = self.db.collection("users")

@@ -340,6 +340,8 @@ struct ProfileMainView: View {
             }
             .padding(.bottom, 25)
         }
+        // Needed for iPad compliance
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

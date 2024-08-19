@@ -121,6 +121,13 @@ class FreeWriteController : ObservableObject {
     }
     
     func retrieveNextFreeWrites() {
+        // return early if lastDoc isn't populated
+        if self.selectedSortingMethod == 0 && self.lastDoc == nil {
+            return
+        } else if self.selectedSortingMethod == 1 && self.lastDocOldest == nil {
+            return
+        }
+        
         // Ensure the user is authenticated
         if let user = Auth.auth().currentUser {
             Task {
