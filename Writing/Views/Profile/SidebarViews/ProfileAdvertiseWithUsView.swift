@@ -17,12 +17,12 @@ struct ProfileAdvertiseWithUsView: View {
             
             
             
-            Text("benjaminpbrother@gmail.com")
+            Text("thedailyshortapp@gmail.com")
                 .font(.system(size: 16, design: .serif))
                 .italic()
                 .contextMenu {
                     Button(action: {
-                        UIPasteboard.general.string = "benjaminpbrother@gmail.com"
+                        UIPasteboard.general.string = "thedailyshortapp@gmail.com"
                     }) {
                         Text("Copy")
                         Image(systemName: "doc.on.doc")

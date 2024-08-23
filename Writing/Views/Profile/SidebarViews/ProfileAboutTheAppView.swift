@@ -32,11 +32,23 @@ struct ProfileAboutTheAppView: View {
             Text("Hello! My name is Ben, I'm a developer based in San Francisco, California, and I'm the creator of The Daily Short! I still work full time as a Software Engineer for my day job, but in my spare time I love working on passion projects and apps. I'm hoping to support and keep this app up and running for as long as I can.")
                 .font(.system(size: 16, design: .serif))
                 .italic()
-                .padding(.bottom, 20)
+                
             
-            Text("I hope this apps pushes you to stay consistent with your writing journey and helps you find some inspiration among other authors. If you have any suggestions or advice please don't hesistate to send me an email :) - benjaminpbrother@gmail.com")
+            Text("I hope this apps pushes you to stay consistent with your writing journey and helps you find some inspiration among other authors. If you have any suggestions or advice please don't hesistate to send me an email :)")
                 .font(.system(size: 16, design: .serif))
                 .italic()
+                .padding(.bottom, 20)
+            Text("thedailyshortapp@gmail.com")
+                .font(.system(size: 16, design: .serif))
+                .italic()
+                .contextMenu {
+                    Button(action: {
+                        UIPasteboard.general.string = "thedailyshortapp@gmail.com"
+                    }) {
+                        Text("Copy")
+                        Image(systemName: "doc.on.doc")
+                    }
+                }
                 .padding(.bottom, 20)
             
             

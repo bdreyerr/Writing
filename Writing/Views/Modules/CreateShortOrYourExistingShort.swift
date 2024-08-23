@@ -16,7 +16,8 @@ struct CreateShortOrYourExistingShort: View {
     @EnvironmentObject var userController: UserController
     @EnvironmentObject var authController: AuthController
     @EnvironmentObject var profileController: ProfileController
-    @StateObject var createShortController = CreateShortController()
+    @EnvironmentObject var createShortController: CreateShortController
+//    @StateObject var createShortController = CreateShortController()
     
 //    @State var isKeyboardPresented = false
     

@@ -13,6 +13,7 @@ struct HomeMainView: View {
     @EnvironmentObject var authController: AuthController
     @EnvironmentObject var homeController: HomeController
     @EnvironmentObject var userController: UserController
+    @StateObject var createShortController = CreateShortController()
     
     // Date Range for the prompt picker
     let dateRange: ClosedRange<Date> = {
@@ -61,7 +62,7 @@ struct HomeMainView: View {
                                 homeController.retrievePrompt()
                                 homeController.retrieveSignedInUsersShort()
                                 homeController.focusedTopCommunityShorts = []
-//                                homeController.t
+                                createShortController.shortContent = ""
                             }
                         }
                         
@@ -141,6 +142,7 @@ struct HomeMainView: View {
             // Retrieve the signed in users short for the selected day
             homeController.retrieveSignedInUsersShort()
         }
+        .environmentObject(createShortController)
         
     }
 }
@@ -150,6 +152,7 @@ struct HomeMainView: View {
         .environmentObject(AuthController())
         .environmentObject(HomeController())
         .environmentObject(UserController())
+        .environmentObject(CreateShortController())
 }
 
 
