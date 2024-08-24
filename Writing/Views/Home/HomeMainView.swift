@@ -19,8 +19,8 @@ struct HomeMainView: View {
     let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
         let startComponents = DateComponents(year: 2024, month: 8, day: 17)
-        let endComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date()) // THIS IS WHAT'S USED IN PROD (WE DON'T WANT USERS TO GO PAST CURRENT DATE)
-//        let endComponents = DateComponents(year: 2024, month: 8, day: 23) // USE THIS IN DEV TO TEST FUTURE PROMPTS
+//        let endComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())  // THIS IS WHAT'S USED IN PROD (WE DON'T WANT USERS TO GO PAST CURRENT DATE)
+        let endComponents = DateComponents(year: 2024, month: 8, day: 30) // USE THIS IN DEV TO TEST FUTURE PROMPTS
         return calendar.date(from:startComponents)!
         ...
         calendar.date(from:endComponents)!
@@ -56,14 +56,10 @@ struct HomeMainView: View {
                         )
                         .labelsHidden()
                         .onChange(of: homeController.promptSelectedDate) {
-                            if let rateLimit = userController.processFirestoreWrite() {
-                                print(rateLimit)
-                            } else {
-                                homeController.retrievePrompt()
-                                homeController.retrieveSignedInUsersShort()
-                                homeController.focusedTopCommunityShorts = []
-                                createShortController.shortContent = ""
-                            }
+                            homeController.retrievePrompt()
+                            homeController.retrieveSignedInUsersShort()
+                            homeController.focusedTopCommunityShorts = []
+                            createShortController.shortContent = ""
                         }
                         
                     }
