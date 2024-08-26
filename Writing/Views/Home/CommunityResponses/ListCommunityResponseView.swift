@@ -11,6 +11,7 @@ import SwiftUI
 struct ListCommunityResponseView: View {
     @EnvironmentObject var homeController: HomeController
     @EnvironmentObject var userController: UserController
+    @EnvironmentObject var advertisementController: AdvertisementController
     
 //    @State private var isSingleCommunityResponsePopupShowing: Bool = false
     
@@ -85,6 +86,12 @@ struct ListCommunityResponseView: View {
 
                     } else {
                         if homeController.selectedSortingMethod == 0 {
+                            // If there's an advertisement for today, show it.
+                            if let ad = advertisementController.focusedAd {
+                                AdPreviewView()
+                            }
+                            
+                            
                             ForEach(homeController.focusedFullCommunityShorts) { short in
                                 Button(action: {
                                 }) {
@@ -93,6 +100,9 @@ struct ListCommunityResponseView: View {
                                 .buttonStyle(PlainButtonStyle())
                             }
                         } else {
+                            if let ad = advertisementController.focusedAd {
+                                AdPreviewView()
+                            }
                             ForEach(homeController.focusedFullCommunityShortsByLikeCount) { short in
                                 Button(action: {
                                 }) {

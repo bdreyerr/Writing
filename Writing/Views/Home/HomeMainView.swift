@@ -14,6 +14,7 @@ struct HomeMainView: View {
     @EnvironmentObject var homeController: HomeController
     @EnvironmentObject var userController: UserController
     @StateObject var createShortController = CreateShortController()
+    @StateObject var advertisementController = AdvertisementController()
     
     // Date Range for the prompt picker
     let dateRange: ClosedRange<Date> = {
@@ -130,6 +131,9 @@ struct HomeMainView: View {
         .sheet(isPresented: $homeController.isFullCommunityResposneSheetShowing) {
             SingleCommunityResponseView()
         }
+        .sheet(isPresented: $advertisementController.isFullAdSheetShowing) {
+            AdFullView()
+        }
         .onAppear {
             // We aren't worried about calling these functions on each view appear, because they retrieve cached data. We're not making a firestore read everytime the view re-appears, just making sure the data on screen is the most up to date.
             
@@ -139,6 +143,7 @@ struct HomeMainView: View {
             homeController.retrieveSignedInUsersShort()
         }
         .environmentObject(createShortController)
+        .environmentObject(advertisementController)
         
     }
 }
